@@ -31,23 +31,17 @@ async  function  onSubmit(){
         })
         return;
     }
-    const { error } = await useFetch("/api/findImage/add", {
+    const { data } = await useFetch("/api/findImage/add", {
         method: "post",
         body:form.value,
     });
-    // api.post("findImage/add",form.value).then(response => {
-    //     $q.dialog({
-    //         title: '信息',
-    //         message: '提交成功,等待管理员处理中.'
-    //     }).onOk(() => {
-    //         // console.log('OK')
-    //     }).onCancel(() => {
-    //         // console.log('Cancel')
-    //     }).onDismiss(() => {
-    //         // console.log('I am triggered on both OK and Cancel')
-    //     })
-    //     getList()
-    // }) ;
+  if(data && data.value && data.value.code === 200) {
+    useQuasar().dialog({
+      title: '信息',
+      message: '提交成功,等待管理员处理中.'
+    })
+    getList()
+  }
 }
 const findImageList = ref([]);
 const total = ref(0);

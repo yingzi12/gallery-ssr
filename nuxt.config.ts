@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import sitemap from "./static/sitemap";
 
 export default defineNuxtConfig({
   devtools: { enabled: true },

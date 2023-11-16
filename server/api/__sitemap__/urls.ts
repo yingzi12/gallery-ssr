@@ -5,7 +5,7 @@ export default defineSitemapEventHandler(async () => {
         let urls=[];
         for(let i=1;i<20;i++) {
             const response = await fetch(config.public.baseUrl+`/album/list?page=`+i.toString());
-          //  const dataJson = await response.json();
+            const dataJson = await response.json();
             // console.log(dataJson.data)
             if (dataJson.code == 200) {
                 // 假设API返回的是URL数组

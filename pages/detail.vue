@@ -93,7 +93,7 @@ getInfo()
         :src="album.sourceWeb+album.imgUrl"
       /></div>
       <div style="padding-left: 10px;width: 70%">
-        <div class="text-h5 q-mt-sm q-mb-xs">{{album.title}}</div>
+        <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{album.title}}</h5></div>
         <div style="word-wrap: break-word; white-space: pre-line;">
           <p>{{album.intro}}</p>
         </div>
@@ -119,8 +119,8 @@ getInfo()
       </template>
     </q-infinite-scroll>
     <div style=" text-align: center;">
-     <a style="margin: 20px" v="album.pre != null " :href='"/detail?aid="+album.pre.id'>{{album.pre.title}}</a>
-      <a style="margin: 20px"   v="album.next != null " :href='"/detail?aid="+album.next.id'>{{album.next.title}}</a>
+     <a style="margin: 20px" v-if="album.pre != null " :href='"/detail?aid="+album.pre.id'>{{album.pre.title}}</a>
+      <a style="margin: 20px"   v-if="album.next != null " :href='"/detail?aid="+album.next.id'>{{album.next.title}}</a>
     </div>
   </div>
     <div class="row">

@@ -1,10 +1,11 @@
 
 export default defineSitemapEventHandler(async () => {
+    const config = useRuntimeConfig();
     try {
         let urls=[];
         for(let i=1;i<20;i++) {
-            const response = await fetch('http://127.0.0.1:8098/album/list?page='+i.toString());
-            const dataJson = await response.json();
+            const response = await fetch(config.public.baseUrl+`/album/list?page=`+i.toString());
+          //  const dataJson = await response.json();
             // console.log(dataJson.data)
             if (dataJson.code == 200) {
                 // 假设API返回的是URL数组
@@ -16,7 +17,7 @@ export default defineSitemapEventHandler(async () => {
                 console.error('API Error:', dataJson.message);
             }
         }
-        console.log(JSON.stringify(urls))
+        //console.log(JSON.stringify(urls))
         return urls;
     } catch (error) {
         console.error('Fetch Error:', error);

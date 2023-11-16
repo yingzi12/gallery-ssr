@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref,} from 'vue'
 import {useRoute} from "vue-router";
-import {useQuasar} from 'quasar'
 
 
 // 接收url里的参数
 const route = useRoute();
 const aid = ref(route.query.aid);
-// const sourceUrl = "https://imageshotgirl.yappgcu.uk/"
 // key :old hostName value:new HostName
 const hostnameValues = new Map([
     ['video.', 'video'],
@@ -120,6 +118,10 @@ getInfo()
         </div>
       </template>
     </q-infinite-scroll>
+    <div style=" text-align: center;">
+     <a style="margin: 20px" v="album.pre != null " :href='"/detail?aid="+album.pre.id'>{{album.pre.title}}</a>
+      <a style="margin: 20px"   v="album.next != null " :href='"/detail?aid="+album.next.id'>{{album.next.title}}</a>
+    </div>
   </div>
     <div class="row">
       <div class="col-2"> </div>

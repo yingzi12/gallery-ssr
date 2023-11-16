@@ -4,7 +4,9 @@ export default defineSitemapEventHandler(async () => {
     try {
         let urls=[];
         for(let i=1;i<20;i++) {
-            const response = await fetch(config.public.baseUrl+`/album/list?page=`+i.toString());
+            const response = await fetch(config.public.baseUrl+`/album/list?pageNum=`+i.toString());
+            console.log(config.public.baseUrl+`/album/list?page=`+i.toString())
+
             const dataJson = await response.json();
             // console.log(dataJson.data)
             if (dataJson.code == 200) {
@@ -18,7 +20,8 @@ export default defineSitemapEventHandler(async () => {
             }
         }
         for(let i=1;i<20;i++) {
-            const response = await fetch(config.public.baseUrl+`/album/listSee?page=`+i.toString());
+            console.log(config.public.baseUrl+`/album/listSee?page=`+i.toString())
+            const response = await fetch(config.public.baseUrl+`/album/listSee?pageNum=`+i.toString());
             const dataJson = await response.json();
             // console.log(dataJson.data)
             if (dataJson.code == 200) {

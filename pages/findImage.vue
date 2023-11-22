@@ -47,8 +47,10 @@ const findImageList = ref([]);
 const total = ref(0);
 async function getList() {
     const { data } = await useFetch('/api/findImage/list')
-    total.value=data.value.total
-    findImageList.value=data.value.data
+    if(data.value.code ==200) {
+      total.value = data.value.total
+      findImageList.value = data.value.data
+    }
 }
 async function handleAdd(id:number){
     const { data } = await useFetch('/api/findImage/list?id='+id.toString())

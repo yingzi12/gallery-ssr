@@ -2,6 +2,9 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  dir: {
+    static: 'static', // 新的静态文件夹名称
+  },
   modules: [
     'nuxt-quasar-ui',
     'nuxt-simple-sitemap'

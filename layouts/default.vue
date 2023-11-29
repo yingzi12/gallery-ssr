@@ -18,6 +18,7 @@
                 <q-route-tab to="/see" label="最热" />
                 <q-route-tab to="/findImage" label="寻找图片" />
                 <q-route-tab to="/users" label="用户中心" />
+              <q-route-tab to="/down" label="下载App" />
             </q-tabs>
         </q-header>
         <div>

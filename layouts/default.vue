@@ -5,7 +5,7 @@
             <q-toolbar class="bg-purple text-white shadow-2 rounded-borders">
                 <q-toolbar-title>
                     <q-avatar>
-                        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+                        <img src="/icon.png">
                     </q-avatar>
                     图集网
                 </q-toolbar-title>

@@ -106,14 +106,14 @@ getList(1)
         <div class="col-2"> </div>
         <div class="col-auto" style="margin: 0px">
             <div class="footter" style="margin: 0px;text-align: center;">
-                <nuxt-link to="">关于图集</nuxt-link>|
-                <nuxt-link to="">联系我们</nuxt-link>|
-                <nuxt-link to="">帮助中心</nuxt-link>|
-                <nuxt-link to="">提交建议</nuxt-link>|
-                <nuxt-link to="">举报中心</nuxt-link>|
-                <nuxt-link to="">隐私政策</nuxt-link>|
-                <nuxt-link to="">使用条款</nuxt-link>|
-                <nuxt-link to="">漏洞提交</nuxt-link>|
+                <router-link to="">关于图集</router-link>|
+                <router-link to="">联系我们</router-link>|
+                <router-link to="">帮助中心</router-link>|
+                <router-link to="">提交建议</router-link>|
+                <router-link to="">举报中心</router-link>|
+              <router-link to="/privacyPolicy">隐私政策</router-link>|
+              <router-link to="/use">使用条款</router-link>|
+                <router-link to="">漏洞提交</router-link>|
             </div>
             <div class="footerText text-weight-thin"> <p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有 心世界未来科技有限公司</p></div>
             <div class="footerText text-weight-thin"><p>图片,美女,写真,图集</p></div>

@@ -2,7 +2,6 @@
 import { ref,} from 'vue'
 import {useRoute} from "vue-router";
 
-
 // 接收url里的参数
 const route = useRoute();
 const aid = ref(route.query.aid);
@@ -83,7 +82,16 @@ async function handleImageError(){
     const {data} = await useFetch("/api/album/error?id=" +aid.value )
     alert("提交成功,等待管理员处理中.")
 }
-getInfo()
+const randomList = ref([]);
+
+async  function getRandom() {
+  const { data } = await useFetch('/api/album/random')
+  if (data.value.code === 200) {
+    randomList.value = data.value.data
+  }
+}
+getRandom();
+getInfo();
 </script>
 <template>
   <q-page>
@@ -107,6 +115,7 @@ getInfo()
         <button  class="text-h6" @click="handleImageError()"> 报告异常</button>
       </div>
     </div>
+    <div>
 <!--    内容页-->
     <q-infinite-scroll @load="onLoad" :disable="disableInfiniteScroll"  :offset="250">
       <div v-for="(image, index) in imageList" :key="index" class="caption">
@@ -118,10 +127,36 @@ getInfo()
         </div>
       </template>
     </q-infinite-scroll>
-    <div style=" text-align: center;">
-     <a style="margin: 20px" v-if="album.pre != null " :href='"/detail?aid="+album.pre.id'>{{album.pre.title}}</a>
-      <a style="margin: 20px"   v-if="album.next != null " :href='"/detail?aid="+album.next.id'>{{album.next.title}}</a>
     </div>
+    <div style=" text-align: center;font-size: large">
+     <a style="margin: 20px;font-size: large" v-if="album.pre != null " :href='"/detail?aid="+album.pre.id'>{{album.pre.title}}</a>
+      <a style="margin: 20px;font-size: large"   v-if="album.next != null " :href='"/detail?aid="+album.next.id'>{{album.next.title}}</a>
+    </div>
+    <div>
+        <!-- 在这里放置您希望在新列中显示的内容 -->
+      <div class="row justify-center q-gutter-sm">
+        <q-intersection
+            v-for="(album ,index) in randomList"
+            :key="index"
+            once
+            transition="scale"
+            class="example-item"
+        >
+          <q-card flat bordered class="q-ma-sm">
+            <img :src="album.sourceWeb+album.imgUrl">
+            <q-card-section>
+              <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{album.title}}</a></div>
+              <div class="text-subtitle2">{{album.createTime}}</div>
+            </q-card-section>
+            <!--            <q-card-section class="q-pt-none">-->
+            <!--              {{ lorem }}-->
+            <!--            </q-card-section>-->
+          </q-card>
+
+        </q-intersection>
+      </div>
+    </div>
+
   </div>
     <div class="row">
       <div class="col-2"> </div>
@@ -164,4 +199,7 @@ getInfo()
   width: 260px
 .head-iamge img
   object-fit: cover
+.example-item
+  height: 600px
+  width: 260px
 </style>

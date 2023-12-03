@@ -33,5 +33,8 @@ export default defineNuxtConfig({
     sources: [
       '/api/__sitemap__/urls',
     ]
-  }
+  },
+  serverMiddleware: [
+    '~/middleware/cache.js'
+  ]
 })

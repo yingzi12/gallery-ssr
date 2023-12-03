@@ -35,6 +35,12 @@ async  function getList(page:number) {
     albumList.value=data.value.data
 }
 getList(1)
+function imageUrl(album) {
+  if (album.sourceUrl!=null && album.sourceUrl.startsWith('/image')) {
+    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
+  }
+  return album.sourceWeb + album.imgUrl;
+}
 
 </script>
 <template>
@@ -79,7 +85,7 @@ getList(1)
                 class="example-item"
             >
                 <q-card flat bordered class="q-ma-sm">
-                    <img :src="album.sourceWeb+album.imgUrl">
+                    <img :src="imageUrl(album)">
                     <q-card-section>
                         <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{album.title}}</a></div>
                         <div class="text-subtitle2">{{album.createTime}}</div>

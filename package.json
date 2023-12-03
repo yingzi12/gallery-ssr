@@ -20,7 +20,10 @@
   },
   "dependencies": {
     "@libsql/client": "^0.3.6",
+    "@paypal/paypal-js": "^7.1.1",
     "@quasar/extras": "^1.16.7",
+    "@types/lru-cache": "^7.10.10",
+    "lru-cache": "^10.1.0",
     "postinstall": "^0.8.0",
     "quasar": "^2.13.0",
     "sqlite3": "^5.1.6",

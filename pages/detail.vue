@@ -92,13 +92,28 @@ async  function getRandom() {
 }
 getRandom();
 getInfo();
+
+function imageUrlDetail(image) {
+  console.log(image.sourceUrl)
+  console.log(image.sourceUrl.startsWith('/image'))
+  if (image.sourceUrl!=null && image.sourceUrl.startsWith('/image')) {
+    return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
+  }
+  return getValueWithDefault(image.sourceWeb) +image.url;
+}
+function imageUrl(album) {
+  if (album.sourceUrl!=null &&  album.sourceUrl.startsWith('/image')) {
+    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
+  }
+  return album.sourceWeb + album.imgUrl;
+}
 </script>
 <template>
   <q-page>
   <div class="q-pa-md">
     <div class="row">
       <div ><q-img class="head-iamge"
-        :src="album.sourceWeb+album.imgUrl"
+        :src="imageUrl(album)"
       /></div>
       <div style="padding-left: 10px;width: 70%">
         <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{album.title}}</h5></div>
@@ -119,7 +134,7 @@ getInfo();
 <!--    内容页-->
     <q-infinite-scroll @load="onLoad" :disable="disableInfiniteScroll"  :offset="250">
       <div v-for="(image, index) in imageList" :key="index" class="caption">
-        <img :src="getValueWithDefault(image.sourceWeb) +image.url" class="responsive-image"/>
+        <img :src="imageUrlDetail(image)" class="responsive-image"/>
       </div>
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
@@ -143,7 +158,7 @@ getInfo();
             class="example-item"
         >
           <q-card flat bordered class="q-ma-sm">
-            <img :src="album.sourceWeb+album.imgUrl">
+            <img :src="imageUrl(album)">
             <q-card-section>
               <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{album.title}}</a></div>
               <div class="text-subtitle2">{{album.createTime}}</div>

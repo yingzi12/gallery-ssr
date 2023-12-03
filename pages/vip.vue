@@ -6,7 +6,7 @@ const vips = [
     sourcePrice:"",
     price: '18元',
     date: '月',
-    features: ['1个月使用期限', '下载']
+    features: ['1个月使用期限', '下载','专属标志']
   },
   {
     id: 2,
@@ -14,7 +14,7 @@ const vips = [
     sourcePrice:"99元",
     price: '89元',
     date: '半年',
-    features: ['6个月使用期限', '下载']
+    features: ['6个月使用期限', '下载','专属标志']
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ const vips = [
     sourcePrice:"199元",
     price: '180元',
     date: '年',
-    features: ['12个月使用期限', '下载', '视频'],
+    features: ['12个月使用期限', '下载','专属标志','App消费9.5折', '视频'],
 
   },
   {
@@ -31,7 +31,7 @@ const vips = [
     sourcePrice:"399元",
     price: '299元',
     date: '永久',
-    features: ['永久更新', '下载', '视频','全部图库', '专属服务'],
+    features: ['永久更新', '下载','专属标志', '视频','全部图库','App消费9折', '专属服务'],
 
   }
 ];

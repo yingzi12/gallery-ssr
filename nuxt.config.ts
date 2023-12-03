@@ -5,6 +5,11 @@ export default defineNuxtConfig({
   dir: {
     static: 'static', // 新的静态文件夹名称
   },
+  buildModules: [
+    // other modules
+    'quasar/nuxt',
+    '@pinia/nuxt',
+  ],
   modules: [
     'nuxt-quasar-ui',
     'nuxt-simple-sitemap'
@@ -19,7 +24,9 @@ export default defineNuxtConfig({
       baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk'
     }
   },
-  quasar: { /* */ },
+  quasar: {
+    plugins: ['Notify'],
+  },
   meta: {
     title: '图集网-图片,美女,写真,图集',
     meta: [

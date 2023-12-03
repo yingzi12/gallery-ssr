@@ -1,23 +1,211 @@
-<script setup>
-useSeoMeta({
-  title: "The about page",
-});
+<script setup lang="ts">
+const  drawer= ref(false);
+const link= ref('detail')
+
 </script>
 
 <template>
-  <h1>About Us</h1>
+  <div class="q-pa-md" style="height: 100vh;">
+    <q-layout view="lHh Lpr lff" container class="shadow-2 rounded-borders">
+    <q-header elevated class="bg-cyan-8">
+        <q-toolbar>
+<!--          <q-toolbar-title>Header</q-toolbar-title>-->
+          <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        </q-toolbar>
+      </q-header>
 
-  <p class="text-center">
-    <span cla ss="font-semibold">功能完善中</span>
+      <q-drawer
+          v-model="drawer"
+          show-if-above
+          :width="200"
+          :breakpoint="400"
+      >
+        <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+          <q-list padding>
+            <q-item  to="/users/detail"
+                clickable
+                v-ripple
+                :active="link === 'detail'"
+                @click="link = 'detail'"
+                active-class="my-menu-link"
+              >
+              <q-item-section avatar>
+                <q-icon name="inbox" />
+              </q-item-section>
 
-  </p>
+              <q-item-section>
+                个人信息
+              </q-item-section>
+            </q-item>
 
-  <p class="text-center">
-    Feel free to contribute to the list by
-    <router-link to="/add-new" title="Redirect to add new page"
-    >making a new submission.</router-link
-    >
-  </p>
+            <q-item  to="/users/attention"
+                clickable
+                v-ripple
+                :active="link === 'attention'"
+                @click="link = 'attention'"
+                active-class="my-menu-link"
+              >
+              <q-item-section avatar>
+                <q-icon name="attention" />
+              </q-item-section>
+
+              <q-item-section>
+                我的关注
+              </q-item-section>
+            </q-item>
+            <q-item to="/users/collection"
+                clickable
+                v-ripple
+                :active="link === 'collection'"
+                @click="link = 'collection'"
+                active-class="my-menu-link"
+              >
+              <q-item-section avatar>
+                <q-icon name="collection" />
+              </q-item-section>
+
+              <q-item-section>
+                我的收藏
+              </q-item-section>
+            </q-item>
+            <q-separator  />
+            <q-item to="/users/buy"
+                clickable
+                v-ripple
+                :active="link === 'buy'"
+                @click="link = 'buy'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="buy" />
+              </q-item-section>
+              <q-item-section>
+                我的购买
+              </q-item-section>
+            </q-item>
+            <q-separator  />
+            <q-item to="/users/album"
+                clickable
+                v-ripple
+                :active="link === 'album'"
+                @click="link = 'album'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="album" />
+              </q-item-section>
+              <q-item-section>
+                我的图集
+              </q-item-section>
+            </q-item>
+            <q-item to="/users/vip"
+                clickable
+                v-ripple
+                :active="link === 'vip'"
+                @click="link = 'vip'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="vip" />
+              </q-item-section>
+              <q-item-section>
+                VIP设置
+              </q-item-section>
+            </q-item>
+            <q-item to="/users/sell"
+                clickable
+                v-ripple
+                :active="link === 'sell'"
+                @click="link = 'sell'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="buy" />
+              </q-item-section>
+              <q-item-section>
+                用户购买
+              </q-item-section>
+            </q-item>
+            <q-item to="/users/withdraw"
+                clickable
+                v-ripple
+                :active="link === 'withdraw'"
+                @click="link = 'withdraw'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="withdraw" />
+              </q-item-section>
+              <q-item-section>
+                我的提现
+              </q-item-section>
+            </q-item>
+            <q-separator  />
+            <q-item to="/users/invite"
+                clickable
+                v-ripple
+                :active="link === 'invite'"
+                @click="link = 'invite'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="send" />
+              </q-item-section>
+              <q-item-section>
+                我的邀请
+              </q-item-section>
+            </q-item>
+            <q-item to="/users/password"
+                clickable
+                v-ripple
+                :active="link === 'password'"
+                @click="link = 'password'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                重置密码
+              </q-item-section>
+            </q-item>
+            <q-item
+                clickable
+                v-ripple
+                :active="link === 'drafts'"
+                @click="link = 'drafts'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                退出
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
+
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+          <div class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            <div class="text-weight-bold">Razvan Stoenescu</div>
+            <div>@rstoenescu</div>
+          </div>
+        </q-img>
+      </q-drawer>
+
+      <q-page-container>
+        <q-page padding>
+          <NuxtPage :page-key="route => route.fullPath" />
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
   <div class="row">
     <div class="col-2"> </div>
     <div class="col-auto" style="margin: 0px">
@@ -38,4 +226,11 @@ useSeoMeta({
     </div>
     <div class="col-2"></div>
   </div>
+
 </template>
+
+<style lang="sass">
+.my-menu-link
+  color: white
+  background: #F2C037
+</style>

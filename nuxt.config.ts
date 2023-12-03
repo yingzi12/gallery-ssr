@@ -8,11 +8,11 @@ export default defineNuxtConfig({
   buildModules: [
     // other modules
     'quasar/nuxt',
-    '@pinia/nuxt',
   ],
   modules: [
     'nuxt-quasar-ui',
-    'nuxt-simple-sitemap'
+    'nuxt-simple-sitemap',
+    '@pinia/nuxt'
   ],
   runtimeConfig: {
     turso: {

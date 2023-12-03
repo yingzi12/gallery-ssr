@@ -15,14 +15,14 @@ const url = ref('https://picsum.photos/500/300')
     <q-card class="my-card" flat bordered>
       <q-item>
         <q-item-section >
-<!--          <q-avatar>-->
-<!--            <img src="https://cdn.quasar.dev/img/boy-avatar.png">-->
-<!--          </q-avatar>-->
-          <q-img
-              :src="url"
-              spinner-color="white"
-              style="height: 140px; max-width: 150px"
-          />
+          <q-avatar  size="100px" font-size="52px">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+<!--          <q-img-->
+<!--              :src="url"-->
+<!--              spinner-color="white"-->
+<!--              style="height: 140px; max-width: 150px"-->
+<!--          />-->
         </q-item-section>
 
         <q-item-section>

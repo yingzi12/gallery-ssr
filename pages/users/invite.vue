@@ -1,9 +1,15 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script  setup lang="ts">
+const text = ref('https://www.aiavr.uk/index?invite=111111111111111213123231');
+const textToCopy = ref(null);
 
-export default defineComponent({
-  name: "invite"
-})
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(textToCopy.value.value);
+    alert('复制成功！');
+  } catch (err) {
+    alert('复制失败');
+  }
+};
 </script>
 
 <template>
@@ -15,7 +21,10 @@ export default defineComponent({
         <div class="q-pa-md">
           <div class="text-h4 q-mb-md">邀请连接</div>
           <div class="q-my-md"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
-          <div class="q-my-md"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
+          <div>
+          <input ref="textToCopy" type="text" v-model="text" />
+          <button @click="copyToClipboard">复制</button>
+        </div>
         </div>
       </template>
 

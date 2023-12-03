@@ -51,6 +51,21 @@ function onSubmit () {
     })
   }
 }
+const url = ref('https://picsum.photos/500/300')
+const filePath = ref("");
+const previewImageUrl = ref(''); // 添加一个 ref 用于存储预览图片的 URL
+
+watch(filePath, (newValue) => {
+  if (newValue && newValue[0]) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImageUrl.value = e.target.result;
+    };
+    reader.readAsDataURL(newValue[0]);
+  } else {
+    previewImageUrl.value = ''; // 清除预览图片
+  }
+});
 </script>
 
 <template>
@@ -62,6 +77,15 @@ function onSubmit () {
         @reset="onReset"
         class="q-gutter-md"
     >
+
+      <div class="q-pa-md q-gutter-sm">
+        <q-img
+            :src="previewImageUrl || 'https://picsum.photos/500/300'"
+            spinner-color="white"
+            style="height: 140px; max-width: 150px"
+        />
+        <q-file  outlined v-model="filePath" style="width: 100px" label="上传图片" />
+      </div>
       <q-input
           filled
           v-model="name"
@@ -95,20 +119,20 @@ function onSubmit () {
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-      <di>
+      <div>
       <q-toggle
           v-model="isFree"
           label="是否收费"
           left-label
       />
-      </di>
-      <di>
+      </div>
+      <div>
         <q-toggle
             v-model="isVip"
             label="是否VIP"
             left-label
         />
-      </di>
+      </div>
       <q-input v-if="isFree"
           filled
           v-model="price"
@@ -122,7 +146,6 @@ function onSubmit () {
           val => (val !== null && val !== '') || '请输入金额',
         val => (val > 0 && val < 10000) || '金额不能大于1000'
                   ]"
-
       />
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>

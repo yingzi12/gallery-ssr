@@ -2,14 +2,17 @@
 
 const $q = useQuasar()
 
-const name = ref(null)
-const gril = ref(null)
+const title = ref(null)
+const desc = ref(null)
 const intro = ref(null)
 const tags = ref(null)
-const isFree = ref(false)
-const isVip = ref(false)
 const price =ref(0);
 const accept = ref(false)
+const timeType=ref(null)
+const timeLong=ref(1);
+const timeTypeList=[
+  '天', '周', '月', '年', '永久'
+]
 if (accept.value !== true) {
   $q.notify({
     color: 'red-5',
@@ -27,8 +30,8 @@ else {
   })
 }
 function  onReset () {
-  name.value = null
-  gril.value = null
+  title.value = null
+  desc.value = null
   intro.value = null
   tags.value = null
   accept.value = false
@@ -64,17 +67,9 @@ function onSubmit () {
     >
       <q-input
           filled
-          v-model="name"
-          label="图集名称 *"
-          hint="Name and surname"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
-      />
-      <q-input
-          filled
-          v-model="gril"
-          label="模特 *"
-          hint="Name and surname"
+          v-model="title"
+          label="会员名称 *"
+          hint="会员名称"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
@@ -90,26 +85,27 @@ function onSubmit () {
       <q-input
           filled
           type="text"
-          v-model="tags"
-          label="标签 *"
+          v-model="desc"
+          label="说明 *"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-      <di>
-        <q-toggle
-            v-model="isFree"
-            label="是否收费"
-            left-label
+      <div>
+        <q-input v-if="timeType != '永久'"
+            filled
+            type="number"
+            v-model="timeLong"
+            label="会员时长 *"
+            lazy-rules
+            :rules="[
+          val => (val !== null && val !== '') || '请输入时长',
+        val => (val > 0 && val < 1000) || '不能小与0，大于1000'
+                  ]"
         />
-      </di>
-      <di>
-        <q-toggle
-            v-model="isVip"
-            label="是否VIP"
-            left-label
-        />
-      </di>
-      <q-input v-if="isFree"
+        <q-select outlined v-model="timeType" :options="timeTypeList" label="单位" />
+      </div>
+
+      <q-input
                filled
                v-model="price"
                label="Price with 2 decimals"

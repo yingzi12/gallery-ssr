@@ -48,6 +48,7 @@ function onSubmit () {
 function refresh () {
   url.value = 'https://picsum.photos/500/300?t=' + Math.random()
 }
+const  filePath=ref("");
 </script>
 
 <template>
@@ -59,7 +60,7 @@ function refresh () {
         @reset="onReset"
         class="q-gutter-md"
     >
-      <q-file rounded outlined v-model="model" label="Rounded outlined" />
+      <q-file rounded outlined v-model="filePath" label="Rounded outlined" />
       <div class="q-pa-md q-gutter-sm">
         <q-img
             :src="url"

@@ -5,8 +5,10 @@ useSeoMeta({
 </script>
 
 <template>
-  <h1>About Us</h1>
-
+  <h1>功能开发中</h1>
+  <h3>自建图集</h3>
+  <h3>上传图片，上传视频</h3>
+  <h3>自定义付费内容，自定义会员</h3>
   <p class="text-center">
     <span cla ss="font-semibold">功能完善中</span>
 

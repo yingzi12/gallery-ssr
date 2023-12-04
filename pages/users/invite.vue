@@ -19,8 +19,12 @@ const copyToClipboard = async () => {
 
       <template v-slot:before>
         <div class="q-pa-md">
+          <div class="text-h4 q-mb-md">已获得奖励 ：0 元</div>
           <div class="text-h4 q-mb-md">邀请连接</div>
-          <div class="q-my-md"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
+          <div class="q-my-md">
+            <h3>邀请大家一起来吧！</h3>
+            <h5>被邀请者在网站消费你都将获得奖励，邀请人越多，奖励越高！</h5>
+          </div>
           <div>
           <input ref="textToCopy" type="text" v-model="text" />
           <button @click="copyToClipboard">复制</button>
@@ -55,6 +59,12 @@ const copyToClipboard = async () => {
           <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
             <span class="cursor-pointer">Open in GitHub</span>
           </q-item-label>
+          <q-item-section top class="col-2 gt-sm">
+            <q-item-label class="q-mt-sm">待确定奖励 : 0</q-item-label>
+          </q-item-section>
+          <q-item-section top class="col-2 gt-sm">
+            <q-item-label class="q-mt-sm">已返奖励 : 0</q-item-label>
+          </q-item-section>
         </q-item-section>
 
         <q-item-section top side>

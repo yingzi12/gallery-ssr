@@ -170,6 +170,36 @@ const link= ref('detail')
                 重置密码
               </q-item-section>
             </q-item>
+            <q-item to="/users/buyLog"
+                clickable
+                v-ripple
+                :active="link === 'buyLog'"
+                @click="link = 'buyLog'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                消费记录
+              </q-item-section>
+            </q-item>
+            <q-item
+                clickable
+                v-ripple
+                :active="link === 'service'"
+                @click="link = 'service'"
+                active-class="my-menu-link"
+            >
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                客服服务
+              </q-item-section>
+            </q-item>
             <q-item
                 clickable
                 v-ripple

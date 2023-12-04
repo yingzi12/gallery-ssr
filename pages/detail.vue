@@ -28,7 +28,8 @@ const isRefreshing = ref(false)
 const onLoad = async (index: number, done: () => void) => {
     try {
         isRefreshing.value = true
-        const {data} = await useFetch('/api/image/list?aid=' + aid.value + '&pageNum=' + index+1)
+
+        const {data} = await useFetch('/api/image/list?aid=' + aid.value + '&pageNum=' +(index+1))
         // if (data.value.code === 200) {
          if(data && data.value && data.value.code === 200) {
             const imgList = data.value.data
@@ -49,7 +50,7 @@ const onLoad = async (index: number, done: () => void) => {
       isRefreshing.value = false;
     }
 }
-onLoad(1, () => {});
+onLoad(0, () => {});
 const album = ref({});
 const  title=ref("图集网")
 

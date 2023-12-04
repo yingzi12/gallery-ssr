@@ -57,31 +57,24 @@ getRandom();
     <q-tabs shrink stretch>
         <q-input name="title" label="搜索" v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
     </q-tabs>
-  <div>
+  <div class="q-pa-md">
     <q-carousel v-if="imagesLoaded"
-        arrows
-        animated
-        thumbnails
-        v-model="slide"
-        height="400px"
+                arrows
+                animated
+                navigation
+                v-model="slide"
+                height="400px"
     >
-      <q-carousel-slide
-          v-for="(album, index) in randomList"
-          :key="index"
-          :name="index"
-          :img-src="imageUrl(album)"
-      >
+      <q-carousel-slide  v-for="(album, index) in randomList" :name="index" :img-src="imageUrl(album)">
         <div class="absolute-bottom custom-caption">
           <div class="text-h2">
-            <a :href="'/detail?aid=' + album.id">{{ album.name }}</a>
+            <a class="album-link" :href="'/detail?aid=' + album.id">{{ album.title }}</a>
           </div>
-          <div class="text-subtitle1">{{ album.intro }}</div>
+          <!--          <div class="text-subtitle1">{{ album.intro }}</div>-->
         </div>
       </q-carousel-slide>
     </q-carousel>
-
   </div>
-
   <div class="q-pa-md">
         <div class="row justify-center q-gutter-sm">
             <q-intersection

@@ -50,10 +50,6 @@ const onLoad = async (index: number, done: () => void) => {
     }
 }
 onLoad(1, () => {});
-// 在组件挂载时调用 onLoad
-// onMounted(() => {
-//   onLoad(1, () => {}); // 你可以传递一个空函数作为 done 回调
-// });
 const album = ref({});
 const  title=ref("图集网")
 

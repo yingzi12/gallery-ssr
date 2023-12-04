@@ -10,7 +10,7 @@ useHead({
     ],
 })
 const current = ref(1)
-const slide = ref('first')
+const slide = ref(0)
 const title = ref('')
 const albumList = ref([]);
 const total = ref(0);
@@ -41,40 +41,48 @@ function imageUrl(album) {
   }
   return album.sourceWeb + album.imgUrl;
 }
+const randomList = ref([]);
+const imagesLoaded = ref(false);
+
+async  function getRandom() {
+  const { data } = await useFetch('/api/album/random')
+  if (data.value.code === 200) {
+    randomList.value = data.value.data
+    imagesLoaded.value=true;
+  }
+}
+getRandom();
 </script>
 <template>
     <q-tabs shrink stretch>
         <q-input name="title" label="搜索" v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
     </q-tabs>
-    <div class="q-pa-md">
-        <q-carousel
-            arrows
-            animated
-            thumbnails
-            v-model="slide"
-            height="400px"
-        >
-            <q-carousel-slide name="first" img-src="https://file2.aazz263.info/images/2021/07/29272649.jpg">
-                <div class="absolute-bottom custom-caption">
-                    <div class="text-h2">First stop</div>
-                    <!--            <div class="text-subtitle1">Mountains</div>-->
-                </div>
-            </q-carousel-slide>
-            <q-carousel-slide name="second" img-src="https://hotgirl.asia/wp-content/uploads/2023/01/1674255622607_AyanaNishinaga_Minisuka_tv_2023_01_12RegularGallery5_2.jpg">
-                <div class="absolute-bottom custom-caption">
-                    <div class="text-h2">
-                        <a href="https://aiavr.uk/detail?aid=4">Second stop</a>
-                    </div>
-                    <!--            <div class="text-subtitle1">Famous City</div>-->
-                </div>
-            </q-carousel-slide>
-            <q-carousel-slide name="third" img-src="https://usa.img111.top/uploads/1178/T/UGirls-APP/2642/2642_010_q9q_2766_4614.webp">
-                <div class="absolute-bottom custom-caption">
-                    <div class="text-h2">Third stop</div>
-                    <!--            <div class="text-subtitle1">Famous Bridge</div>-->
-                </div>
-            </q-carousel-slide>
-        </q-carousel>
+  <div>
+    <q-carousel v-if="imagesLoaded"
+        arrows
+        animated
+        thumbnails
+        v-model="slide"
+        height="400px"
+    >
+      <q-carousel-slide
+          v-for="(album, index) in randomList"
+          :key="index"
+          :name="index"
+          :img-src="imageUrl(album)"
+      >
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h2">
+            <a :href="'/detail?aid=' + album.id">{{ album.name }}</a>
+          </div>
+          <div class="text-subtitle1">{{ album.intro }}</div>
+        </div>
+      </q-carousel-slide>
+    </q-carousel>
+
+  </div>
+
+  <div class="q-pa-md">
         <div class="row justify-center q-gutter-sm">
             <q-intersection
                 v-for="(album ,index) in albumList"
@@ -149,4 +157,17 @@ function imageUrl(album) {
     display: flex
     justify-content: center
     align-items: center
+</style>
+<style>
+.album-link {
+  color: white;        /* 设置链接颜色为白色 */
+  text-decoration: none; /* 去除下划线 */
+}
+
+/* 要添加 :hover 和 :focus 状态的样式 */
+.album-link:hover,
+.album-link:focus {
+  color: white;        /* 鼠标悬浮和聚焦时的颜色 */
+  text-decoration: none; /* 鼠标悬浮和聚焦时去除下划线 */
+}
 </style>

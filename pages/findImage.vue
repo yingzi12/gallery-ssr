@@ -83,7 +83,7 @@ getRandom();
 </script>
 <template>
     <q-page>
-        <div style="width: 600px" class="caption">
+        <div style="max-width: 400px" class="caption">
             <form>
                 <q-form @submit="onSubmit">
                     <q-input label="图集名称" v-model="form.title"

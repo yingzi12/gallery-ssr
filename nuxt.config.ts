@@ -28,6 +28,9 @@ export default defineNuxtConfig({
       { hid: 'keywords', name: 'keywords', content: "图片,美女,写真,图集" },
       { hid: 'description', name: 'keywords', content: "图集网 美女 写真 摄影 秀人网 Photo Gallery, Beauty, Photo, Photography, Showman.com" },
     ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' } // 指向你的 favicon
+    ],
   },
   sitemap:{
     sources: [

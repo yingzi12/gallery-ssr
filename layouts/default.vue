@@ -5,7 +5,7 @@
             <q-toolbar class="bg-purple text-white shadow-2 rounded-borders">
                 <q-toolbar-title>
                     <q-avatar>
-                        <img src="/icon.png">
+                        <img src="/album-logo.png">
                     </q-avatar>
                     图集网
                 </q-toolbar-title>

@@ -9,7 +9,6 @@ const link= ref('detail')
     <q-layout view="lHh Lpr lff" container class="shadow-2 rounded-borders">
     <q-header elevated class="bg-cyan-8">
         <q-toolbar>
-<!--          <q-toolbar-title>Header</q-toolbar-title>-->
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
         </q-toolbar>
       </q-header>
@@ -22,7 +21,7 @@ const link= ref('detail')
       >
         <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item  to="/users/detail"
+            <q-item  to="/users/"
                 clickable
                 v-ripple
                 :active="link === 'detail'"
@@ -224,7 +223,12 @@ const link= ref('detail')
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
             <div class="text-weight-bold">Razvan Stoenescu</div>
-            <div>@rstoenescu</div>
+            <div>
+              234fsf2f2sf@adfa.com<q-icon name="warning" style="color: red" />
+            </div>
+            <div>
+             (邮箱待验证)
+            </div>
           </div>
         </q-img>
       </q-drawer>

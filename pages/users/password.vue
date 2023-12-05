@@ -2,8 +2,9 @@
 const fourth =ref(true);
 const $q = useQuasar()
 
-const name = ref(null)
-const age = ref(null)
+const oldPassword = ref(null)
+const newPassword = ref(null)
+const newPassword2 = ref(null)
 const accept = ref(false)
 if (accept.value !== true) {
   $q.notify({
@@ -20,11 +21,6 @@ else {
     icon: 'cloud_done',
     message: 'Submitted'
   })
-}
-function  onReset () {
-  name.value = null
-  age.value = null
-  accept.value = false
 }
 function onSubmit () {
   if (accept.value !== true) {
@@ -52,35 +48,35 @@ function onSubmit () {
 
     <q-form
         @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
     >
       <q-input
           filled
-          v-model="name"
+          v-model="oldPassword"
+          label="Your name *"
+          hint="Name and surname"
+          lazy-rules
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
+      />
+      <q-input
+          filled
+          v-model="newPassword"
+          label="Your name *"
+          hint="Name and surname"
+          lazy-rules
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
+      />
+      <q-input
+          filled
+          v-model="newPassword2"
           label="Your name *"
           hint="Name and surname"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
 
-      <q-input
-          filled
-          type="number"
-          v-model="age"
-          label="Your age *"
-          lazy-rules
-          :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
-        ]"
-      />
-
-<!--      <q-toggle v-model="accept" label="I accept the license and terms" />-->
-
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="重置密码" type="submit" color="primary"/>
       </div>
     </q-form>
 

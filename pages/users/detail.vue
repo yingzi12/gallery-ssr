@@ -18,17 +18,18 @@ const url = ref('https://picsum.photos/500/300')
           <q-avatar  size="100px" font-size="52px">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
-<!--          <q-img-->
-<!--              :src="url"-->
-<!--              spinner-color="white"-->
-<!--              style="height: 140px; max-width: 150px"-->
-<!--          />-->
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>Title</q-item-label>
+          <q-item-label>这是打发水电费</q-item-label>
           <q-item-label caption>
-            Subhead
+            ID:23424234234
+          </q-item-label>
+          <q-item-label caption>
+            234fsf2f2sf@adfa.com<q-icon name="warning" style="color: red" />
+          </q-item-label>
+          <q-item-label caption>
+            （点击发送邮箱验证码）
           </q-item-label>
         </q-item-section>
 
@@ -37,43 +38,16 @@ const url = ref('https://picsum.photos/500/300')
       <q-separator />
 
       <q-card-section horizontal>
-        <q-card-section>
           {{ lorem }}
-        </q-card-section>
-
-        <q-separator vertical />
-
-        <q-card-section class="col-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </q-card-section>
       </q-card-section>
       <q-separator />
 
       <q-card-actions>
-        <q-btn flat round icon="event" />
-        <q-btn flat>
-          7:30PM
-        </q-btn>
-        <q-btn flat color="primary">
-          Reserve
-        </q-btn>
+        <q-btn flat round icon="event" >1000</q-btn>
+        <q-btn flat round icon="event" >1000</q-btn>
+        <q-btn flat round icon="event" >1000</q-btn>
 
-      </q-card-actions>
-      <q-separator />
-      <q-card-actions class="q-pt-xs">
-        <div class="text-overline">Overline</div>
-        <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
-        <div class="text-caption text-grey">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
-      </q-card-actions>
-      <q-separator />
 
-      <q-card-actions class="col-5 flex flex-center">
-        <q-img
-            class="rounded-borders"
-            src="https://cdn.quasar.dev/img/parallax2.jpg"
-        />
       </q-card-actions>
     </q-card>
 

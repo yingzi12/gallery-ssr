@@ -60,39 +60,38 @@ const  filePath=ref("");
         @reset="onReset"
         class="q-gutter-md"
     >
-      <q-file rounded outlined v-model="filePath" label="Rounded outlined" />
       <div class="q-pa-md q-gutter-sm">
         <q-img
-            :src="url"
+            src="https://picsum.photos/500/300"
             spinner-color="white"
             style="height: 140px; max-width: 150px"
         />
-        <q-btn push color="teal" label="Change image" @click="refresh" />
-
-
+        <q-file  outlined v-model="filePath" style="width: 100px" label="上传图片" />
       </div>
       <q-input
           filled
           v-model="name"
-          label="Your name *"
-          hint="Name and surname"
+          label="你的名称 *"
+          hint="你的名称"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-
       <q-input
           filled
-          type="number"
-          v-model="age"
-          label="Your age *"
+          v-model="name"
+          label="E-mail *"
+          hint="E-mail"
           lazy-rules
-          :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
-        ]"
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-
-
+      <q-input
+          filled
+          v-model="name"
+          label="简介 *"
+          hint="简介"
+          lazy-rules
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
+      />
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />

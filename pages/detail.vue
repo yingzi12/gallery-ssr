@@ -28,7 +28,8 @@ const isRefreshing = ref(false)
 const onLoad = async (index: number, done: () => void) => {
     try {
         isRefreshing.value = true
-        const {data} = await useFetch('/api/image/list?aid=' + aid.value + '&pageNum=' + index)
+
+        const {data} = await useFetch('/api/image/list?aid=' + aid.value + '&pageNum=' +(index+1))
         // if (data.value.code === 200) {
          if(data && data.value && data.value.code === 200) {
             const imgList = data.value.data
@@ -38,15 +39,18 @@ const onLoad = async (index: number, done: () => void) => {
             imageList.value.push(...imgList);
             isRefreshing.value = false;
 
-         } done();
+         }
+         done();
 
     } catch (error) {
-        disableInfiniteScroll.value=true
-
-        // isDisable.value = true
+      disableInfiniteScroll.value = true;
+      console.error(error);
+      done();
+    } finally {
+      isRefreshing.value = false;
     }
-
 }
+onLoad(0, () => {});
 const album = ref({});
 const  title=ref("图集网")
 
@@ -92,10 +96,10 @@ async  function getRandom() {
 }
 getRandom();
 getInfo();
-
+// onLoad(1);
 function imageUrlDetail(image) {
-  console.log(image.sourceUrl)
-  console.log(image.sourceUrl.startsWith('/image'))
+  // console.log(image.sourceUrl)
+  // console.log(image.sourceUrl.startsWith('/image'))
   if (image.sourceUrl!=null && image.sourceUrl.startsWith('/image')) {
     return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
   }
@@ -160,8 +164,12 @@ function imageUrl(album) {
           <q-card flat bordered class="q-ma-sm">
             <img :src="imageUrl(album)">
             <q-card-section>
-              <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{album.title}}</a></div>
-              <div class="text-subtitle2">{{album.createTime}}</div>
+              <div class="text-h6">
+                <a :href='"/detail?aid="+album.id'>
+                <p class="text-caption  two-line-clamp">  {{album.title}} </p>
+              </a>
+                <p class="text-caption" style="padding: 0px">  {{album.createTime}} </p>
+              </div>
             </q-card-section>
             <!--            <q-card-section class="q-pt-none">-->
             <!--              {{ lorem }}-->
@@ -215,6 +223,18 @@ function imageUrl(album) {
 .head-iamge img
   object-fit: cover
 .example-item
-  height: 600px
-  width: 260px
+  height: 273px
+  width: 150px
+.two-line-clamp
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
+  overflow: hidden
+  text-overflow: ellipsis
+
+.q-card-section
+  padding: 8px
+.text-caption
+  margin: 0
+  font-size: 0.8em
 </style>

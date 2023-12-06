@@ -65,10 +65,25 @@ async function handleAdd(id:number){
 
 
 getList()
+
+function imageUrl(album) {
+  if (album.sourceUrl!=null &&  album.sourceUrl.startsWith('/image')) {
+    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
+  }
+  return album.sourceWeb + album.imgUrl;
+}
+const randomList = ref([]);
+async  function getRandom() {
+  const { data } = await useFetch('/api/album/random')
+  if (data.value.code === 200) {
+    randomList.value = data.value.data
+  }
+}
+getRandom();
 </script>
 <template>
     <q-page>
-        <div style="width: 600px" class="caption">
+        <div style="max-width: 400px" class="caption">
             <form>
                 <q-form @submit="onSubmit">
                     <q-input label="图集名称" v-model="form.title"
@@ -120,7 +135,36 @@ getList()
                 </div>
             </div>
         </div>
-        <div class="row">
+      <div>
+        <!-- 在这里放置您希望在新列中显示的内容 -->
+        <div class="row justify-center q-gutter-sm">
+          <q-intersection
+              v-for="(album ,index) in randomList"
+              :key="index"
+              once
+              transition="scale"
+              class="example-item"
+          >
+            <q-card flat bordered class="q-ma-sm">
+              <img :src="imageUrl(album)">
+              <q-card-section>
+                <div class="text-h6">
+                  <a :href='"/detail?aid="+album.id'>
+                    <p class="text-caption  two-line-clamp">  {{album.title}} </p>
+                  </a>
+                  <p class="text-caption" style="padding: 0px">  {{album.createTime}} </p>
+                </div>
+              </q-card-section>
+              <!--            <q-card-section class="q-pt-none">-->
+              <!--              {{ lorem }}-->
+              <!--            </q-card-section>-->
+            </q-card>
+
+          </q-intersection>
+        </div>
+      </div>
+
+      <div class="row">
             <div class="col-2"> </div>
             <div class="col-auto" style="margin: 0px">
                 <div class="footter" style="margin: 0px;text-align: center;">
@@ -149,4 +193,29 @@ getList()
   padding: 20px
   justify-content: center
   align-items: center
+.example-item
+  height: 253px
+  width: 150px
+
+.two-line-clamp
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
+  overflow: hidden
+  text-overflow: ellipsis
+//
+//img
+//  max-height: 100px
+//  width: 100%
+//  object-fit: cover
+
+
+.q-card-section
+  padding: 8px
+
+
+.text-caption
+  margin: 0
+  font-size: 0.8em
+
 </style>

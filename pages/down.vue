@@ -1,15 +1,5 @@
 <template>
-<!--  <div class="container">-->
-<!--    <div class="left">-->
-<!--      <img src="https://www.aiavr.uk/frame.png" alt="二维码">-->
-<!--      <button @click="downloadQRCode">下载</button>-->
-<!--    </div>-->
-<!--    <div class="right">-->
-<!--      <img src="/path/to/beautiful-woman.jpg" alt="美女">-->
-<!--      <p>扫码下载</p>-->
-<!--    </div>-->
-<!--  </div>-->
-  <div class="yw-page yw-page-app">
+  <div class="yw-page yw-page-app container">
     <div class="yw-header jsHeader">
       <div class="yw-constr app-constr">
         <div class="yw-hd-slide-x">
@@ -21,9 +11,6 @@
             <div class="yw-hd-app-dld">
               <a href="https://www.aiavr.uk/Album-Gallery-1.0.1.apk" class="yw-hd-app-btn" target="_blank"><i class="icon-android"></i>安卓版下载</a>
               <div class="qr-box" onmouseover="this.className='qr-box cur'" onmouseout="this.className='qr-box'">
-<!--                <div class="load-qr-pic qr-qd-pic jsPicQr">-->
-<!--                  <img src="https://www.51xs.uk/core/qrcode.php?string=https://www.51xs.uk/app/?my=down">-->
-<!--                </div>-->
                 <a class="qq-qr-icon jsLoadQr"><i class="icon-qr"></i></a>
               </div>
             </div>

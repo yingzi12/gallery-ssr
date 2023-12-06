@@ -16,8 +16,8 @@ const tab=ref('mails')
             align="justify"
             narrow-indicator
         >
-          <q-tab name="mails" label="Mails" />
-          <q-tab name="alarms" label="Alarms" />
+          <q-tab name="mails" label="系统" />
+          <q-tab name="alarms" label="用户" />
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated class="bg-orange-1 text-dark ">

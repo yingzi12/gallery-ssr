@@ -83,57 +83,52 @@ getRandom();
 </script>
 <template>
     <q-page>
-        <div style="max-width: 400px" class="caption">
-            <form>
-                <q-form @submit="onSubmit">
-                    <q-input label="图集名称" v-model="form.title"
-                             ref="inputRef"
-                             filled
-                             :rules="[ val => val.length <= 200 || '最多200个字符']"
-                    />
-                    <q-input label="模特" v-model="form.gril"
-                             ref="inputRef"
-                             filled
-                             :rules="[ val => val.length <= 50 || '最多50个字符']"
-                    />
-                    <q-input label="拍摄时间" v-model="form.createTime"
-                             ref="inputRef"
-                             filled
-                             :rules="[ val => val.length <= 10 || '最多10个字符']"
-                    />
-                    <q-btn type="submit" label="提交" />
-                </q-form>
-            </form>
-        </div>
+      <div style="max-width: 400px" class="caption">
+        <q-form @submit="onSubmit">
+          <q-input :label="$t('form.title')" v-model="form.title"
+                   filled
+                   :rules="[ val => val.length <= 200 || $t('form.titleLength') ]"
+          />
+          <q-input :label="$t('form.model')" v-model="form.gril"
+                   filled
+                   :rules="[ val => val.length <= 50 || $t('form.modelLength') ]"
+          />
+          <q-input :label="$t('form.shootTime')" v-model="form.createTime"
+                   filled
+                   :rules="[ val => val.length <= 10 || $t('form.timeLength') ]"
+          />
+          <q-btn type="submit" :label="$t('form.submit')" />
+        </q-form>
+      </div>
         <div>
-            <div class="q-pa-md">
-                <p class="text-h5">待寻找图集</p>
-                <q-markup-table>
-                    <thead>
-                    <tr>
-                        <th class="text-left">图集</th>
-                        <th class="text-right">模特</th>
-                        <th class="text-right">拍摄时间</th>
-                        <th class="text-right">提交时间</th>
-                        <th class="text-right">寻找人数</th>
-                        <th class="text-right">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="findImage in findImageList" :key="findImage.id">
-                        <td class="text-left">{{ findImage.title }}</td>
-                        <td class="text-right">{{ findImage.gril }}</td>
-                        <td class="text-right">{{ findImage.createTime }}</td>
-                        <td class="text-right">{{ findImage.subTime }}</td>
-                        <td class="text-right">{{ findImage.countFind }}</td>
-                        <td class="text-right"><button @click="handleAdd(findImage.id)">我也在寻找</button></td>
-                    </tr>
-                    </tbody>
-                </q-markup-table>
-                <div v-if="findImageList.length <=0" class="caption">
-                    <p class="text-h6">暂无数据</p>
-                </div>
+          <div class="q-pa-md">
+            <p class="text-h5">{{ $t('form.findAlbum') }}</p>
+            <q-markup-table>
+              <thead>
+              <tr>
+                <th class="text-left">{{ $t('table.album') }}</th>
+                <th class="text-right">{{ $t('table.model') }}</th>
+                <th class="text-right">{{ $t('table.shootTime') }}</th>
+                <th class="text-right">{{ $t('table.submitTime') }}</th>
+                <th class="text-right">{{ $t('table.numberOfFinders') }}</th>
+                <th class="text-right">{{ $t('table.action') }}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="findImage in findImageList" :key="findImage.id">
+                <td class="text-left">{{ findImage.title }}</td>
+                <td class="text-right">{{ findImage.gril }}</td>
+                <td class="text-right">{{ findImage.createTime }}</td>
+                <td class="text-right">{{ findImage.subTime }}</td>
+                <td class="text-right">{{ findImage.countFind }}</td>
+                <td class="text-right"><button @click="handleAdd(findImage.id)">{{ $t('table.find') }}</button></td>
+              </tr>
+              </tbody>
+            </q-markup-table>
+            <div v-if="findImageList.length <=0" class="caption">
+              <p class="text-h6">{{ $t('form.noData') }}</p>
             </div>
+          </div>
         </div>
       <div>
         <!-- 在这里放置您希望在新列中显示的内容 -->
@@ -167,16 +162,16 @@ getRandom();
       <div class="row">
             <div class="col-2"> </div>
             <div class="col-auto" style="margin: 0px">
-                <div class="footter" style="margin: 0px;text-align: center;">
-                    <router-link to="">关于图集</router-link>|
-                    <router-link to="">联系我们</router-link>|
-                    <router-link to="">帮助中心</router-link>|
-                    <router-link to="">提交建议</router-link>|
-                    <router-link to="">举报中心</router-link>|
-                    <router-link to="/privacyPolicy">隐私政策</router-link>|
-                    <router-link to="/use">使用条款</router-link>|
-                    <router-link to="">漏洞提交</router-link>|
-                </div>
+              <div class="footer" style="margin: 0px;text-align: center;">
+                <router-link to="">{{ $t('footer.about') }}</router-link> |
+                <router-link to="">{{ $t('footer.contact') }}</router-link> |
+                <router-link to="">{{ $t('footer.help') }}</router-link> |
+                <router-link to="">{{ $t('footer.suggestions') }}</router-link> |
+                <router-link to="">{{ $t('footer.report') }}</router-link> |
+                <router-link to="/privacyPolicy">{{ $t('footer.privacyPolicy') }}</router-link> |
+                <router-link to="/use">{{ $t('footer.termsOfUse') }}</router-link> |
+                <router-link to="">{{ $t('footer.bugReport') }}</router-link> |
+              </div>
                 <div class="footerText text-weight-thin"> <p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有 心世界未来科技有限公司</p></div>
                 <div class="footerText text-weight-thin"><p>图片,美女,写真,图集</p></div>
                 <div class="footerText text-weight-light"><p>本站所收录的作品、社区话题、用户评论、用户上传内容或图片等均属用户个人行为。如前述内容侵害您的权益，欢迎举报投诉，一经核实，立即删除，本站不承担任何责任</p></div>

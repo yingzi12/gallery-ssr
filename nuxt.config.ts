@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     'quasar/nuxt',
   ],
   modules: [
+    '@nuxtjs/i18n',
     'nuxt-quasar-ui',
     'nuxt-simple-sitemap',
     '@pinia/nuxt'
@@ -46,5 +47,8 @@ export default defineNuxtConfig({
   },
   serverMiddleware: [
     '~/middleware/cache.js'
-  ]
+  ],
+  i18n: {
+    /* module options */
+  }
 })

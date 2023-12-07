@@ -129,6 +129,8 @@ function imageUrl(album) {
         <div>浏览次数:{{album.countSee}}</div>
         <div>类型: {{album.tags}}</div>
         <div>创建时间：{{album.createTime}}</div>
+        <div><q-btn>收藏</q-btn></div>
+
       </div>
       <div style="width: 10%">
         <button  class="text-h6" @click="handleImageError()"> 报告异常</button>

@@ -16,10 +16,10 @@ const queryData = reactive({
     }
 });
 useHead({
-    title:"图集网",
+    title:"图集网 Album Gallery",
     meta: [
         { name: 'description', content: "图集网 美女 写真 摄影 秀人网 Photo Gallery, Beauty, Photo, Photography, Showman.com." },
-        { name: 'title', content: "图集网" }
+        { name: 'title', content: "图集网 Album Gallery" }
 
     ],
 })
@@ -56,7 +56,7 @@ getRandom();
 </script>
 <template>
     <q-tabs shrink stretch>
-        <q-input name="title" label="搜索" v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
+        <q-input name="title" :label="$t('search') " v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
     </q-tabs>
   <div class="q-pa-md">
     <q-carousel v-if="imagesLoaded"

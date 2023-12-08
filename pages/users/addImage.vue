@@ -44,7 +44,9 @@ function onSubmit () {
   }
 }
 const url = ref('https://picsum.photos/500/300')
-
+const updateUrl="https://127.0.0.1:8098/admin/userImage/upload"
+const token="Authorization";
+const aid="";
 </script>
 
 <template>
@@ -55,10 +57,10 @@ const url = ref('https://picsum.photos/500/300')
   <div class="q-pa-md">
     <div class="q-gutter-sm row items-start">
       <q-uploader
-          url="http://localhost:4444/upload"
+          :url="updateUrl"
+          :headers="[{name: 'Authorization', value: token},{name: 'aid', value: aid}]"
           label="Batch upload"
           multiple
-          batch
           style="max-width: 300px"
       />
     </div>

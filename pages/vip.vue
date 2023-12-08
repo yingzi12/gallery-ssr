@@ -1,41 +1,38 @@
 <script setup lang="ts">
-const vips = [
+const vips = ref([
   {
     id: 1,
-    name: '包月套餐',
-    sourcePrice:"",
-    price: '18元',
-    date: '月',
-    features: ['1个月使用期限', '下载','专属标志']
+    name: 'monthly', // 对应于 messages 中的键
+    sourcePrice: "",
+    price: '2.99$',
+    date: 'month', // 对应于 messages 中的键
+    features: ['download', 'exclusiveLogo',  'videos']
   },
   {
     id: 2,
-    name: '半年套餐',
-    sourcePrice:"99元",
-    price: '89元',
-    date: '半年',
-    features: ['6个月使用期限', '下载','专属标志']
+    name: 'halfYear',
+    sourcePrice: "16.9$",
+    price: '14.9$',
+    date: 'halfYear',
+    features: ['download', 'exclusiveLogo', 'discount98', 'videos']
   },
   {
     id: 3,
-    name: '一年套餐',
-    sourcePrice:"199元",
-    price: '180元',
-    date: '年',
-    features: ['12个月使用期限', '下载','专属标志','App消费9.5折', '视频'],
-
+    name: 'yearly',
+    sourcePrice: "32.9$",
+    price: '28.9$',
+    date: 'year',
+    features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount95', 'videos']
   },
   {
     id: 4,
-    name: '永久套餐',
-    sourcePrice:"399元",
-    price: '299元',
-    date: '永久',
-    features: ['永久更新', '下载','专属标志', '视频','全部图库','App消费9折', '专属服务'],
-
+    name: 'lifetime',
+    sourcePrice: "99.9$",
+    price: '49.9$',
+    date: 'lifetime',
+    features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount90', 'exclusiveServices', 'videos']
   }
-];
-
+]);
 const buyvip = (id: number) => {
   // 处理购买逻辑
 };
@@ -48,20 +45,21 @@ const buyvip = (id: number) => {
         <div class="col">
         <q-card class="my-card">
           <q-card-section class="bg-secondary text-white">
-            <div class="text-h5" style="padding: 10px;">{{vip.name}}</div>
+            <div class="text-h5" style="padding: 10px;">{{ $t(`vip.${vip.name}`) }}</div>
             <div class="text-subtitle2">
               <p style="font-size: 36px;" id="cache47">
                 <span id="cache48" >{{vip.price}}</span>
                 <span id="cache38" class="strikethrough">{{vip.sourcePrice}}</span>
-                <span style="font-size: 20px;" id="cache49">/{{vip.date}}</span>
+                <span style="font-size: 20px;" id="cache49">/{{ $t(`vip.date.${vip.date}`) }}</span>
               </p>
             </div>
+            <div><span style="font-size: 10px;" >{{ $t(`vip.cancellation`) }}</span></div>
           </q-card-section>
           <q-separator dark />
 
-          <q-card-section  class="card-section" style="height: 176px">
+          <q-card-section  class="card-section" style="min-height: 176px">
             <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">
-              <p   style="color:#999999;"> {{ feature }}</p>
+              <p   style="color:#999999;"> {{ $t(`vip.features.${feature}`) }}</p>
             </div>
           </q-card-section>
 

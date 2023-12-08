@@ -1,3 +1,4 @@
+import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
@@ -5,7 +6,7 @@ export default defineEventHandler(async (event) => {
     // console.log(body)
 
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/systemUser/regis`,{
+    const response = await fetch(config.public.baseUrl+`/systemUsers/edit`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

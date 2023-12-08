@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from "vue";
 import { useQuasar } from 'quasar'
-const data = reactive({
-    form: {
-        title:"",
-        gril:"",
-        createTime:""
-    },
-});
+
 useHead({
     title:"图集网",
     meta: [
@@ -16,6 +10,13 @@ useHead({
 
     ],
 })
+const data = reactive({
+  form: {
+    title:"",
+    gril:"",
+    createTime:""
+  },
+});
 const { form, } = toRefs(data);
 async  function  onSubmit(){
     if(form.value.title == undefined || form.value.title == null || form.value.title.trim() == '' || form.value.title.trim().length ==0 ){

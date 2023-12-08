@@ -2,17 +2,35 @@
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useUserStore } from '@/stores/useUserStore';
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
 const userStore = useUserStore();
 const username = ref('');
 const password = ref('');
+const uuid = ref('');
+const code = ref('');
 const captcha = ref('');
 const accept = ref(false);
-const captchaImageUrl = ref('url_to_your_captcha_endpoint');
+const captchaImage = ref('');
 
-function refreshCaptcha() {
-  captchaImageUrl.value = 'url_to_your_captcha_endpoint?rand=' + Math.random();
+// 修正此函数
+async function refreshCaptcha() {
+  try {
+    const { data } = await useFetch("/api/users/captcha");
+    if (data.value.code == 200) {
+      captchaImage.value = "data:image/png;base64," + data.value.img;
+      uuid.value = data.value.uuid;
+    }
+  } catch (error) {
+    // 处理错误，例如显示通知
+    $q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Failed to load captcha'
+    });
+  }
 }
 
 async function onSubmit() {
@@ -30,25 +48,37 @@ async function onSubmit() {
     await userStore.login({
       username: username.value,
       password: password.value,
+      uuid: uuid.value,
+      code: captcha.value,
       captcha: captcha.value,
     });
-    // 登录成功后的逻辑
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Submitted'
-    });
+    if (userStore.token) {
+      // 登录成功，重定向到主页或其他页面
+      router.push('/users/'); // 或者其他页面
+    } else {
+      // 登录失败，但没有抛出错误
+      $q.notify({
+        color: 'red-5',
+        textColor: 'white',
+        icon: 'error',
+        message: 'Login failed'
+      });
+    }
   } catch (error) {
+    refreshCaptcha();
     // 处理登录错误
     $q.notify({
       color: 'red-5',
       textColor: 'white',
       icon: 'error',
-      message: 'Login failed'
+      message: error.message || 'Login failed'
     });
   }
 }
+
+
+// 当组件挂载时，刷新验证码
+onMounted(refreshCaptcha);
 </script>
 
 
@@ -91,7 +121,7 @@ async function onSubmit() {
                 :rules="[val => val && val.length > 0 || '请输入验证码']"
             />
             <div class="q-mb-md">
-              <img :src="captchaImageUrl" @click="refreshCaptcha">
+              <img :src="captchaImage" @click="refreshCaptcha">
               <div>点击图片刷新验证码</div>
             </div>
 

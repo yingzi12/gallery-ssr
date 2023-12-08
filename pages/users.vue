@@ -1,7 +1,31 @@
 <script setup lang="ts">
+import { useUserStore } from '@/stores/useUserStore';
+const userStore = useUserStore();
 const  drawer= ref(false);
 const link= ref('detail')
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
+const users= ref(null)
+const previewImage=ref("\"/favicon.png\"")
+onMounted(() => {
+  // 当组件挂载时检查用户的登录状态
+  if (!userStore.user || !userStore.token) {
+    // 如果用户未登录，则重定向到登录页面
+    router.push('/login'); // 假设登录页面的路由为 '/login'
+  }else{
+    previewImage.value = (userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl;
+    console.log(userStore.token)
+    console.log(userStore.user)
+    console.log(JSON.stringify(userStore.user))
+    users.value=userStore.user;
 
+  }
+});
+
+// 添加注销方法
+const logout = async () => {
+  await userStore.logout();
+  router.push('/login'); // 注销后重定向到登录页面
+};
 </script>
 
 <template>
@@ -33,7 +57,7 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                个人信息
+                {{ $t(`user.personalInfo`) }}
               </q-item-section>
             </q-item>
 
@@ -49,7 +73,7 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                我的关注
+                {{ $t(`user.myAttention`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/collection"
@@ -64,7 +88,7 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                我的收藏
+                {{ $t(`user.myCollection`) }}
               </q-item-section>
             </q-item>
             <q-separator  />
@@ -79,7 +103,7 @@ const link= ref('detail')
                 <q-icon name="buy" />
               </q-item-section>
               <q-item-section>
-                我的购买
+                {{ $t(`user.myPurchase`) }}
               </q-item-section>
             </q-item>
             <q-separator  />
@@ -94,7 +118,7 @@ const link= ref('detail')
                 <q-icon name="album" />
               </q-item-section>
               <q-item-section>
-                我的图集
+                {{ $t(`user.myAlbum`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/vip"
@@ -108,7 +132,7 @@ const link= ref('detail')
                 <q-icon name="vip" />
               </q-item-section>
               <q-item-section>
-                VIP设置
+                {{ $t(`user.vipSettings`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/sell"
@@ -122,7 +146,7 @@ const link= ref('detail')
                 <q-icon name="buy" />
               </q-item-section>
               <q-item-section>
-                用户购买
+                {{ $t(`user.userPurchase`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/withdraw"
@@ -136,7 +160,7 @@ const link= ref('detail')
                 <q-icon name="withdraw" />
               </q-item-section>
               <q-item-section>
-                我的提现
+                {{ $t(`user.myWithdrawal`) }}
               </q-item-section>
             </q-item>
             <q-separator  />
@@ -151,7 +175,7 @@ const link= ref('detail')
                 <q-icon name="send" />
               </q-item-section>
               <q-item-section>
-                我的邀请
+                {{ $t(`user.myInvitation`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/password"
@@ -166,7 +190,7 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                重置密码
+                {{ $t(`user.resetPassword`) }}
               </q-item-section>
             </q-item>
             <q-item to="/users/buyLog"
@@ -181,7 +205,7 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                消费记录
+                {{ $t(`user.consumptionRecord`) }}
               </q-item-section>
             </q-item>
             <q-item
@@ -196,22 +220,22 @@ const link= ref('detail')
               </q-item-section>
 
               <q-item-section>
-                客服服务
+                {{ $t(`user.customerService`) }}
               </q-item-section>
             </q-item>
             <q-item
                 clickable
                 v-ripple
                 :active="link === 'drafts'"
-                @click="link = 'drafts'"
-                active-class="my-menu-link"
+                @click="logout"
+            active-class="my-menu-link"
             >
               <q-item-section avatar>
                 <q-icon name="drafts" />
               </q-item-section>
 
               <q-item-section>
-                退出
+                {{ $t(`user.logOut`) }}
               </q-item-section>
             </q-item>
           </q-list>
@@ -219,15 +243,15 @@ const link= ref('detail')
 
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
           <div class="absolute-bottom bg-transparent">
-            <q-avatar size="56px" class="q-mb-sm">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            <q-avatar v-if="userStore.user" size="56px" class="q-mb-sm">
+              <img :src="previewImage">
             </q-avatar>
-            <div class="text-weight-bold">Razvan Stoenescu</div>
-            <div>
-              234fsf2f2sf@adfa.com<q-icon name="warning" style="color: red" />
+            <div class="text-weight-bold">{{ userStore.user!=null ? userStore.user.nickname : '待登录' }}</div>
+            <div v-if="userStore.user">
+              {{userStore.user.email}}<q-icon v-if="userStore.user.isEmail==2" name="warning" style="color: red" />
             </div>
-            <div>
-             (邮箱待验证)
+            <div v-if="userStore.user && userStore.user.isEmail==2">
+             ( {{ $t(`user.emailVerification`) }})
             </div>
           </div>
         </q-img>

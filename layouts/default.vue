@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+
 const { locale } = useI18n()
 const options= [
   {

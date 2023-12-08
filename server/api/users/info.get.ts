@@ -4,12 +4,12 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
 
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/captchaImage`);
+    const response = await fetch(config.public.baseUrl+`/album/info?id=`+query.id);
     const dataJson = await response.json();
     // console.log(dataJson.data)
     return {
         code:dataJson.code,
-        img: dataJson.img,
-        uuid: dataJson.uuid,
+        message: dataJson.message,
+        data: dataJson.data,
     };
 });

@@ -47,8 +47,77 @@ export default defineI18nConfig(() => ({
                 description: "Album Network - Beauty, Photos, Photography, Showman.com.",
                 title: "Album Network",
             },
+            vip: {
+                monthly: 'Monthly Package',
+                halfYear: 'Half Year Package',
+                yearly: 'Yearly Package',
+                lifetime: 'Lifetime Package',
+                cancellation:'No Cancellation',
+                price: 'Price',
+                date: {
+                    month: 'Month',
+                    halfYear: 'Half Year',
+                    year: 'Year',
+                    lifetime: 'Lifetime'
+                },
+                features: {
+                    monthFeature1: '1 month duration',
+                    download: 'Download',
+                    exclusiveLogo: 'Exclusive logo',
+                    // ...其他月套餐特征...
+                    halfYearFeature1: '6 months duration',
+                    // ...半年套餐的其他特征...
+                    yearFeature1: '12 months duration',
+                    // ...年套餐的其他特征...
+                    lifetimeFeature1: 'Lifetime updates',
+                    videos: 'Videos',
+                    fullAlbum: 'Full Image Gallery',
+                    discount90: '10% Discount on App Purchases',
+                    discount95: '5% Discount on App Purchases',
+                    discount98: '2% Discount on App Purchases',
+                    exclusiveServices: 'Exclusive Services',
+                    // ...永久套餐的其他特征...
+                },
+            },
+            user:{
+                personalInfo: 'Personal Info',
+                myAttention: 'My Attention',
+                myCollection: 'My Collection',
+                myPurchase: 'My Purchases',
+                myAlbum: 'My Albums',
+                vipSettings: 'VIP Settings',
+                userPurchase: 'User Purchases',
+                myWithdrawal: 'My Withdrawal',
+                myInvitation: 'My Invitations',
+                resetPassword: 'Reset Password',
+                consumptionRecord: 'Consumption Record',
+                customerService: 'Customer Service',
+                logOut: 'Log Out',
+                aboutAlbum: 'About Album',
+                contactUs: 'Contact Us',
+                helpCenter: 'Help Center',
+                submitSuggestions: 'Submit Suggestions',
+                reportCenter: 'Report Center',
+                privacyPolicy: 'Privacy Policy',
+                termsOfUse: 'Terms of Use',
+                submitBugs: 'Submit Bugs',
+                emailVerification: 'Email Pending Verification',
+                sendEmail: 'Click to Send Email Verification Code',
+                edit:'Edit',
+            },
+            login:{
+                name:"Account",
+                password:"Password",
+                email:"E-email",
+                code:"Code",
+                login:"Login",
+                regis:"Register",
+                sumbit:"Sumbit",
+                welcome:"Welcome to join the gallery and create your own gallery",
+
+            }
         },
-        zh: {
+        'zh-CN': {
             welcome: '欢迎',
             title: '图集',
             search:"搜索",
@@ -93,6 +162,75 @@ export default defineI18nConfig(() => ({
                 description: "图集网 - 美女、照片、摄影、秀人网。",
                 title: "图集网",
             },
+            vip: {
+                monthly: '包月套餐',
+                halfYear: '半年套餐',
+                yearly: '一年套餐',
+                lifetime: '永久套餐',
+                price: '价格',
+                cancellation:'不可取消',
+                date: {
+                    month: '月',
+                    halfYear: '半年',
+                    year: '年',
+                    lifetime: '永久'
+                },
+                features: {
+                    monthFeature1: '1个月使用期限',
+                    download: '下载',
+                    exclusiveLogo: '专属标志',
+                    // ...其他月套餐特征...
+                    halfYearFeature1: '6个月使用期限',
+                    // ...半年套餐的其他特征...
+                    yearFeature1: '12个月使用期限',
+                    // ...年套餐的其他特征...
+                    lifetimeFeature1: '永久更新',
+                    videos: '视频',
+                    fullAlbum: '全部图库',
+                    discount90: 'App消费9折',
+                    discount95: 'App消费9.5折',
+                    discount98: 'App消费9.8折',
+                    exclusiveServices: '专属服务',
+
+                    // ...永久套餐的其他特征...
+                },
+            },
+            user:{
+                personalInfo: '个人信息',
+                myAttention: '我的关注',
+                myCollection: '我的收藏',
+                myPurchase: '我的购买',
+                myAlbum: '我的图集',
+                vipSettings: 'VIP设置',
+                userPurchase: '用户购买',
+                myWithdrawal: '我的提现',
+                myInvitation: '我的邀请',
+                resetPassword: '重置密码',
+                consumptionRecord: '消费记录',
+                customerService: '客服服务',
+                logOut: '退出',
+                aboutAlbum: '关于图集',
+                contactUs: '联系我们',
+                helpCenter: '帮助中心',
+                submitSuggestions: '提交建议',
+                reportCenter: '举报中心',
+                privacyPolicy: '隐私政策',
+                termsOfUse: '使用条款',
+                submitBugs: '漏洞提交',
+                emailVerification: '邮箱待验证',
+                sendEmail: '点击发送邮箱验证码',
+                edit:'编辑',
+            },
+            login:{
+                name:"账号",
+                password:"密码",
+                email:"电子邮箱",
+                code:"验证码",
+                login:"登录",
+                regis:"注册",
+                sumbit:"提交",
+                welcome:"欢迎加入图集，创建属于你的图集.",
+            }
         }
     }
 }))

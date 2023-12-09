@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
         }
     );
     const dataJson = await response.json();
+    console.log(dataJson.data)
     const sourceWeb=config.public.sourceWeb;
     const list= dataJson.data;
     for (let image of list) {
@@ -25,7 +26,7 @@ export default defineEventHandler(async (event) => {
             image.url = ""; // 如果发生错误，则设置为空字符串
         }
     }
-    // console.log(dataJson.data)
+    console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

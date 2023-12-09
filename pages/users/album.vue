@@ -61,10 +61,10 @@ getList(1)
 <!--            标签。标签标签标签标签标签标签标签标签标签标签标签标签-->
 <!--          </q-item-label>-->
           <q-item-label class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
-            <span class="cursor-pointer"><a :href="'/users/addVideo?aid='+album.id+'&title'+album.title">视频： {{ album.numberVideo }}</a></span>
+            <span class="cursor-pointer"><a :href="'/users/addVideo?aid='+album.id+'&title='+album.title">视频： {{ album.numberVideo }}</a></span>
           </q-item-label>
           <q-item-label class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
-            <span class="cursor-pointer"><a :href="'/users/addImage?aid='+album.id+'&title'+album.title">照片： {{ album.numberPhotos }}</a></span>
+            <span class="cursor-pointer"><a :href="'/users/addImage?aid='+album.id+'&title='+album.title">照片： {{ album.numberPhotos }}</a></span>
           </q-item-label>
         </q-item-section>
         <q-item-section  side>

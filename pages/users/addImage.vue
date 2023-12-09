@@ -1,27 +1,17 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/useUserStore';
 import {tansParams} from "~/server/utils/urlUtils";
+import {useRoute} from "vue-router";
 
 const userStore = useUserStore();
-import {useRoute} from "vue-router";
 
 // config.public
 // 接收url里的参数
 const route = useRoute();
 const aid = ref(route.query.aid);
+const title = ref(route.query.title);
 
-const url = ref('https://picsum.photos/500/300')
 const updateUrl=ref("http://127.0.0.1:8098/admin/userImage/upload");
-
-// const album=ref(null);
-// async function getInfo() {
-//   // 滚动到顶部
-//   const {data} = await useFetch("/api/admin/userAlbum/info?id=" +aid.value )
-//   if (data.value.code === 200) {
-//     album.value = data.value.data;
-//   }
-// }
-// getInfo();
 
 const imageList = ref([]);
 const total = ref(0);
@@ -51,6 +41,23 @@ async  function getList(page:number) {
   }
 }
 getList(1)
+
+async  function  deleteImage(id:number){
+  const data  = await useFetch('/api/admin/userImage/remove/'+id.toString(),{
+    credentials: 'include', // 确保携带 cookie
+  })
+  // if(data.code ==200){
+  //    getList(1)
+  // }
+}
+async function  updateIsFree(id:number,isFree:number){
+  const data = await useFetch('/api/admin/userImage/updateIsFree?id='+id.toString()+"&isFree="+isFree.toString(),{
+    credentials: 'include', // 确保携带 cookie
+  })
+  // if(data.code ==200){
+  //   image.isFree=isFree
+  // }
+}
 const token=ref("Bearer 1");
 onMounted(() => {
   userStore.restoreUserFromCookie();
@@ -106,9 +113,9 @@ onMounted(() => {
           <img :src="image.imgUrl">
 
           <q-card-section>
-            <q-btn  v-if="image.isFree == 2" square color="primary" icon="visibility" >预览</q-btn>
-            <q-btn v-if="image.isFree == 1" square color="primary" icon="sunny" >正式</q-btn>
-            <q-btn square color="primary" icon="delete" >删除</q-btn>
+            <q-btn  v-if="image.isFree == 2" square color="primary" icon="visibility"  @click="updateIsFree(image.id,image.isFree)">预览</q-btn>
+            <q-btn v-if="image.isFree == 1" square color="primary" icon="sunny"@click="updateIsFree(image.id,image.isFree)" >正式</q-btn>
+            <q-btn square color="primary" icon="delete"  @click="deleteImage(image.id)" >删除</q-btn>
           </q-card-section>
         </q-card>
       </q-intersection>

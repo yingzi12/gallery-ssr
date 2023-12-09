@@ -1,14 +1,15 @@
+import { asSitemapUrl, defineSitemapEventHandler } from '#imports'
 
 export default defineSitemapEventHandler(async () => {
+    console.log("-----------------------------dataJson.data1")
     const config = useRuntimeConfig();
     try {
         let urls=[];
+        console.log("-----------------------------dataJson.data")
         for(let i=1;i<20;i++) {
             const response = await fetch(config.public.baseUrl+`/album/list?pageNum=`+i.toString()+`&title=秀人网`);
-            // console.log(config.public.baseUrl+`/album/list?page=`+i.toString()+`&title=秀人网`)
-
             const dataJson = await response.json();
-            // console.log(dataJson.data)
+            console.log(dataJson.data)
             if (dataJson.code == 200) {
                 // 假设API返回的是URL数组
                 urls.push(...dataJson.data.map(item => ({

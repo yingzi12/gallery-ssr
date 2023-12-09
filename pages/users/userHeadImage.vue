@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/useUserStore';
+import {useQuasar} from "quasar";
+import {useRouter} from "vue-router";
 const userStore = useUserStore();
 const selectedImage = ref<File | null>(null);
 const previewImage = ref((userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl);
-
+const config = useRuntimeConfig();
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const handleImageUpload = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file) {
@@ -22,31 +25,78 @@ const handleImageUpload = (event: Event) => {
   }
 };
 
-const uploadImage = () => {
+const uploadImage = async () => {
   if (selectedImage.value) {
     // 创建一个FormData对象用于上传
     const formData = new FormData();
-    formData.append('image', selectedImage.value);
+    formData.append('file', selectedImage.value);
 
     // 使用fetch或axios等方式将formData上传到后端
     // 例如：fetch('/upload', { method: 'POST', body: formData })
+    try {
+      console.log('Authorization Header:', `Bearer ${userStore.token}`);
+      const response = await fetch(config.public.baseUrl + '/admin/systemUser/upload', {
+        method: 'POST',
+        body: formData,
+        headers: new Headers({
+          'Authorization': `Bearer ${userStore.token}`
+        })
+      });
+
+      const data = await response.json();
+      console.log(data)
+      console.log(data.value)
+      console.log(data.code)
+
+      if(data.code ==200){
+        useQuasar().dialog({
+          title: '信息',
+          message: '替换头像成功.'
+        }).onOk(() => {
+          // console.log('OK')
+        }).onCancel(() => {
+          // console.log('Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+        router.push('/users'); // Redirect to login page
+
+      }else{
+        useQuasar().dialog({
+          title: '信息',
+          message: '替换头像失败.'
+        }).onOk(() => {
+          // console.log('OK')
+        }).onCancel(() => {
+          // console.log('Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+      }
+      console.log(data); // 处理响应
+    } catch (error) {
+      console.error('上传失败:', error);
+    }
     // 在这里处理后端上传逻辑
     // 注意：这里只是示例，实际情况可能会根据您的后端和网络请求库而有所不同
   } else {
     alert('请选择一张图片');
   }
 };
+
+
+
 </script>
 
 <template>
   <div>
     <input type="file" @change="handleImageUpload" accept="image/*" />
   </div>
-<div>
-  <q-avatar v-if="previewImage"  size="100px" font-size="52px">
+  <div>
+    <q-avatar v-if="previewImage"  size="100px" font-size="52px">
       <img :src="previewImage">
     </q-avatar>
-</div>
+  </div>
   <button @click="uploadImage">提交</button>
 
 </template>

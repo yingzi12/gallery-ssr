@@ -1,6 +1,8 @@
 import { createClient } from "@libsql/client";
 
 export function useTurso() {
+  console.log("-----------useTurso-----------------")
+
   const tursoConfig = useRuntimeConfig().turso;
 
   if (!tursoConfig.dbUrl || !tursoConfig.dbAuthToken) {

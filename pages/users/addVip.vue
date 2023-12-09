@@ -74,13 +74,10 @@ function onSubmit () {
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
       <q-input
-          filled
-          type="text"
           v-model="intro"
           label="简介 *"
-          lazy-rules
+          filled
           :rules="[ val => val && val.length > 0 || 'Please type something']"
-
       />
       <q-input
           filled
@@ -112,7 +109,7 @@ function onSubmit () {
                mask="#.##"
                fill-mask="0"
                reverse-fill-mask
-               hint="Mask: #.##"
+               hint="美元: #.##"
                input-class="text-right"
                :rules="[
           val => (val !== null && val !== '') || '请输入金额',

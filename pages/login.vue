@@ -75,10 +75,19 @@ async function onSubmit() {
     });
   }
 }
+function isLogin(){
+  if (userStore.user) {
+    // 如果用户未登录，则重定向到登录页面
+    router.push('/users'); // 假设登录页面的路由为 '/login'
+  }
+}
 
-
-// 当组件挂载时，刷新验证码
-onMounted(refreshCaptcha);
+onMounted(() => {
+  userStore.restoreUserFromCookie();
+  isLogin();
+  // 当组件挂载时，刷新验证码
+  refreshCaptcha();
+});
 </script>
 
 

@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     }
   },
   quasar: {
-    plugins: ['Notify'],
+    plugins: ['Notify','Dialog'],
   },
   meta: {
     title: '图集网-图片,美女,写真,图集',

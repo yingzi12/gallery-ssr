@@ -8,6 +8,7 @@ export const defineWrappedResponseHandler = <T extends EventHandlerRequest, D> (
     handler: EventHandler<T, D>
 ): EventHandler<T, D> =>
     defineEventHandler<T>(async event => {
+        console.log("-----------defineWrappedResponseHandler-----------------")
         try {
             // do something before the route handler
             const response = await handler(event)

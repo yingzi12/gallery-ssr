@@ -3,14 +3,20 @@ import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/useUserStore';
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
-const router = useRouter();
 const userStore = useUserStore();
+const userInfoCookie = useCookie('userInfo');
+const userInfo=userStore.user;
 
 const nickname = ref('');
 const email = ref('');
-const description = ref('');
+const intro = ref('');
+nickname.value=userInfo.nickname;
+email.value=userInfo.email;
+intro.value=userInfo.intro;
+
 const accept = ref(false);
 const selectedFile = ref(null);
 
@@ -28,19 +34,48 @@ const onSubmit = async () => {
   const formData = new FormData();
   formData.append('nickname', nickname.value);
   formData.append('email', email.value);
-  formData.append('description', description.value);
+  formData.append('intro', intro.value);
   if (selectedFile.value) {
     formData.append('file', selectedFile.value);
   }
 
   try {
-    const response = await fetch('/admin/edit', {
-      method: 'POST',
+    const response = await fetch("/api/admin/users/edit", {
+      method: "post",
       headers: {
-        'Authorization': `Bearer ${userStore.token}` // 确保您的 token 是有效的
+        'Content-Type': 'application/json',
       },
-      body: formData
+      body: JSON.stringify({
+        nickname: nickname.value,
+        email: email.value,
+        intro: intro.value,
+      }),
     });
+    const data = await response.json();
+    if(data.code==200){
+
+      userInfo.isEmail=data.data.isEmail;
+      userInfo.nickname=data.data.nickname;
+      userInfo.intro=data.data.intro;
+      userInfo.email=data.data.email;
+      userInfoCookie.value=userInfo;
+
+      $q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Update Success'
+      });
+      router.push('/users'); // Redirect to login page
+
+    }else {
+      $q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Update Error'
+      });
+    }
 
     // 检查响应...
   } catch (error) {
@@ -56,7 +91,7 @@ const onSubmit = async () => {
 
       <q-input filled v-model="nickname" label="Your Name *" :rules="[val => !!val || 'Please enter your nickname']" />
       <q-input filled v-model="email" type="email" label="E-mail *" :rules="[val => !!val || 'Please enter your email']" />
-      <q-input filled v-model="description" label="Description *" :rules="[val => !!val || 'Please enter a description']" />
+      <q-input filled v-model="intro" label="Intro *" :rules="[val => !!val || 'Please enter a Intro']" />
 
       <q-toggle v-model="accept" label="I accept the license and terms" />
 

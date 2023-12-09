@@ -26,6 +26,9 @@ const logout = async () => {
   await userStore.logout();
   router.push('/login'); // 注销后重定向到登录页面
 };
+onMounted(() => {
+  userStore.restoreUserFromCookie();
+});
 </script>
 
 <template>

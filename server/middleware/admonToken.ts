@@ -1,6 +1,7 @@
 
 export default defineEventHandler((event) => {
     var url=event.path;
+    console.log("admintoken url:"+url)
 // 检查当前路由是否位于 /api/admin 下
     if (url.startsWith('/api/admin')) {
         try {

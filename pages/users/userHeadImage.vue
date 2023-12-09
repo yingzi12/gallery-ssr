@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/useUserStore';
 import {useQuasar} from "quasar";
-import {useRouter} from "vue-router";
+
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
+
 const userStore = useUserStore();
 const selectedImage = ref<File | null>(null);
 const previewImage = ref((userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl);
 const config = useRuntimeConfig();
-const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const handleImageUpload = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file) {

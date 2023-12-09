@@ -1,135 +1,123 @@
 <script setup lang="ts">
-import {useQuasar} from "quasar";
+import { useQuasar } from 'quasar';
 import { useUserStore } from '@/stores/useUserStore';
 
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
+const $q = useQuasar();
+const userStore = useUserStore();
 const config = useRuntimeConfig();
 
-const $q = useQuasar()
-
-const name = ref(null)
-const gril = ref(null)
-const intro = ref(null)
-const tags = ref(null)
-const vipPrice = ref(0.0)
-const price =ref(0.0);
-const accept = ref(false)
-const userStore = useUserStore();
-
-if (accept.value !== true) {
-  $q.notify({
-    color: 'red-5',
-    textColor: 'white',
-    icon: 'warning',
-    message: 'You need to accept the license and terms first'
-  })
-}
-else {
-  $q.notify({
-    color: 'green-4',
-    textColor: 'white',
-    icon: 'cloud_done',
-    message: 'Submitted'
-  })
-}
-function  onReset () {
-  name.value = null
-  gril.value = null
-  intro.value = null
-  tags.value = null
-  accept.value = false
-}
-function onSubmit () {
-  if (accept.value !== true) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    })
-  }
-  else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Submitted'
-    })
-  }
-}
-const url = ref('https://picsum.photos/500/300')
-const filePath = ref("");
+const title = ref(null);
+const gril = ref(null);
+const intro = ref(null);
+const tags = ref(null);
+const imgUrl = ref("");
+const vipPrice = ref(0.0);
+const price = ref(0.0);
+const accept = ref(false);
+const charge=ref(1);
 const previewImage = ref("/favicon.png");
 const selectedImage = ref<File | null>(null);
-// const handleImageUpload = (event: Event) => {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     if (file.size <= 2 * 1024 * 1024) { // 2MB限制
-//       selectedImage.value = file;
-//
-//       // 预览图片
-//       const reader = new FileReader();
-//
-//       reader.onload = () => {
-//         previewImage.value = reader.result as string;
-//       };
-//       reader.readAsDataURL(file);
-//     } else {
-//       alert('图片大小不能超过2MB');
-//     }
-//   }
-// };
-const handleImageUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (file) {
-    if (file.size <= 2 * 1024 * 1024) { // 2MB限制
-      selectedImage.value = file;
 
-      // 创建 FormData 对象来发送文件
-      const formData = new FormData();
-      formData.append('image', file);
+function notify(message: string, color: string) {
+  $q.notify({
+    color: color,
+    textColor: 'white',
+    icon: color === 'red-5' ? 'warning' : 'cloud_done',
+    message: message
+  });
+}
 
-      try {
-        // 发送请求到后台接口（请替换为您的后台接口地址）
-        // const response = await fetch('your-backend-api-url', {
-        //   method: 'POST',
-        //   body: formData,
-        // });
-        const response = await fetch(config.public.baseUrl + '/admin/userAlbum/upload', {
-          method: 'POST',
-          body: formData,
-          headers: new Headers({
-            'Authorization': `Bearer ${userStore.token}`
-          })
-        });
+function onReset() {
+  title.value = null;
+  gril.value = null;
+  intro.value = null;
+  tags.value = null;
+  imgUrl.value = null;
+  charge.value=1;
+  accept.value = false;
+}
 
-        if (response.ok) {
-          const data = await response.json();
-          // 假设后台返回的新图片地址在 data.newImageUrl 中
-          previewImage.value = data.newImageUrl;
-        } else {
-          throw new Error('Image upload failed');
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    } else {
-      alert('图片大小不能超过2MB');
+async function onSubmit() {
+  // if (!accept.value) {
+  //   notify('You need to accept the license and terms first', 'red-5');
+  // } else {server≈.get.ts
+    const response = await fetch("/api/admin/userAlbum/add", {
+      method: "post",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userStore.token}`
+      },
+      credentials: 'include', // 确保携带 cookie
+      body: JSON.stringify({
+        title: title.value,
+        intro: intro.value,
+        gril: gril.value,
+        imgUrl: imgUrl.value,
+        tags: tags.value,
+        charge:charge.value,
+        price: price.value,
+        vipPrice: vipPrice.value,
+      }),
+    });
+    const data = await response.json();
+    if(data.code==200){
+      $q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Create Success'
+      });
+      router.push('/users/album'); // Redirect to login page
+
+    }else {
+      $q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Update Error'
+      });
     }
-  }
-};
+    // 这里添加您的提交逻辑
+  // }
+}
 
-watch(filePath, (newValue) => {
-  if (newValue && newValue[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      previewImage.value = e.target.result;
-    };
-    reader.readAsDataURL(newValue[0]);
+async function handleImageUpload(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file && file.size <= 2 * 1024 * 1024) { // 2MB限制
+    selectedImage.value = file;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch(config.public.baseUrl + '/admin/userAlbum/upload', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include', // 确保携带 cookie
+        headers: new Headers({
+          'Authorization': `Bearer ${userStore.token}`
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.data)
+        previewImage.value = "https://image.51x.uk"+data.data;
+        imgUrl.value = "https://image.51x.uk"+data.data;
+      } else {
+        throw new Error('Image upload failed');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      notify('Error uploading image', 'red-5');
+    }
   } else {
-    previewImage.value = ''; // 清除预览图片
+    alert('图片大小不能超过2MB');
   }
-});
-const charge=ref("");
+}
+
+
 const chargeList=[
   {
     label: '免费',
@@ -180,9 +168,9 @@ function updateCharge(charge:number){
       </div>
       <q-input
           filled
-          v-model="name"
+          v-model="title"
           label="图集名称 *"
-          hint="Name and surname"
+          hint="输入图集名称"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
@@ -194,14 +182,14 @@ function updateCharge(charge:number){
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-<!--      <div class="q-pa-md" style="max-width: 150px">-->
-        <q-input
-            v-model="intro"
-            label="简介 *"
-            filled
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
-        />
-<!--      </div>-->
+      <q-input
+          v-model="intro"
+          label="简介 *"
+          filled
+          type="textarea"
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
+      />
+      <!--      </div>-->
       <q-input
           filled
           type="text"
@@ -216,20 +204,20 @@ function updateCharge(charge:number){
                   @update:modelValue="updateCharge"
                   emit-value
                   map-options />
-      <q-input v-if="charge =='3' || charge=='5'"
-          filled
-          v-model="price"
-          label="价格"
-          mask="#.##"
-          fill-mask="0"
-          reverse-fill-mask
-          hint="Mask: #.##"
-          input-class="text-right"
-          :rules="[
+        <q-input v-if="charge =='2' || charge =='3' || charge=='5'"
+                 filled
+                 v-model="price"
+                 label="价格"
+                 mask="#.##"
+                 fill-mask="0"
+                 reverse-fill-mask
+                 hint="Mask: #.##"
+                 input-class="text-right"
+                 :rules="[
           val => (val !== null && val !== '') || '请输入金额',
         val => (val > 0.5 && val < 10000) || '金额不能小与0.5大于1000'
                   ]"
-      />
+        />
         <q-input v-if="charge =='3' || charge=='4'"
                  filled
                  v-model="vipPrice"

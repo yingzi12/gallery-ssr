@@ -56,7 +56,7 @@ onMounted(() => {
                 active-class="my-menu-link"
               >
               <q-item-section avatar>
-                <q-icon name="inbox" />
+                <q-icon name="account_circle" />
               </q-item-section>
 
               <q-item-section>
@@ -72,7 +72,7 @@ onMounted(() => {
                 active-class="my-menu-link"
               >
               <q-item-section avatar>
-                <q-icon name="attention" />
+                <q-icon name="favorite_border" />
               </q-item-section>
 
               <q-item-section>
@@ -83,11 +83,11 @@ onMounted(() => {
                 clickable
                 v-ripple
                 :active="link === 'collection'"
-                @click="link = 'collection'"
+                @click="link = 'favorite_border'"
                 active-class="my-menu-link"
               >
               <q-item-section avatar>
-                <q-icon name="collection" />
+                <q-icon name="star_rate" />
               </q-item-section>
 
               <q-item-section>
@@ -103,7 +103,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="buy" />
+                <q-icon name="shopping_bag" />
               </q-item-section>
               <q-item-section>
                 {{ $t(`user.myPurchase`) }}
@@ -118,7 +118,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="album" />
+                <q-icon name="perm_media" />
               </q-item-section>
               <q-item-section>
                 {{ $t(`user.myAlbum`) }}
@@ -132,7 +132,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="vip" />
+                <q-icon name="settings_brightness" />
               </q-item-section>
               <q-item-section>
                 {{ $t(`user.vipSettings`) }}
@@ -146,7 +146,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="buy" />
+                <q-icon name="view_headline" />
               </q-item-section>
               <q-item-section>
                 {{ $t(`user.userPurchase`) }}
@@ -160,7 +160,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="withdraw" />
+                <q-icon name="paid" />
               </q-item-section>
               <q-item-section>
                 {{ $t(`user.myWithdrawal`) }}
@@ -189,7 +189,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="password" />
               </q-item-section>
 
               <q-item-section>
@@ -204,7 +204,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="vertical_split" />
               </q-item-section>
 
               <q-item-section>
@@ -219,7 +219,7 @@ onMounted(() => {
                 active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="mail_outline" />
               </q-item-section>
 
               <q-item-section>
@@ -234,7 +234,7 @@ onMounted(() => {
             active-class="my-menu-link"
             >
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="exit_to_app" />
               </q-item-section>
 
               <q-item-section>

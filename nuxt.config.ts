@@ -22,7 +22,8 @@ export default defineNuxtConfig({
     },
     // Public keys that are exposed to the client
     public: {
-      baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk'
+      baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk',
+      sourceWeb:  process.env.SOURCE_WEB || 'https://image.51x.uk'
     }
   },
   quasar: {

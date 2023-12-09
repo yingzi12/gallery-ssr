@@ -4,17 +4,7 @@ import {tansParams} from "~/server/utils/urlUtils";
 const current = ref(1)
 const slide = ref(0)
 const title = ref('')
-const albumList = ref([]);
-const total = ref(0);
-const queryData = reactive({
-    form: {},
-    queryParams: {
-        pageNum: 1,
-        title:'',
-    },
-    rules: {
-    }
-});
+
 useHead({
     title:"图集网 Album Gallery",
     meta: [
@@ -24,6 +14,17 @@ useHead({
     ],
 })
 const image=ref("")
+const albumList = ref([]);
+const total = ref(0);
+const queryData = reactive({
+  form: {},
+  queryParams: {
+    pageNum: 1,
+    title:'',
+  },
+  rules: {
+  }
+});
 const { queryParams, form, rules } = toRefs(queryData);
 async  function getList(page:number) {
     // 滚动到顶部

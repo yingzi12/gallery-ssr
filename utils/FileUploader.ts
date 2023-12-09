@@ -12,7 +12,7 @@ class FileUploader {
 
     async checkChunkExists(identifier: string, chunkNumber: number): Promise<boolean> {
         try {
-            var url=`${this.baseUrl}/userVedio/check?identifier=${identifier}&chunkNumber=${chunkNumber}`;
+            var url=`${this.baseUrl}/userVideo/check?identifier=${identifier}&chunkNumber=${chunkNumber}`;
             const response = await fetch(url);
             const dataJson = await response.json();
 
@@ -42,7 +42,7 @@ class FileUploader {
         formData.append('chunkNumber', chunkNumber.toString());
         formData.append('totalChunks', totalChunks.toString());
         formData.append('identifier', identifier);
-        var url=`${this.baseUrl}/userVedio/upload`;
+        var url=`${this.baseUrl}/userVideo/upload`;
         await fetch(url, {
             method: 'POST',
             body: formData

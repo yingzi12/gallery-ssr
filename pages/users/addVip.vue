@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const $q = useQuasar()
 
 const title = ref(null)
@@ -77,16 +77,16 @@ function onSubmit () {
           v-model="intro"
           label="简介 *"
           filled
+          type="textarea"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
       <q-input
-          filled
-          type="text"
-          v-model="desc"
-          label="说明 *"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
-      />
+        v-model="desc"
+        label="说明 *"
+        filled
+        type="textarea"
+        :rules="[ val => val && val.length > 0 || 'Please type something']"
+    />
       <div>
         <q-input v-if="timeType != '永久'"
             filled

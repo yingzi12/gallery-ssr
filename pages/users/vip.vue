@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
   <div class="q-pa-md q-gutter-md">
-    <router-link to="/users/addAlbum">
+    <router-link to="/users/addVip">
       <q-btn color="primary" label="添加" />
     </router-link>
     <q-list bordered class="rounded-borders" style="max-width: 600px">

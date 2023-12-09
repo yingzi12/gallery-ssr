@@ -64,9 +64,9 @@ onMounted(() => {
       <q-separator />
 
       <q-card-actions>
-        <q-btn flat round icon="event" >{{ userStore.user!=null ?userStore.user.countAttention :0 }}</q-btn>
-        <q-btn flat round icon="event" >{{ userStore.user!=null ?userStore.user.countLikey  :0}}</q-btn>
-        <q-btn flat round icon="event" >{{ userStore.user!=null ?userStore.user.countSee :0  }}</q-btn>
+        <q-btn flat round icon="favorite"  color="red-8">{{ userStore.user!=null ?   userStore.user.countAttention :0 }}</q-btn>
+        <q-btn flat round icon="thumb_up" color="red-8">{{ userStore.user!=null ? userStore.user.countLike  :0}}</q-btn>
+        <q-btn flat round icon="visibility" color="red-8">{{ userStore.user!=null ? userStore.user.countSee :0  }}</q-btn>
       </q-card-actions>
     </q-card>
 

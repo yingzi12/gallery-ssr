@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const $q = useQuasar()
+import {tansParams} from "~/server/utils/urlUtils";
 
+const $q = useQuasar()
 const name = ref(null)
 const accept = ref(false)
 if (accept.value !== true) {
@@ -39,6 +40,35 @@ function onSubmit () {
 }
 const url = ref('https://picsum.photos/500/300')
 
+const config = useRuntimeConfig();
+console.log("sourceWeb:"+config.public.sourceWeb)
+const albumList = ref([]);
+const total = ref(0);
+const queryData = reactive({
+  form: {},
+  queryParams: {
+    pageNum: 1,
+    title:'',
+  },
+  rules: {
+  }
+});
+const { queryParams, form, rules } = toRefs(queryData);
+async  function getList(page:number) {
+  // 滚动到顶部
+  // current.value=page
+  // queryParams.value.title=title.value;
+  queryParams.value.pageNum=page;
+  const { data } = await useFetch('/api/admin/userVideo/list?'+tansParams(queryParams.value),{
+    credentials: 'include', // 确保携带 cookie
+  })
+  total.value=data.value.total
+  albumList.value=data.value.data
+  if(total.value==0){
+    total.value=albumList.value.length
+  }
+}
+getList(1)
 </script>
 
 <template>

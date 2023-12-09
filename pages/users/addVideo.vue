@@ -1,78 +1,101 @@
 <script setup lang="ts">
-import {tansParams} from "~/server/utils/urlUtils";
+import { ref, watch, onMounted } from 'vue';
+import { useUserStore } from '@/stores/useUserStore';
+import { tansParams } from "~/server/utils/urlUtils";
+import { useRoute } from "vue-router";
+import {useQuasar} from "quasar";
+const $q = useQuasar();
 
-const $q = useQuasar()
-const name = ref(null)
-const accept = ref(false)
-if (accept.value !== true) {
-  $q.notify({
-    color: 'red-5',
-    textColor: 'white',
-    icon: 'warning',
-    message: 'You need to accept the license and terms first'
-  })
-}
-else {
-  $q.notify({
-    color: 'green-4',
-    textColor: 'white',
-    icon: 'cloud_done',
-    message: 'Submitted'
-  })
-}
-function onSubmit () {
-  if (accept.value !== true) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    })
-  }
-  else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Submitted'
-    })
-  }
-}
-const url = ref('https://picsum.photos/500/300')
-
-const config = useRuntimeConfig();
-console.log("sourceWeb:"+config.public.sourceWeb)
-const albumList = ref([]);
+const userStore = useUserStore();
+const route = useRoute();
+const aid = ref(route.query.aid);
+const updateUrl = ref("http://127.0.0.1:8098/admin/userImage/upload");
+const imageList = ref([]);
 const total = ref(0);
+const token = ref("Bearer 1");
+
 const queryData = reactive({
-  form: {},
   queryParams: {
     pageNum: 1,
-    title:'',
-  },
-  rules: {
+    title: '',
   }
 });
-const { queryParams, form, rules } = toRefs(queryData);
-async  function getList(page:number) {
-  // 滚动到顶部
-  // current.value=page
-  // queryParams.value.title=title.value;
-  queryParams.value.pageNum=page;
-  const { data } = await useFetch('/api/admin/userVideo/list?'+tansParams(queryParams.value),{
-    credentials: 'include', // 确保携带 cookie
-  })
-  total.value=data.value.total
-  albumList.value=data.value.data
-  if(total.value==0){
-    total.value=albumList.value.length
+const { queryParams } = toRefs(queryData);
+
+async function getList(page: number) {
+  queryParams.value.pageNum = page;
+  const { data } = await useFetch('/api/admin/userImage/list?' + tansParams(queryParams.value), {
+    credentials: 'include',
+  });
+  if (data.value) {
+    total.value = data.value.total || imageList.value.length;
+    imageList.value = data.value.data;
   }
 }
-getList(1)
+
+async function deleteImage(id: number) {
+  $q.dialog({
+    title: '通知',
+    message: '是否确认删除.',
+    ok: {
+      push: true
+    },
+    cancel: {
+      push: true,
+      color: 'negative'
+    },
+  }).onOk(async () => {
+    const { data } = await useFetch('/api/admin/userImage/remove?id=' + id.toString(), {
+      method: 'get',
+      credentials: 'include',
+    });
+    if (data.value && data.value.code === 200) {
+      await getList(1);
+    }
+  }).onCancel(() => {
+    // console.log('Cancel')
+  });
+}
+
+async function updateIsFree(id: number, isFree: number) {
+  $q.dialog({
+    title: '通知',
+    message: '是否确认修改.',
+    ok: {
+      push: true
+    },
+    cancel: {
+      push: true,
+      color: 'negative'
+    },
+  }).onOk(async () => {
+    const { data } = await useFetch('/api/admin/userImage/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
+      credentials: 'include',
+    });
+    if (data.value && data.value.code === 200) {
+      await getList(1);
+    }
+  }).onCancel(() => {
+    // console.log('Cancel')
+  })
+  ;
+}
+onMounted(() => {
+  userStore.restoreUserFromCookie();
+  token.value = "Bearer " + userStore.token;
+  getList(1);
+});
+getList(1);
+
+watch(() => route.query.aid, (newAid) => {
+  aid.value = newAid;
+  getList(1);
+});
+const url = ref('https://picsum.photos/500/300')
+
 </script>
 
 <template>
-
   <q-breadcrumbs gutter="none">
     <q-breadcrumbs-el label="这是我的图集" />
     <q-breadcrumbs-el label="视频列表" />
@@ -80,15 +103,36 @@ getList(1)
   <div class="q-pa-md">
     <div class="q-gutter-sm row items-start">
       <q-uploader
-          url="http://localhost:4444/upload"
-          label="Batch upload"
+          :url="updateUrl"
+          field-name="file"
+          :headers="[{name: 'Authorization', value: `${token}`}]"
+          :with-credentials="false"
+          label="上传图集预览视频（视频视频公开观看）"
           multiple
-          batch
+          accept="video/*"
+          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `1`}]"
+          @finish="getList(1)"
           style="max-width: 300px"
       />
     </div>
   </div>
-
+  <div class="q-pa-md">
+    <div class="q-gutter-sm row items-start">
+      <q-uploader
+          :url="updateUrl"
+          field-name="file"
+          :headers="[{name: 'Authorization', value: `${token}`}]"
+          :with-credentials="false"
+          label="上传图集正式视频"
+          multiple
+          accept="video/*"
+          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `2`}]"
+          @finish="getList(1)"
+          style="max-width: 300px"
+      />
+    </div>
+  </div>
+  <q-th>视频列表（{{total}}）</q-th>
   <q-list bordered class="rounded-borders" style="max-width: 400px">
     <q-item-label header>图片列表（0）</q-item-label>
 
@@ -135,4 +179,7 @@ getList(1)
 .my-card
   width: 100%
   max-width: 350px
+.example-item
+  height: 290px
+  width: 290px
 </style>

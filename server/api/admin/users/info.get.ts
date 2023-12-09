@@ -1,25 +1,24 @@
-import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
-    console.log("dataJson.data start")
     const config = useRuntimeConfig();
-    const query = getQuery(event)
     const cookies = parseCookies(event)
     const token = cookies["token"]; // 从用户存储库中获取token
+    const query = getQuery(event)
+
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userAlbum/list?${tansParams(query)}`, {
+    const response = await fetch(config.public.baseUrl+`/admin/systemUser/getInfo/`+query.id, {
+            method: 'get',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
         }
-    );
+        );
     const dataJson = await response.json();
-    console.log("dataJson.data end")
+    // console.log(dataJson.data)
     return {
         code:dataJson.code,
-        message: "Album list retrieved!",
+        message: dataJson.message,
         data: dataJson.data,
-        total: dataJson.total,
     };
 });

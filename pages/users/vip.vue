@@ -6,9 +6,14 @@ definePageMeta({
 
 <template>
   <div class="q-pa-md q-gutter-md">
+    <div>
     <router-link to="/users/addVip">
       <q-btn color="primary" label="添加" />
     </router-link>
+      <router-link to="/userVip">
+        <q-btn color="primary" label="VIP页面查看" />
+      </router-link>
+    </div>
     <q-list bordered class="rounded-borders" style="max-width: 600px">
       <q-item-label header>我创建的图集（0）</q-item-label>
 
@@ -29,13 +34,14 @@ definePageMeta({
         </q-item-section>
 
         <q-item-section  side>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="edit" >修改</q-btn>
           <q-btn class="gt-xs" size="12px" flat dense round icon="done" >发布</q-btn>
-          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
         <q-item-section side >
           <q-item-label caption>价格：11.0</q-item-label>
           <q-item-label caption>单位：1/月</q-item-label>
           <q-item-label caption>购买：0</q-item-label>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
       </q-item>
 
@@ -58,13 +64,14 @@ definePageMeta({
         </q-item-section>
 
         <q-item-section  side>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="edit" >修改</q-btn>
           <q-btn class="gt-xs" size="12px" flat dense round icon="done" >发布</q-btn>
-          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
         <q-item-section side >
           <q-item-label caption>价格：11.0</q-item-label>
           <q-item-label caption>单位：1/月</q-item-label>
           <q-item-label caption>购买：0</q-item-label>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
       </q-item>
     </q-list>

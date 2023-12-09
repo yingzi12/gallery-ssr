@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     const cookies = parseCookies(event)
     const token = cookies["token"]; // 从用户存储库中获取token
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userAlbum/list?${tansParams(query)}`, {
+    const response = await fetch(config.public.baseUrl+`/admin/userSettingVip/list?${tansParams(query)}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`

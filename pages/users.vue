@@ -6,7 +6,33 @@ const link= ref('detail')
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const users= ref(null)
 const previewImage=ref("\"/favicon.png\"")
+
+async function getDetail(){
+  const response = await fetch('/api/admin/users/info?id'+userStore.user.id, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const data = await response.json();
+  console.log(data)
+  console.log("users detail.{}",data.code)
+  if(data.code ==401){
+    await userStore.logout();
+    router.push('/login'); // 注销后重定向到登录页面
+  }
+  if(data.code==200){
+    userStore.setUser(userStore.user,userStore.token);
+  }
+}
+getDetail()
+// 添加注销方法
+const logout = async () => {
+  await userStore.logout();
+  router.push('/login'); // 注销后重定向到登录页面
+};
 onMounted(() => {
+  console.log("000000000000000000000000000000")
   // 当组件挂载时检查用户的登录状态
   if (!userStore.user || !userStore.token) {
     // 如果用户未登录，则重定向到登录页面
@@ -19,14 +45,6 @@ onMounted(() => {
     users.value=userStore.user;
 
   }
-});
-
-// 添加注销方法
-const logout = async () => {
-  await userStore.logout();
-  router.push('/login'); // 注销后重定向到登录页面
-};
-onMounted(() => {
   userStore.restoreUserFromCookie();
 });
 </script>

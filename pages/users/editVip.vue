@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {useUserStore} from "~/stores/useUserStore";
-
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
 const $q = useQuasar()
 
 const title = ref(null)
@@ -11,7 +8,6 @@ const intro = ref(null)
 const tags = ref(null)
 const price =ref(0);
 const accept = ref(false)
-const introduce=ref(null)
 const timeType=ref(1)
 const timeLong=ref(1);
 // const timeTypeList=[
@@ -62,9 +58,8 @@ function  onReset () {
   intro.value = null
   tags.value = null
   accept.value = false
-  introduce.value=null
 }
-async function onSubmit () {
+function onSubmit () {
   if (accept.value !== true) {
     $q.notify({
       color: 'red-5',
@@ -72,48 +67,14 @@ async function onSubmit () {
       icon: 'warning',
       message: 'You need to accept the license and terms first'
     })
-  } else {
+  }
+  else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
       message: 'Submitted'
     })
-  }
-  const response = await fetch("/api/admin/userSettingVip/add", {
-    method: "post",
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
-    },
-    credentials: 'include', // 确保携带 cookie
-    body: JSON.stringify({
-      title: title.value,
-      intro: intro.value,
-      tags: tags.value,
-      price: price.value,
-      timeType:timeType.value,
-      timeLong:timeLong.value,
-      introduce:introduce.value
-    }),
-  });
-  const data = await response.json();
-  if(data.code==200){
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Create Success'
-    });
-    router.push('/users/vip'); // Redirect to login page
-
-  }else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Update Error'
-    });
   }
 }
 </script>
@@ -143,7 +104,7 @@ async function onSubmit () {
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
       <q-input
-        v-model="introduce"
+        v-model="desc"
         label="说明 *"
         filled
         type="textarea"

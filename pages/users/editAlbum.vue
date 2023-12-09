@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import { useUserStore } from '@/stores/useUserStore';
+import {useRoute} from "vue-router";
+import {ref} from "vue";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
 const config = useRuntimeConfig();
 const $q = useQuasar();
-
+const route = useRoute();
+const aid = ref(route.query.id);
 const title = ref(null);
 const gril = ref(null);
 const intro = ref(null);
@@ -42,46 +45,77 @@ async function onSubmit() {
   // if (!accept.value) {
   //   notify('You need to accept the license and terms first', 'red-5');
   // } else {server≈.get.ts
-    const response = await fetch("/api/admin/userAlbum/add", {
-      method: "post",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userStore.token}`
-      },
-      credentials: 'include', // 确保携带 cookie
-      body: JSON.stringify({
-        title: title.value,
-        intro: intro.value,
-        gril: gril.value,
-        imgUrl: imgUrl.value,
-        tags: tags.value,
-        charge:charge.value,
-        price: price.value,
-        vipPrice: vipPrice.value,
-      }),
+  const response = await fetch("/api/admin/userAlbum/edit", {
+    method: "post",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    },
+    credentials: 'include', // 确保携带 cookie
+    body: JSON.stringify({
+      id: aid.value,
+      title: title.value,
+      intro: intro.value,
+      gril: gril.value,
+      imgUrl: imgUrl.value,
+      tags: tags.value,
+      charge:charge.value,
+      price: price.value,
+      vipPrice: vipPrice.value,
+    }),
+  });
+  const data = await response.json();
+  if(data.code==200){
+    $q.notify({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'cloud_done',
+      message: 'Create Success'
     });
-    const data = await response.json();
-    if(data.code==200){
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'Create Success'
-      });
-      router.push('/users/album'); // Redirect to login page
+    router.push('/users/album'); // Redirect to login page
 
-    }else {
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'Update Error'
-      });
+  }else {
+    if(data.code==401){
+      router.push('/login'); // Redirect to login page
     }
-    // 这里添加您的提交逻辑
+    $q.notify({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'cloud_done',
+      message: 'Update Error'
+    });
+  }
+  // 这里添加您的提交逻辑
   // }
 }
 
+async function getDetail(){
+  const response = await fetch('/api/admin/userAlbum/info?id='+aid.value, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const data = await response.json();
+  console.log(data.code)
+  if(data.code ==401){
+    await userStore.logout();
+    router.push('/login'); // 注销后重定向到登录页面
+  }
+  if(data.code==200){
+    title.value= data.data.title;
+    intro.value= data.data.intro;
+    gril.value= data.data.gril;
+    imgUrl.value= data.data.imgUrl;
+    tags.value= data.data.tags;
+    charge.value=data.data.charge;
+    price.value= data.data.price;
+    vipPrice.value= data.data.vipPrice;
+    userStore.setUser(userStore.user,userStore.token);
+
+  }
+}
+getDetail()
 async function handleImageUpload(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file && file.size <= 2 * 1024 * 1024) { // 2MB限制

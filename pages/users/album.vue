@@ -1,6 +1,8 @@
 <script  setup lang="ts">
 import {tansParams} from "~/server/utils/urlUtils";
-
+import {useUserStore} from "~/stores/useUserStore";
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
+const userStore = useUserStore();
 definePageMeta({
   key: route => route.fullPath
 })
@@ -24,11 +26,19 @@ async  function getList(page:number) {
   const { data } = await useFetch('/api/admin/userAlbum/list?'+tansParams(queryParams.value),{
     credentials: 'include', // 确保携带 cookie
   })
+  console.log(data.value.code)
+  if(data.value.code ==401){
+     await userStore.logout();
+     router.push('/login'); // 注销后重定向到登录页面
+  }
   total.value=data.value.total
   albumList.value=data.value.data
   if(total.value==0){
     total.value=albumList.value.length
   }
+}
+function editAlbum(id:number){
+  router.push("/users/editAlbum?id="+id.toString());
 }
 getList(1)
 </script>
@@ -68,20 +78,22 @@ getList(1)
           </q-item-label>
         </q-item-section>
         <q-item-section  side>
-            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >vip</q-btn>
-            <q-btn class="gt-xs" size="12px" flat dense round icon="done"> 20 </q-btn>
+          <span>免费</span>
+<!--            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >vip</q-btn>-->
+<!--            <q-btn class="gt-xs" size="12px" flat dense round icon="done"> 20 </q-btn>-->
         </q-item-section>
 
         <q-item-section  side>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="edit" @click="editAlbum(album.id)" >修改</q-btn>
           <q-btn class="gt-xs" size="12px" flat dense round icon="done" >发布</q-btn>
-          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
         <q-item-section side >
-          <q-item-label caption>收藏：0</q-item-label>
-          <q-item-label caption>购买：0</q-item-label>
-          <q-item-label caption>查看：0</q-item-label>
-          <q-item-label caption>模特：这是模特名称</q-item-label>
+          <q-item-label caption>收藏： {{ album.countCollection }}</q-item-label>
+          <q-item-label caption>购买： {{ album.countBuy }}</q-item-label>
+          <q-item-label caption>查看： {{ album.countSee }}</q-item-label>
+          <q-item-label caption>模特： {{ album.gril }}</q-item-label>
           <q-item-label caption>2023-11-11</q-item-label>
+          <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
         </q-item-section>
       </q-item>
 

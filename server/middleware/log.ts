@@ -1,5 +1,5 @@
 export default defineEventHandler((event) => {
-    console.log("defineEventHandler")
+    console.log("log")
 
     console.log('New request: ' + getRequestURL(event))
 })

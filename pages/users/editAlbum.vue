@@ -112,7 +112,9 @@ async function getDetail(){
     price.value= data.data.price;
     vipPrice.value= data.data.vipPrice;
     userStore.setUser(userStore.user,userStore.token);
-
+  }
+  if(data.code==401){
+    router.push('/login'); // Redirect to login page
   }
 }
 getDetail()

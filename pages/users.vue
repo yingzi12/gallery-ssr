@@ -6,26 +6,27 @@ const link= ref('detail')
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const users= ref(null)
 const previewImage=ref("\"/favicon.png\"")
-
-async function getDetail(){
-  const response = await fetch('/api/admin/users/info?id'+userStore.user.id, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const data = await response.json();
-  console.log(data)
-  console.log("users detail.{}",data.code)
-  if(data.code ==401){
-    await userStore.logout();
-    router.push('/login'); // 注销后重定向到登录页面
-  }
-  if(data.code==200){
-    userStore.setUser(userStore.user,userStore.token);
-  }
-}
-getDetail()
+//server/api/admin/users/info.get.ts
+// async function getDetail(id:number){
+//   const response = await fetch('/api/admin/users/info?id'+id.toString(), {
+//     method: 'get',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': `Bearer ${userStore.token}`
+//     },
+//     credentials: 'include', // 确保携带 cookie
+//   });
+//   const data = await response.json();
+//   console.log(data)
+//   // console.log("users detail.{}",data.code)
+//   if(data.code ==401){
+//     await userStore.logout();
+//     router.push('/login'); // 注销后重定向到登录页面
+//   }
+//   if(data.code==200){
+//     userStore.setUser(userStore.user,userStore.token);
+//   }
+// }
 // 添加注销方法
 const logout = async () => {
   await userStore.logout();
@@ -43,6 +44,9 @@ onMounted(() => {
     console.log(userStore.user)
     console.log(JSON.stringify(userStore.user))
     users.value=userStore.user;
+
+    userStore.refreshCookieExpiration();
+    // getDetail(userStore.user.id)
 
   }
   userStore.restoreUserFromCookie();

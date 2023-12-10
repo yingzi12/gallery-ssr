@@ -93,7 +93,7 @@ onMounted(() => {
 
 <template>
   <div class="center-container">
-    <div class="q-pa-md" style="max-width: 400px">
+    <div class="q-pa-md" style="max-width: 600px">
       <q-card class="my-card">
         <q-card-section>
           <div class="text-h6">登录</div>

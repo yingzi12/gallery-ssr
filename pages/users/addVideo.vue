@@ -6,12 +6,14 @@ import { tansParams } from "~/server/utils/urlUtils";
 import { useRoute } from "vue-router";
 import {useQuasar} from "quasar";
 const $q = useQuasar();
+const config = useRuntimeConfig();
 
 const userStore = useUserStore();
+console.log("addVideo token:"+userStore.token)
 const route = useRoute();
 const aid = ref(route.query.aid);
-const updateUrl = ref("http://127.0.0.1:8098/admin/userVideo/upload");
-const imageList = ref([]);
+const updateUrl = ref(config.public.baseUrl+"/admin/userVideo/upload");
+const videoList = ref([]);
 const total = ref(0);
 const token = ref("Bearer 1");
 
@@ -27,10 +29,13 @@ async function getList(page: number) {
   queryParams.value.pageNum = page;
   const { data } = await useFetch('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
     credentials: 'include',
+    headers: {
+      'Authorization': `Bearer ${userStore.token}`
+    },
   });
   if (data.value) {
-    total.value = data.value.total || imageList.value.length;
-    imageList.value = data.value.data;
+    total.value = data.value.total || videoList.value.length;
+    videoList.value = data.value.data;
   }
 }
 
@@ -49,6 +54,9 @@ async function deleteImage(id: number) {
     const { data } = await useFetch('/api/admin/userVideo/remove?id=' + id.toString(), {
       method: 'get',
       credentials: 'include',
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      },
     });
     if (data.value && data.value.code === 200) {
       await getList(1);
@@ -72,6 +80,9 @@ async function updateIsFree(id: number, isFree: number) {
   }).onOk(async () => {
     const { data } = await useFetch('/api/admin/userVideo/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
       credentials: 'include',
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      },
     });
     if (data.value && data.value.code === 200) {
       await getList(1);
@@ -92,12 +103,13 @@ watch(() => route.query.aid, (newAid) => {
   aid.value = newAid;
   getList(1);
 });
-const url = ref('https://picsum.photos/500/300')
+// const url = ref('https://picsum.photos/500/300')
 
 //视频分段上传
 const selectedFile = ref<File | null>(null);
 const uploadVideoProgress = ref<number | null>(null);
-const uploaderVideo = new FileUploader('http://localhost:8098', updateVideoProgress);
+const uploaderVideo = new FileUploader(config.public.baseUrl, updateVideoProgress);
+const day=getCurrentDateFormatted();
 
 function handleVideoFileChange(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -136,7 +148,7 @@ async function uploadVideoFile() {
       const timestamp = Date.now();
       const identifier = `${selectedFile.value.name}`;
       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token);
+      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day);
       console.log('Upload complete');
       uploadVideoProgress.value = 100; // 更新进度条到100%
       selectedFile.value=null;
@@ -148,7 +160,14 @@ async function uploadVideoFile() {
   }
 }
 const file = ref(null);
+function getCurrentDateFormatted() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，所以加1，并确保两位数
+  const day = now.getDate().toString().padStart(2, '0'); // 确保天数是两位数
 
+  return `${year}-${month}-${day}`;
+}
 </script>
 
 <template>
@@ -203,9 +222,6 @@ const file = ref(null);
         </div>
       </q-card-actions>
     </q-card>
-
-
-
   </div>
 <!--  <div class="q-pa-md">-->
 <!--    <div class="q-gutter-sm row items-start">-->
@@ -225,8 +241,10 @@ const file = ref(null);
 <!--  </div>-->
   <q-th>视频列表（{{total}}）</q-th>
   <q-list bordered class="rounded-borders" style="max-width: 400px">
-    <q-item-label header>图片列表（0）</q-item-label>
-
+    <q-item-label header>视频列表（0）</q-item-label>
+    <div  v-for="(video,index) in videoList"
+          :key="index"
+    >
     <q-item>
       <q-item-section >
         <q-img
@@ -237,7 +255,7 @@ const file = ref(null);
       </q-item-section>
 
       <q-item-section side >
-        <q-item-label caption>2023-11-11 11:11:12</q-item-label>
+        <q-item-label caption>{{ video.createTime }}</q-item-label>
       </q-item-section>
       <q-item-section  side>
         <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
@@ -245,23 +263,7 @@ const file = ref(null);
     </q-item>
 
     <q-separator spaced />
-
-    <q-item>
-      <q-item-section >
-        <q-img
-            :src="url"
-            spinner-color="white"
-            style="height: 140px; max-width: 150px"
-        />
-      </q-item-section>
-
-      <q-item-section side >
-        <q-item-label caption>2023-11-11 11:11:12</q-item-label>
-      </q-item-section>
-      <q-item-section  side>
-        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
-      </q-item-section>
-    </q-item>
+</div>
   </q-list>
 
 </template>

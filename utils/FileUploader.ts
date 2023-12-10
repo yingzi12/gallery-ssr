@@ -10,9 +10,9 @@ class FileUploader {
         this.onProgress = onProgress;
     }
 
-    async checkChunkExists(identifier: string, chunkNumber: number,token:string): Promise<boolean> {
+    async checkChunkExists(identifier: string, chunkNumber: number,token:string,day:string): Promise<boolean> {
         try {
-            var url=`${this.baseUrl}/userVideo/check?identifier=${identifier}&chunkNumber=${chunkNumber}`;
+            var url=`${this.baseUrl}/admin/userVideo/check?identifier=${identifier}&chunkNumber=${chunkNumber}&day=${day}`;
             const response = await fetch(url,{
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -33,8 +33,8 @@ class FileUploader {
         }
     }
 
-    async uploadChunk(fileChunk: Blob, identifier: string, chunkNumber: number, totalChunks: number,token:string): Promise<void> {
-        const exists = await this.checkChunkExists(identifier, chunkNumber,token);
+    async uploadChunk(fileChunk: Blob, identifier: string, chunkNumber: number, totalChunks: number,token:string,day:string): Promise<void> {
+        const exists = await this.checkChunkExists(identifier, chunkNumber,token,day);
         if (exists) {
             console.log(`Chunk ${chunkNumber} already uploaded.`);
             this.onProgress(chunkNumber, totalChunks);
@@ -43,10 +43,11 @@ class FileUploader {
 
         const formData = new FormData();
         formData.append('file', fileChunk);
+        formData.append('day', day);
         formData.append('chunkNumber', chunkNumber.toString());
         formData.append('totalChunks', totalChunks.toString());
         formData.append('identifier', identifier);
-        var url=`${this.baseUrl}/userVideo/upload`;
+        var url=`${this.baseUrl}/admin/userVideo/uploadSection`;
         await fetch(url, {
             method: 'POST',
             body: formData,
@@ -58,14 +59,14 @@ class FileUploader {
         this.onProgress(chunkNumber, totalChunks);
     }
 
-    async uploadFile(file: File, identifier: string,token:string ="", chunkSize: number = 1024 * 1024): Promise<void> {
+    async uploadFile(file: File, identifier: string,token:string ="",day:string ="", chunkSize: number = 1024 * 1024): Promise<void> {
         const totalChunks = Math.ceil(file.size / chunkSize);
         for (let i = 0; i < totalChunks; i++) {
             const start = i * chunkSize;
             const end = Math.min(start + chunkSize, file.size);
             const chunk = file.slice(start, end);
 
-            await this.uploadChunk(chunk, identifier, i, totalChunks,token);
+            await this.uploadChunk(chunk, identifier, i, totalChunks,token,day);
         }
     }
 }

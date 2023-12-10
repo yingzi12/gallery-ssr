@@ -26,6 +26,7 @@ function handleVideoFileChange(event: Event) {
 function updateVideoProgress(chunkNumber: number, totalChunks: number) {
   uploadVideoProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
+const day= getCurrentDateFormatted();
 
 async function uploadVideoFile() {
   if (selectedFile.value) {
@@ -40,5 +41,13 @@ async function uploadVideoFile() {
       console.error('Upload failed', error);
     }
   }
+}
+function getCurrentDateFormatted() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，所以加1，并确保两位数
+  const day = now.getDate().toString().padStart(2, '0'); // 确保天数是两位数
+
+  return `${year}-${month}-${day}`;
 }
 </script>

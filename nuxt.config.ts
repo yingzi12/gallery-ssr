@@ -6,13 +6,13 @@ export default defineNuxtConfig({
     static: 'static', // 新的静态文件夹名称
   },
   buildModules: [
-    // other modules
     'quasar/nuxt',
   ],
   modules: [
     '@nuxtjs/i18n',
     'nuxt-quasar-ui',
     'nuxt-simple-sitemap',
+    '@nuxtseo/module',
     '@pinia/nuxt'
   ],
   runtimeConfig: {
@@ -49,7 +49,11 @@ export default defineNuxtConfig({
   serverMiddleware: [
     '~/middleware/cache.js'
   ],
+  plugins: [
+    '~/plugins/error-handler.ts',
+    '~/plugins/axios.js'
+  ],
   i18n: {
     /* module options */
-  }
+  },
 })

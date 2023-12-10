@@ -33,7 +33,7 @@ class FileUploader {
         }
     }
 
-    async uploadChunk(fileChunk: Blob, identifier: string, chunkNumber: number, totalChunks: number,token:string,day:string,aid:number): Promise<void> {
+    async uploadChunk(fileChunk: Blob, identifier: string, chunkNumber: number, totalChunks: number,token:string,day:string,aid:number,isFree:number): Promise<void> {
         const exists = await this.checkChunkExists(identifier, chunkNumber,token,day);
         if (exists) {
             console.log(`Chunk ${chunkNumber} already uploaded.`);
@@ -44,7 +44,8 @@ class FileUploader {
         const formData = new FormData();
         formData.append('file', fileChunk);
         formData.append('day', day);
-        formData.append('aid', aid);
+        formData.append('aid', aid.toString());
+        formData.append('isFree', isFree.toString());
         formData.append('chunkNumber', chunkNumber.toString());
         formData.append('totalChunks', totalChunks.toString());
         formData.append('identifier', identifier);
@@ -60,14 +61,24 @@ class FileUploader {
         this.onProgress(chunkNumber, totalChunks);
     }
 
-    async uploadFile(file: File, identifier: string,token:string ="",day:string ="",aid:number=0, chunkSize: number = 1024 * 1024): Promise<void> {
+    /**
+     * 默认每个分段10M
+     * @param file
+     * @param identifier
+     * @param token
+     * @param day
+     * @param aid
+     * @param isFree
+     * @param chunkSize
+     */
+    async uploadFile(file: File, identifier: string,token:string ="",day:string ="",aid:number=0,isFree:number=2, chunkSize: number =10 *  1024 * 1024): Promise<void> {
         const totalChunks = Math.ceil(file.size / chunkSize);
         for (let i = 0; i < totalChunks; i++) {
             const start = i * chunkSize;
             const end = Math.min(start + chunkSize, file.size);
             const chunk = file.slice(start, end);
 
-            await this.uploadChunk(chunk, identifier, i, totalChunks,token,day,aid);
+            await this.uploadChunk(chunk, identifier, i, totalChunks,token,day,aid,isFree);
         }
     }
 }

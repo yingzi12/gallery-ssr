@@ -110,6 +110,10 @@ watch(() => route.query.aid, (newAid) => {
 const selectedFile = ref<File | null>(null);
 const uploadVideoProgress = ref<number | null>(null);
 const uploaderVideo = new FileUploader(config.public.baseUrl, updateVideoProgress);
+const selectedPreviewFile = ref<File | null>(null);
+const uploadPreviewProgress = ref<number | null>(null);
+const uploaderVideoPreview = new FileUploader(config.public.baseUrl, updateVideoPreviewProgress);
+
 const day=getCurrentDateFormatted();
 
 function handleVideoFileChange(event: Event) {
@@ -137,7 +141,22 @@ function handleVideoFileChange(event: Event) {
 
   }
 }
-
+function handlePreviewVideoFileChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    const file = target.files[0];
+    if (file.type !== 'video/mp4') {
+      alert('Please select an MP4 video file.');
+      return;
+    }
+    const maxSize = 100 * 1024 * 1024; // 400MB in bytes
+    if (file.size > maxSize) {
+      alert('File size should not exceed 100MB.');
+      return;
+    }
+    selectedPreviewFile.value = file;
+  }
+}
 function updateVideoProgress(chunkNumber: number, totalChunks: number) {
   uploadVideoProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
@@ -146,20 +165,93 @@ async function uploadVideoFile() {
   if (selectedFile.value) {
     try {
       // 生成唯一标识符：文件名-时间戳
-      const timestamp = Date.now();
       const identifier = `${selectedFile.value.name}`;
       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value);
+      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value,2);
       console.log('Upload complete');
       uploadVideoProgress.value = 100; // 更新进度条到100%
       selectedFile.value=null;
-      uploadVideoProgress.value=null;
     } catch (error) {
       console.error('Upload failed', error);
       uploadVideoProgress.value = 0; // 更新进度条到100%
     }
   }
 }
+function updateVideoPreviewProgress(chunkNumber: number, totalChunks: number) {
+  uploadPreviewProgress.value = Math.round((chunkNumber / totalChunks) * 100);
+}
+// async function uploadPreviewVideoFile() {
+//   // 类似 uploadVideoFile，但使用 selectedPreviewFile 和 uploadPreviewProgress
+//   if (selectedPreviewFile.value) {
+//     try {
+//       // 生成唯一标识符：文件名-时间戳
+//       const identifier = `${selectedPreviewFile.value.name}`;
+//       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
+//       await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier,userStore.token,day,aid.value,1);
+//       console.log('Upload complete');
+//       uploadPreviewProgress.value = 100; // 更新进度条到100%
+//       selectedPreviewFile.value=null;
+//     } catch (error) {
+//       console.error('Upload failed', error);
+//       uploadPreviewProgress.value = 0; // 更新进度条到100%
+//     }
+//   }
+// }
+
+// async function uploadVideoFile() {
+//   if (selectedFile.value) {
+//     try {
+//       const identifier = `${selectedFile.value.name}`;
+//       await uploaderVideo.uploadFile(selectedFile.value, identifier, userStore.token, day, aid.value, 2);
+//       uploadVideoProgress.value = 100;
+//       selectedFile.value = null;
+//
+//       $q.dialog({
+//         title: '上传成功',
+//         message: '视频上传成功。',
+//         ok: true,
+//       }).onOk(() => {
+//         getList(1);
+//       });
+//
+//     } catch (error) {
+//       console.error('Upload failed', error);
+//       uploadVideoProgress.value = 0;
+//       $q.notify({
+//         type: 'negative',
+//         message: '上传失败'
+//       });
+//     }
+//   }
+// }
+
+async function uploadPreviewVideoFile() {
+  if (selectedPreviewFile.value) {
+    try {
+      const identifier = `${selectedPreviewFile.value.name}`;
+      await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, 1);
+      uploadPreviewProgress.value = 100;
+      selectedPreviewFile.value = null;
+
+      $q.dialog({
+        title: '上传成功',
+        message: '预览视频上传成功。',
+        ok: true,
+      }).onOk(() => {
+        getList(1);
+      });
+
+    } catch (error) {
+      console.error('Upload failed', error);
+      uploadPreviewProgress.value = 0;
+      $q.notify({
+        type: 'negative',
+        message: '上传失败'
+      });
+    }
+  }
+}
+
 const file = ref(null);
 function getCurrentDateFormatted() {
   const now = new Date();
@@ -189,7 +281,22 @@ function getCurrentDateFormatted() {
 
     <q-card class="my-card">
       <q-card-section>
-        <div class="text-h6">上传正式视频</div>
+        <div class="text-subtitle1">上传预览视频（公开可看）</div>
+      </q-card-section>
+      <q-separator />
+      <q-card-actions vertical>
+        <q-btn flat> <input type="file" @change="handlePreviewVideoFileChange" accept=".mp4" /></q-btn>
+        <q-btn flat><button @click="uploadPreviewVideoFile">Upload Preview</button></q-btn>
+      </q-card-actions>
+      <q-separator />
+      <q-card-actions vertical>
+        <div v-if="uploadPreviewProgress">
+          <p>Uploading Preview: {{ uploadPreviewProgress }}%</p>
+        </div>
+      </q-card-actions>
+
+      <q-card-section>
+        <div class="text-subtitle1">上传正式视频</div>
       </q-card-section>
       <q-separator />
       <q-card-actions vertical>
@@ -204,9 +311,9 @@ function getCurrentDateFormatted() {
       </q-card-actions>
     </q-card>
   </div>
-  <q-th>视频列表（{{total}}）</q-th>
+<!--  <q-th>视频列表（{{total}}）</q-th>-->
   <q-list bordered class="rounded-borders" style="max-width: 400px">
-    <q-item-label header>视频列表（0）</q-item-label>
+    <q-item-label header>视频列表（{{total}}）</q-item-label>
     <div  v-for="(video,index) in videoList"
           :key="index"
     >
@@ -220,6 +327,12 @@ function getCurrentDateFormatted() {
       </q-item-section>
 
       <q-item-section side >
+        <q-item-label v-if="video.isFree == 1" caption>预览视频</q-item-label>
+        <q-item-label v-if="video.isFree == 2" caption>正式视频</q-item-label>
+        <q-item-label v-if="video.status == 1"  caption>等待转码</q-item-label>
+        <q-item-label v-if="video.status == 2"  caption>转码中</q-item-label>
+        <q-item-label v-if="video.status == 3"  caption>可以播放</q-item-label>
+
         <q-item-label caption>{{ video.createTime }}</q-item-label>
       </q-item-section>
       <q-item-section  side>

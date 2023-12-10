@@ -271,7 +271,7 @@ async function uploadPreviewVideoFile() {
         console.log('Upload update complete');
       }else {
         const identifier = `${selectedPreviewFile.value.name}`;
-        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree);
+        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree,md5);
       }
       uploadPreviewProgress.value = 100;
       selectedPreviewFile.value = null;

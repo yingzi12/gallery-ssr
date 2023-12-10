@@ -72,7 +72,7 @@ class FileUploader {
      * @param isFree
      * @param chunkSize
      */
-    async uploadFile(file: File, identifier: string,token:string ="",day:string ="",aid:number=0,isFree:number=2,md5:string=2, chunkSize: number =10 *  1024 * 1024): Promise<void> {
+    async uploadFile(file: File, identifier: string,token:string ="",day:string ="",aid:number=0,isFree:number=2,md5:string="", chunkSize: number =10 *  1024 * 1024): Promise<void> {
         const totalChunks = Math.ceil(file.size / chunkSize);
         for (let i = 0; i < totalChunks; i++) {
             const start = i * chunkSize;

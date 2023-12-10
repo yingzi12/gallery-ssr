@@ -13,6 +13,7 @@ console.log("addVideo token:"+userStore.token)
 const route = useRoute();
 const aid = ref(route.query.aid);
 const updateUrl = ref(config.public.baseUrl+"/admin/userVideo/upload");
+console.log("updateUrl:"+updateUrl.value)
 const videoList = ref([]);
 const total = ref(0);
 const token = ref("Bearer 1");
@@ -148,7 +149,7 @@ async function uploadVideoFile() {
       const timestamp = Date.now();
       const identifier = `${selectedFile.value.name}`;
       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day);
+      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value);
       console.log('Upload complete');
       uploadVideoProgress.value = 100; // 更新进度条到100%
       selectedFile.value=null;
@@ -183,32 +184,12 @@ function getCurrentDateFormatted() {
       <p class="text-body2">推荐电脑端免费转码工具:<a  href="http://www.pcfreetime.com/formatfactory/cn/index.html">格式工厂</a></p>
 
     </div>
-    <div class="q-gutter-sm row items-start">
-
-      <div>
-      <q-uploader
-          :url="updateUrl"
-          field-name="file"
-          :headers="[{name: 'Authorization', value: `${token}`}]"
-          :with-credentials="false"
-          label="上传图集预览视频（视频视频公开观看）"
-          multiple
-          max-file-size="204000"
-          max-files="3"
-          accept=".mp4"
-          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `1`}]"
-          @finish="getList(1)"
-          style="max-width: 300px"
-      />
-      </div>
-    </div>
   </div>
   <div>
 
     <q-card class="my-card">
       <q-card-section>
         <div class="text-h6">上传正式视频</div>
-<!--        <div class="text-subtitle2">上传正式视频</div>-->
       </q-card-section>
       <q-separator />
       <q-card-actions vertical>
@@ -223,22 +204,6 @@ function getCurrentDateFormatted() {
       </q-card-actions>
     </q-card>
   </div>
-<!--  <div class="q-pa-md">-->
-<!--    <div class="q-gutter-sm row items-start">-->
-<!--      <q-uploader-->
-<!--          :url="updateUrl"-->
-<!--          field-name="file"-->
-<!--          :headers="[{name: 'Authorization', value: `${token}`}]"-->
-<!--          :with-credentials="false"-->
-<!--          label="上传图集正式视频"-->
-<!--          multiple-->
-<!--          accept="video/*"-->
-<!--          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `2`}]"-->
-<!--          @finish="getList(1)"-->
-<!--          style="max-width: 300px"-->
-<!--      />-->
-<!--    </div>-->
-<!--  </div>-->
   <q-th>视频列表（{{total}}）</q-th>
   <q-list bordered class="rounded-borders" style="max-width: 400px">
     <q-item-label header>视频列表（0）</q-item-label>
@@ -248,7 +213,7 @@ function getCurrentDateFormatted() {
     <q-item>
       <q-item-section >
         <q-img
-            :src="url"
+            :src="video.url"
             spinner-color="white"
             style="height: 140px; max-width: 150px"
         />

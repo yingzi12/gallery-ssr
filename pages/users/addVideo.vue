@@ -28,6 +28,7 @@ const queryData = reactive({
 const { queryParams } = toRefs(queryData);
 
 async function getList(page: number) {
+  queryParams.value.aid = aid.value;
   queryParams.value.pageNum = page;
   const { data } = await useFetch('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
     credentials: 'include',
@@ -178,7 +179,7 @@ async function uploadVideoFile() {
       console.log(data);
       const isFree=2;
       if (data!=null && data.code == 200) {
-         await addVideoRecord(md5,data.data.url,isFree);
+         await addVideoRecord(md5,data.data.sourceUrl,isFree);
         console.log('Upload update complete');
       }else {
         // 生成唯一标识符：文件名-时间戳
@@ -223,31 +224,6 @@ async function calculateMd5(file: File): Promise<string> {
   });
 }
 
-//检查文件是否已经上传
-// async function checkFileExistence(md5: string) {
-//   try {
-//     const response = await fetch(`${config.public.baseUrl}/admin/userVideo/checkAllMd5?md5=${md5}`, {
-//       method: 'get',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${userStore.token}`
-//       },
-//     });
-//     const data = await response.json();
-//     if (data!=null && data.code == 200) {
-//       return data;
-//       // 文件已存在
-//       // addVideoRecord(md5);
-//     } else {
-//       return null;
-//       // // 文件不存在，继续上传
-//       // uploadVideoFile(file, md5);
-//     }
-//   } catch (error) {
-//     console.error('Error checking file existence', error);
-//   }
-// }
-//文件已经存在
 async function addVideoRecord(md5: string,url:string,isFree:number) {
   try {
     const response = await fetch('/api/admin/userVideo/add', {
@@ -291,7 +267,7 @@ async function uploadPreviewVideoFile() {
       console.log(data);
       const isFree=1;
       if (data!=null && data.code == 200) {
-        await addVideoRecord(md5,data.data.url,isFree);
+        await addVideoRecord(md5,data.data.sourceUrl,isFree);
         console.log('Upload update complete');
       }else {
         const identifier = `${selectedPreviewFile.value.name}`;

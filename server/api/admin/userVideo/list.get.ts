@@ -15,15 +15,19 @@ export default defineEventHandler(async (event) => {
     );
     const dataJson = await response.json();
     const sourceWeb=config.public.sourceWeb;
-    const list= dataJson.data;
-    for (let image of list) {
-        console.log(image);
-        try {
-            image.url = await getBase64FromImageUrl(sourceWeb + image.imgUrl);
-        } catch (error) {
-            console.error(`Error converting image:${image.url}`);
-            image.url = ""; // 如果发生错误，则设置为空字符串
+    let list= dataJson.data;
+    if(list!=null) {
+        for (let image of list) {
+            console.log(image);
+            try {
+                image.url = await getBase64FromImageUrl(sourceWeb + image.imgUrl);
+            } catch (error) {
+                console.error(`Error converting image:${image.url}`);
+                image.url = ""; // 如果发生错误，则设置为空字符串
+            }
         }
+    }else{
+        list=[];
     }
     // console.log(dataJson.data)
     return {

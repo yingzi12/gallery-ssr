@@ -41,7 +41,7 @@ async function getList(page: number) {
   }
 }
 
-async function deleteImage(id: number) {
+async function deleteVideo(id: number) {
   $q.dialog({
     title: '通知',
     message: '是否确认删除.',
@@ -166,10 +166,19 @@ async function uploadVideoFile() {
   if (selectedFile.value) {
     try {
       const md5 = await calculateMd5(selectedFile.value);
-      const data= checkFileExistence(md5, selectedFile.value);
+      const response = await fetch(`${config.public.baseUrl}/admin/userVideo/checkAllMd5?md5=${md5}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userStore.token}`
+        },
+      });
+      const data = await response.json();
+      // const data= checkFileExistence(md5);
+      console.log(data);
       const isFree=2;
-      if(data != null){
-         await addVideoRecord(md5,data.url,isFree);
+      if (data!=null && data.code == 200) {
+         await addVideoRecord(md5,data.data.url,isFree);
         console.log('Upload update complete');
       }else {
         // 生成唯一标识符：文件名-时间戳
@@ -190,49 +199,58 @@ function updateVideoPreviewProgress(chunkNumber: number, totalChunks: number) {
   uploadPreviewProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
 //计算md5
-function calculateMd5(file: File): Promise<string> {
+async function calculateMd5(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
+    if (!(file instanceof Blob)) {
+      reject(new TypeError("calculateMd5 The provided value is not a Blob"));
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = function (e) {
       const data = e.target.result;
-      const md5 = SparkMD5.ArrayBuffer.hash(data);
-      resolve(md5);
+      if (data instanceof ArrayBuffer) {
+        const md5 = SparkMD5.ArrayBuffer.hash(data);
+        resolve(md5);
+      } else {
+        reject(new Error(" calculateMd5 File reading did not result in ArrayBuffer"));
+      }
     };
     reader.onerror = function (e) {
-      reject(e);
+      reject(new Error("FileReader error: " + e.target.error));
     };
     reader.readAsArrayBuffer(file);
   });
 }
+
 //检查文件是否已经上传
-async function checkFileExistence(md5: string, file: File) {
-  try {
-    const response = await fetch('/api/admin/userVideo/checkAllMd5', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userStore.token}`
-      },
-      body: JSON.stringify({ md5: md5 })
-    });
-    const data = await response.json();
-    if (data.code === 200) {
-      return data.date;
-      // 文件已存在
-      // addVideoRecord(md5);
-    } else {
-      return null;
-      // // 文件不存在，继续上传
-      // uploadVideoFile(file, md5);
-    }
-  } catch (error) {
-    console.error('Error checking file existence', error);
-  }
-}
+// async function checkFileExistence(md5: string) {
+//   try {
+//     const response = await fetch(`${config.public.baseUrl}/admin/userVideo/checkAllMd5?md5=${md5}`, {
+//       method: 'get',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${userStore.token}`
+//       },
+//     });
+//     const data = await response.json();
+//     if (data!=null && data.code == 200) {
+//       return data;
+//       // 文件已存在
+//       // addVideoRecord(md5);
+//     } else {
+//       return null;
+//       // // 文件不存在，继续上传
+//       // uploadVideoFile(file, md5);
+//     }
+//   } catch (error) {
+//     console.error('Error checking file existence', error);
+//   }
+// }
 //文件已经存在
 async function addVideoRecord(md5: string,url:string,isFree:number) {
   try {
-    const response = await fetch('/api/userVedio/add', {
+    const response = await fetch('/api/admin/userVideo/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -241,7 +259,7 @@ async function addVideoRecord(md5: string,url:string,isFree:number) {
       body: JSON.stringify({ aid: aid.value, md5: md5, url: url, isFree: isFree })
     });
     const data = await response.json();
-    if (data.code === 200) {
+    if (data.code == 200) {
       $q.notify({
         type: 'positive',
         message: '视频已成功添加'
@@ -260,11 +278,20 @@ async function addVideoRecord(md5: string,url:string,isFree:number) {
 async function uploadPreviewVideoFile() {
   if (selectedPreviewFile.value) {
     try {
-      const md5 = await calculateMd5(selectedFile.value);
-      const data= checkFileExistence(md5, selectedFile.value);
+      const md5 = await calculateMd5(selectedPreviewFile.value);
+      const response = await fetch(`${config.public.baseUrl}/admin/userVideo/checkAllMd5?md5=${md5}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userStore.token}`
+        },
+      });
+      const data = await response.json();
+      console.log("checkFileExistence");
+      console.log(data);
       const isFree=1;
-      if(data != null){
-        await addVideoRecord(md5,data.url,isFree);
+      if (data!=null && data.code == 200) {
+        await addVideoRecord(md5,data.data.url,isFree);
         console.log('Upload update complete');
       }else {
         const identifier = `${selectedPreviewFile.value.name}`;

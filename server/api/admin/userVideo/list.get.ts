@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
         try {
             image.url = await getBase64FromImageUrl(sourceWeb + image.imgUrl);
         } catch (error) {
-            console.error('Error converting image:', error);
+            console.error(`Error converting image:${image.url}`);
             image.url = ""; // 如果发生错误，则设置为空字符串
         }
     }

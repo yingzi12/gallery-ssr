@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SparkMD5 from 'spark-md5';
 import { ref, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/useUserStore';
 import FileUploader from "~/utils/FileUploader";
@@ -164,12 +165,20 @@ function updateVideoProgress(chunkNumber: number, totalChunks: number) {
 async function uploadVideoFile() {
   if (selectedFile.value) {
     try {
-      // 生成唯一标识符：文件名-时间戳
-      const identifier = `${selectedFile.value.name}`;
-      // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-      await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value,2);
-      console.log('Upload complete');
-      uploadVideoProgress.value = 100; // 更新进度条到100%
+      const md5 = await calculateMd5(selectedFile.value);
+      const data= checkFileExistence(md5, selectedFile.value);
+      const isFree=2;
+      if(data != null){
+         await addVideoRecord(md5,data.url,isFree);
+        console.log('Upload update complete');
+      }else {
+        // 生成唯一标识符：文件名-时间戳
+        const identifier = `${selectedFile.value.name}`;
+        // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
+        await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value,isFree,md5);
+        console.log('Upload complete');
+      }
+      uploadVideoProgress.value = 100; // 更新进度条到100
       selectedFile.value=null;
     } catch (error) {
       console.error('Upload failed', error);
@@ -180,56 +189,87 @@ async function uploadVideoFile() {
 function updateVideoPreviewProgress(chunkNumber: number, totalChunks: number) {
   uploadPreviewProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
-// async function uploadPreviewVideoFile() {
-//   // 类似 uploadVideoFile，但使用 selectedPreviewFile 和 uploadPreviewProgress
-//   if (selectedPreviewFile.value) {
-//     try {
-//       // 生成唯一标识符：文件名-时间戳
-//       const identifier = `${selectedPreviewFile.value.name}`;
-//       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-//       await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier,userStore.token,day,aid.value,1);
-//       console.log('Upload complete');
-//       uploadPreviewProgress.value = 100; // 更新进度条到100%
-//       selectedPreviewFile.value=null;
-//     } catch (error) {
-//       console.error('Upload failed', error);
-//       uploadPreviewProgress.value = 0; // 更新进度条到100%
-//     }
-//   }
-// }
-
-// async function uploadVideoFile() {
-//   if (selectedFile.value) {
-//     try {
-//       const identifier = `${selectedFile.value.name}`;
-//       await uploaderVideo.uploadFile(selectedFile.value, identifier, userStore.token, day, aid.value, 2);
-//       uploadVideoProgress.value = 100;
-//       selectedFile.value = null;
-//
-//       $q.dialog({
-//         title: '上传成功',
-//         message: '视频上传成功。',
-//         ok: true,
-//       }).onOk(() => {
-//         getList(1);
-//       });
-//
-//     } catch (error) {
-//       console.error('Upload failed', error);
-//       uploadVideoProgress.value = 0;
-//       $q.notify({
-//         type: 'negative',
-//         message: '上传失败'
-//       });
-//     }
-//   }
-// }
-
+//计算md5
+function calculateMd5(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const data = e.target.result;
+      const md5 = SparkMD5.ArrayBuffer.hash(data);
+      resolve(md5);
+    };
+    reader.onerror = function (e) {
+      reject(e);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+//检查文件是否已经上传
+async function checkFileExistence(md5: string, file: File) {
+  try {
+    const response = await fetch('/api/admin/userVideo/checkAllMd5', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userStore.token}`
+      },
+      body: JSON.stringify({ md5: md5 })
+    });
+    const data = await response.json();
+    if (data.code === 200) {
+      return data.date;
+      // 文件已存在
+      // addVideoRecord(md5);
+    } else {
+      return null;
+      // // 文件不存在，继续上传
+      // uploadVideoFile(file, md5);
+    }
+  } catch (error) {
+    console.error('Error checking file existence', error);
+  }
+}
+//文件已经存在
+async function addVideoRecord(md5: string,url:string,isFree:number) {
+  try {
+    const response = await fetch('/api/userVedio/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userStore.token}`
+      },
+      body: JSON.stringify({ aid: aid.value, md5: md5, url: url, isFree: isFree })
+    });
+    const data = await response.json();
+    if (data.code === 200) {
+      $q.notify({
+        type: 'positive',
+        message: '视频已成功添加'
+      });
+      getList(1);
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: '添加视频记录失败'
+      });
+    }
+  } catch (error) {
+    console.error('Error adding video record', error);
+  }
+}
 async function uploadPreviewVideoFile() {
   if (selectedPreviewFile.value) {
     try {
-      const identifier = `${selectedPreviewFile.value.name}`;
-      await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, 1);
+      const md5 = await calculateMd5(selectedFile.value);
+      const data= checkFileExistence(md5, selectedFile.value);
+      const isFree=1;
+      if(data != null){
+        await addVideoRecord(md5,data.url,isFree);
+        console.log('Upload update complete');
+      }else {
+        const identifier = `${selectedPreviewFile.value.name}`;
+        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree);
+      }
       uploadPreviewProgress.value = 100;
       selectedPreviewFile.value = null;
 

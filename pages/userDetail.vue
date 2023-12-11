@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import {useUserStore} from "~/stores/useUserStore";
+const userStore = useUserStore();
 const lorem="这是个人简介"
-
-import {reactive, ref, toRefs} from 'vue'
-import {tansParams} from "~/server/utils/urlUtils";
 const current = ref(1)
 const slide = ref('first')
 const title = ref('')
@@ -43,7 +42,7 @@ function imageUrl(album) {
   }
   return album.sourceWeb + album.imgUrl;
 }
-
+console.log(userStore.token)
 </script>
 
 <template>

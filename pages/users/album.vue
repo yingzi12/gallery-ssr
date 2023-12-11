@@ -59,6 +59,19 @@ function updateStatus(album:any,statusChoise:number){
   // const status=ref(1);
   const message=ref("");
   if(statusChoise ==1){
+    const count= album.value.numberPhotos+album.value.numberVideo;
+    if(count==0) {
+      $q.dialog({
+        title: '通知',
+        message: '照片与视频为0不能发布.',
+        ok: {
+          push: true
+        },
+      }).onOk(async () => {
+        return;
+      });
+      return;
+    }
     message.value="发布";
   }else {
     message.value="下架";

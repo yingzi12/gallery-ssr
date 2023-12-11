@@ -1,32 +1,59 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import PayPalButton from './payPalButton.vue';
+import {useUserStore} from "~/stores/useUserStore";
+const userStore = useUserStore();
 
 // 接收url里的参数
 const route = useRoute();
 const aid = ref(route.query.aid);
-// key :old hostName value:new HostName
 
-const imageList= ref([])
-const disableInfiniteScroll = ref(false)
-const isRefreshing = ref(false)
+const imgTotal=ref(0);
+const videoTotal=ref(0);
+const isSee=ref(false);
+const imageCount=ref(0);
+const videoCount=ref(0);
+
+const imageList= ref([]);
+const videoList= ref([]);
+
+const imageLockList= ref([]);
+const videoLockList= ref([]);
+
+const disableInfiniteScroll = ref(false);
+const isRefreshing = ref(false);
 const onLoad = async (index: number, done: () => void) => {
+  // 如果isSee为false，立即结束加载过程
+  if (!isSee.value) {
+    done();
+    return;
+  }
+  if (isSee.value) {
+    console.log("-----------onLoad--------------"+index.toString())
+    imageLockList.value=[]
     try {
-        isRefreshing.value = true
-
-        const {data} = await useFetch('/api/userImage/list?aid=' + aid.value + '&pageNum=' +(index+1))
-        // if (data.value.code === 200) {
-         if(data && data.value && data.value.code === 200) {
-            const imgList = data.value.data
-             if(imgList.length ==0){
-                 disableInfiniteScroll.value=true
-             }
-            imageList.value.push(...imgList);
-            isRefreshing.value = false;
-
-         }
-         done();
-
+      isRefreshing.value = true
+      const response = await axios.get(`/api/userImage/list?aid=${aid.value}&isFree=2&pageNum=`+(index+1), {
+        headers: {
+          'Authorization': `Bearer ${userStore.token}`
+        }
+      })
+      console.log("-----------userImage--------------")
+      const data = response.data;
+      if (data && data.code === 200) {
+        const imgList = data.data;
+        imgTotal.value = data.total
+        if (imgList.length == 0) {
+          disableInfiniteScroll.value = true
+        }
+        console.log("-----------userImage--------------")
+        imageList.value.push(...imgList);
+        isRefreshing.value = false;
+      }else{
+        disableInfiniteScroll.value = true
+        isRefreshing.value = false;
+      }
+      done();
     } catch (error) {
       disableInfiniteScroll.value = true;
       console.error(error);
@@ -34,8 +61,10 @@ const onLoad = async (index: number, done: () => void) => {
     } finally {
       isRefreshing.value = false;
     }
+  }
 }
-onLoad(0, () => {});
+
+// onLoad(0, () => {});
 const album = ref({});
 const  title=ref("图集网")
 
@@ -45,45 +74,87 @@ const  orgDec=ref("图集网")
 const  orgImgae=ref("图集网")
 
 useHead({
-    title:title,
-    meta: [
-        { name: 'description', content: description },
-        { name: 'title', content: title },
-        { name: 'og:title', content:  ortTile},
-        { name: 'og:description', content:  orgDec},
-        { name: 'og:image', content:  orgImgae}
-    ],
+  title:title,
+  meta: [
+    { name: 'description', content: description },
+    { name: 'title', content: title },
+    { name: 'og:title', content:  ortTile},
+    { name: 'og:description', content:  orgDec},
+    { name: 'og:image', content:  orgImgae}
+  ],
 })
 
 async function getInfo() {
-    // 滚动到顶部
-    const {data} = await useFetch("/api/userAlbum/info?id=" +aid.value )
-    if (data.value.code === 200) {
-        album.value = data.value.data;
-        title.value="图集网-"+album.value.title
-        ortTile.value=album.value.title
-        orgDec.value=album.value.description
-        orgImgae.value=album.value.sourceWeb+album.value.imgUrl
-
+  // 滚动到顶部
+  const response = await axios.get("/api/userAlbum/info?id=" +aid.value ,{
+    headers: {
+      'Authorization': `Bearer ${userStore.token}`
     }
+  })
+  const data = response.data;
+  console.log(data)
+  if (data.code === 200) {
+    imageList.value.push(...data.data.imageList);
+    videoList.value.push(...data.data.videoList);
+    isSee.value=data.data.isSee;
+    if(!isSee.value) {
+      imageCount.value = data.data.imageCount;
+      for (let i = 0; i < imageCount.value; i++) {
+        imageLockList.value.push({'imgUrl': '/lock_image.png'})
+      }
+      videoCount.value = data.data.videoCount;
+      for (let i = 0; i < videoCount.value; i++) {
+        videoLockList.value.push({'imgUrl': '/lock_video.png'})
+      }
+    }
+    album.value = data.data;
+    title.value="图集网-"+album.value.title
+    ortTile.value=album.value.title
+    orgDec.value=album.value.description
+    orgImgae.value=album.value.sourceWeb+album.value.imgUrl
+  }
+}
+async function getVideoList() {
+  if (isSee.value) {
+    videoLockList.value=[]
+  // 滚动到顶部
+  const response = await axios.get(`/api/userVideo/list?aid=${aid.value}&isFree=2`, {
+    headers: {
+      'Authorization': `Bearer ${userStore.token}`
+    }
+  })
+  const data = response.data;
+  if (data.code === 200) {
+    videoList.value.push(...data.data);
+  }
+}
 }
 async function handleImageError(){
-    const {data} = await useFetch("/api/userAlbum/error?id=" +aid.value )
-    alert("提交成功,等待管理员处理中.")
+  const response = await axios.get("/api/userAlbum/error?id=" +aid.value ,{
+    headers: {
+      'Authorization': `Bearer ${userStore.token}`
+    }
+  })
+  alert("提交成功,等待管理员处理中.")
 }
 const randomList = ref([]);
 
 async  function getRandom() {
-  const { data } = await useFetch('/api/userAlbum/random')
-  if (data.value.code === 200) {
-    randomList.value = data.value.data
+  const response = await axios.get('/api/userAlbum/random',{
+    headers: {
+      'Authorization': `Bearer ${userStore.token}`
+    }
+  })
+  const data = response.data;
+  if (data.code === 200) {
+    randomList.value = data.data
   }
 }
 getRandom();
 getInfo();
 // onLoad(1);
 function imageUrlDetail(image) {
-    return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
+  return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
 }
 function imageUrl(album) {
   if (album.sourceUrl!=null &&  album.sourceUrl.startsWith('/image')) {
@@ -96,79 +167,130 @@ const paypalDialog = ref(false);
 const openPayPalDialog = (album) => {
   paypalDialog.value = true;
 };
+console.log(userStore.token)
+// 监听isSee的值
+watch(isSee, (newValue, oldValue) => {
+  if (newValue === true) {
+    onLoad(0, () => {});
+    getVideoList();
+  }
+}, { immediate: true }); // immediate: true 确保在挂载时立即触发一次
 
 </script>
 <template>
   <q-page>
-  <div class="q-pa-md">
-    <div class="row">
-      <div ><q-img class="head-iamge"
-        :src="imageUrl(album)"
-      /></div>
-      <div style="padding-left: 10px;width: 70%">
-        <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{album.title}}</h5></div>
-        <div style="word-wrap: break-word; white-space: pre-line;">
-          <p>{{album.intro}}</p>
+    <div class="q-pa-md">
+      <div class="row">
+        <div ><q-img class="head-iamge"
+                     :src="imageUrl(album)"
+        /></div>
+        <div style="padding-left: 10px;width: 70%">
+          <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{album.title}}</h5></div>
+          <div style="word-wrap: break-word; white-space: pre-line;">
+            <p>{{album.intro}}</p>
+          </div>
+          <div>模特:{{album.gril}}</div>
+          <div>照片:{{album.photoNumber}}</div>
+          <div>浏览次数:{{album.countSee}}</div>
+          <div>类型: {{album.tags}}</div>
+          <div>创建时间：{{album.createTime}}</div>
+          <div><q-btn v-if="album.charge != 1" @click="openPayPalDialog(album)">购买</q-btn>
+            <q-btn>收藏</q-btn></div>
         </div>
-        <div>模特:{{album.gril}}</div>
-        <div>照片:{{album.photoNumber}}</div>
-        <div>浏览次数:{{album.countSee}}</div>
-        <div>类型: {{album.tags}}</div>
-        <div>创建时间：{{album.createTime}}</div>
-        <div><q-btn v-if="album.charge != 1" @click="openPayPalDialog(album)">购买</q-btn>
-          <q-btn>收藏</q-btn></div>
-      </div>
-      <div style="width: 10%">
-        <button  class="text-h6" @click="handleImageError()"> 报告异常</button>
-      </div>
-    </div>
-    <div>
-<!--    内容页-->
-    <q-infinite-scroll @load="onLoad" :disable="disableInfiniteScroll"  :offset="250">
-      <div v-for="(image, index) in imageList" :key="index" class="caption">
-        <img :src="imageUrlDetail(image)" class="responsive-image"/>
-      </div>
-      <template v-slot:loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+        <div style="width: 10%">
+          <button  class="text-h6" @click="handleImageError()"> 报告异常</button>
         </div>
-      </template>
-    </q-infinite-scroll>
-    </div>
-    <div style=" text-align: center;font-size: large">
-     <a style="margin: 20px;font-size: large" v-if="album.pre != null " :href='"/userAlbumDetail?aid="+album.pre.id'>{{album.pre.title}}</a>
-      <a style="margin: 20px;font-size: large"   v-if="album.next != null " :href='"/userAlbumDetail?aid="+album.next.id'>{{album.next.title}}</a>
-    </div>
-    <div>
-        <!-- 在这里放置您希望在新列中显示的内容 -->
-      <div class="row justify-center q-gutter-sm">
-        <q-intersection
-            v-for="(album ,index) in randomList"
-            :key="index"
-            once
-            transition="scale"
-            class="example-item"
-        >
-          <q-card flat bordered class="q-ma-sm">
-            <img :src="imageUrl(album)">
-            <q-card-section>
-              <div class="text-h6">
-                <a :href='"/detail?aid="+album.id'>
-                <p class="text-caption  two-line-clamp">  {{album.title}} </p>
-              </a>
-                <p class="text-caption" style="padding: 0px">  {{album.createTime}} </p>
+      </div>
+      <div>
+
+        <div>
+          <q-th>视频列表（{{videoTotal}}）</q-th>
+          <div class="q-pa-md">
+            <div class="row justify-center q-gutter-sm">
+              <q-intersection
+                  v-for="(video,index) in videoList"
+                  :key="index"
+                  transition="scale"
+                  class="example-item"
+              >
+                <q-card flat bordered class="q-ma-sm">
+                  <img :src="video.imgUrl">
+
+                  <q-card-section>
+                    <q-btn  v-if="video.isFree == 2" square color="primary" icon="visibility" >预览</q-btn>
+                    <q-btn v-if="video.isFree == 1" square color="primary" icon="sunny" >正式</q-btn>
+                  </q-card-section>
+                </q-card>
+              </q-intersection>
+              <q-intersection
+                  v-for="(videoLock,index) in videoLockList"
+                  :key="index"
+                  transition="scale"
+                  class="example-item"
+              >
+                <q-card flat bordered class="q-ma-sm">
+                  <img :src="videoLock.imgUrl">
+                </q-card>
+              </q-intersection>
+            </div>
+          </div>
+        </div>
+        <div>
+          <q-th>图片列表（{{imgTotal}}）</q-th>
+
+          <!--    内容页-->
+          <q-infinite-scroll @load="onLoad" :disable="disableInfiniteScroll"  :offset="250">
+            <div v-for="(image, index) in imageList" :key="index" class="caption">
+              <img :src="imageUrlDetail(image)" class="responsive-image"/>
+            </div>
+
+            <template v-slot:loading>
+              <div class="row justify-center q-my-md">
+                <q-spinner-dots color="primary" size="40px" />
               </div>
-            </q-card-section>
-            <!--            <q-card-section class="q-pt-none">-->
-            <!--              {{ lorem }}-->
-            <!--            </q-card-section>-->
-          </q-card>
+            </template>
+          </q-infinite-scroll>
+          <q-pull-to-refresh >
+            <div v-for="(imageLock, index) in imageLockList" :key="index" class="caption">
+              <img :src="imageLock.imgUrl" class="responsive-image"/>
+            </div>
+          </q-pull-to-refresh>
 
-        </q-intersection>
+        </div>
+        <div style=" text-align: center;font-size: large">
+          <a style="margin: 20px;font-size: large" v-if="album.pre != null " :href='"/userAlbumDetail?aid="+album.pre.id'>{{album.pre.title}}</a>
+          <a style="margin: 20px;font-size: large"   v-if="album.next != null " :href='"/userAlbumDetail?aid="+album.next.id'>{{album.next.title}}</a>
+        </div>
+        <div>
+          <!-- 在这里放置您希望在新列中显示的内容 -->
+          <div class="row justify-center q-gutter-sm">
+            <q-intersection
+                v-for="(album ,index) in randomList"
+                :key="index"
+                once
+                transition="scale"
+                class="example-item"
+            >
+              <q-card flat bordered class="q-ma-sm">
+                <img :src="imageUrl(album)">
+                <q-card-section>
+                  <div class="text-h6">
+                    <a :href='"/detail?aid="+album.id'>
+                      <p class="text-caption  two-line-clamp">  {{album.title}} </p>
+                    </a>
+                    <p class="text-caption" style="padding: 0px">  {{album.createTime}} </p>
+                  </div>
+                </q-card-section>
+                <!--            <q-card-section class="q-pt-none">-->
+                <!--              {{ lorem }}-->
+                <!--            </q-card-section>-->
+              </q-card>
+
+            </q-intersection>
+          </div>
+        </div>
       </div>
     </div>
-
-  </div>
     <div class="row">
       <div class="col-2"> </div>
       <div class="col-auto" style="margin: 0px">
@@ -178,8 +300,8 @@ const openPayPalDialog = (album) => {
           <router-link to="">帮助中心</router-link>|
           <router-link to="">提交建议</router-link>|
           <router-link to="">举报中心</router-link>|
-            <router-link to="/privacyPolicy">隐私政策</router-link>|
-            <router-link to="/use">使用条款</router-link>|
+          <router-link to="/privacyPolicy">隐私政策</router-link>|
+          <router-link to="/use">使用条款</router-link>|
           <router-link to="">漏洞提交</router-link>|
         </div>
         <div class="footerText text-weight-thin"> <p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有 心世界未来科技有限公司</p></div>
@@ -203,7 +325,7 @@ const openPayPalDialog = (album) => {
         <div class="container">
           <h1>欢迎使用我们的服务</h1>
           <p>请选择您的支付方案：</p>
-          <PayPalButton></PayPalButton>
+          <PayPalButton :amount="album.price" :transaction-description="album.intro" :transaction-id="album.id"></PayPalButton>
         </div>
       </q-card-section>
     </q-card>

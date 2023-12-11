@@ -30,7 +30,7 @@ async  function getList(page:number) {
   current.value=page
   queryParams.value.title=title.value;
   queryParams.value.pageNum=page;
-  const { data } = await useFetch('/api/album/listAlbum?'+tansParams(queryParams.value))
+  const { data } = await useFetch('/api/userAlbum/listAlbum?'+tansParams(queryParams.value))
   total.value=data.value.total
   albumList.value=data.value.data
 }
@@ -87,7 +87,7 @@ function imageUrl(album) {
         <q-card flat bordered class="q-ma-sm">
           <img :src="imageUrl(album)">
           <q-card-section>
-            <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{album.title}}</a></div>
+            <div class="text-h6"><a :href='"/userAlbumDetail?aid="+album.id'>{{album.title}}</a></div>
             <div class="text-subtitle2">{{album.createTime}}</div>
           </q-card-section>
           <!--            <q-card-section class="q-pt-none">-->

@@ -6,11 +6,7 @@ export default defineEventHandler((event) => {
     if (url.startsWith('/api/admin')) {
         try {
             const cookies = parseCookies(event)
-            console.log(cookies)
-
             const token = cookies["token"]; // 从用户存储库中获取token
-            console.log("token:"+token)
-            event.headers
             // 将token添加到请求头中
             event.headers.set('Authorization', `Bearer ${token}`);
         } catch (error) {

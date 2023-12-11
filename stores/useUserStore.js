@@ -47,13 +47,15 @@ export const useUserStore = defineStore('userStore', {
             // 如果存在 token，更新其过期时间
             const tokenCookie = useCookie('token');
             if (tokenCookie.value) {
-                tokenCookie.options.expires = inOneHour;
+                tokenCookie.value = tokenCookie.value; // 重新设置 token 的值
+                document.cookie = `token=${tokenCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
             }
 
             // 如果存在用户信息，更新其过期时间
             const userCookie = useCookie('userInfo');
             if (userCookie.value) {
-                userCookie.options.expires = inOneHour;
+                userCookie.value = userCookie.value; // 重新设置 userInfo 的值
+                document.cookie = `userInfo=${userCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
             }
         },
         async login(credentials) {

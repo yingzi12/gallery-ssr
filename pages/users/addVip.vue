@@ -14,9 +14,6 @@ const accept = ref(false)
 const introduce=ref(null)
 const timeType=ref(1)
 const timeLong=ref(1);
-// const timeTypeList=[
-//   '天', '周', '月', '年', '永久'
-// ]
 const timeTypeList=[
   {
     label: '天',
@@ -65,21 +62,21 @@ function  onReset () {
   introduce.value=null
 }
 async function onSubmit () {
-  if (accept.value !== true) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    })
-  } else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Submitted'
-    })
-  }
+  // if (accept.value !== true) {
+  //   $q.notify({
+  //     color: 'red-5',
+  //     textColor: 'white',
+  //     icon: 'warning',
+  //     message: 'You need to accept the license and terms first'
+  //   })
+  // } else {
+  //   $q.notify({
+  //     color: 'green-4',
+  //     textColor: 'white',
+  //     icon: 'cloud_done',
+  //     message: 'Submitted'
+  //   })
+  // }
   const response = await fetch("/api/admin/userSettingVip/add", {
     method: "post",
     headers: {

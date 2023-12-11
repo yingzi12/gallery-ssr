@@ -1,28 +1,25 @@
 <script setup lang="ts">
 import SparkMD5 from 'spark-md5';
-import { ref, watch, onMounted } from 'vue';
-import { useUserStore } from '@/stores/useUserStore';
-import FileUploader from "~/utils/FileUploader";
-import { tansParams } from "~/server/utils/urlUtils";
 import { useRoute } from "vue-router";
 import {useQuasar} from "quasar";
 const $q = useQuasar();
 const config = useRuntimeConfig();
-
+definePageMeta({
+  key: route => route.fullPath
+})
 const userStore = useUserStore();
-console.log("addVideo token:"+userStore.token)
 const route = useRoute();
 const aid = ref(route.query.aid);
-const updateUrl = ref(config.public.baseUrl+"/admin/userVideo/upload");
-console.log("updateUrl:"+updateUrl.value)
+// const updateUrl = ref(config.public.baseUrl+"/admin/userVideo/upload");
 const videoList = ref([]);
 const total = ref(0);
-const token = ref("Bearer 1");
-
+// const token = ref("Bearer 1");
+console.log(userStore.token)
 const queryData = reactive({
   queryParams: {
     pageNum: 1,
     title: '',
+    aid:aid.value,
   }
 });
 const { queryParams } = toRefs(queryData);
@@ -30,15 +27,16 @@ const { queryParams } = toRefs(queryData);
 async function getList(page: number) {
   queryParams.value.aid = aid.value;
   queryParams.value.pageNum = page;
-  const { data } = await useFetch('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
-    credentials: 'include',
+  const response  = await axios.get('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
     headers: {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  if (data.value) {
-    total.value = data.value.total || videoList.value.length;
-    videoList.value = data.value.data;
+  const data = await response.data;
+  console.log(data.code)
+  if(data.code==200){
+    total.value = data.total || videoList.value.length;
+    videoList.value = data.data;
   }
 }
 
@@ -54,9 +52,8 @@ async function deleteVideo(id: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const { data } = await useFetch('/api/admin/userVideo/remove?id=' + id.toString(), {
+    const { data } = await  axios.get('/api/admin/userVideo/remove?id=' + id.toString(), {
       method: 'get',
-      credentials: 'include',
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       },
@@ -81,13 +78,14 @@ async function updateIsFree(id: number, isFree: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const { data } = await useFetch('/api/admin/userVideo/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
-      credentials: 'include',
+    const response = await axios.get('/api/admin/userVideo/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       },
     });
-    if (data.value && data.value.code === 200) {
+    const data = await response.data;
+    console.log(data.code)
+    if(data.code==200){
       await getList(1);
     }
   }).onCancel(() => {
@@ -97,11 +95,8 @@ async function updateIsFree(id: number, isFree: number) {
 }
 onMounted(() => {
   userStore.restoreUserFromCookie();
-  token.value = "Bearer " + userStore.token;
   getList(1);
 });
-getList(1);
-
 watch(() => route.query.aid, (newAid) => {
   aid.value = newAid;
   getList(1);
@@ -226,7 +221,7 @@ async function calculateMd5(file: File): Promise<string> {
 
 async function addVideoRecord(md5: string,url:string,isFree:number) {
   try {
-    const response = await fetch('/api/admin/userVideo/add', {
+    const response = await  axios.post('/api/admin/userVideo/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -234,7 +229,7 @@ async function addVideoRecord(md5: string,url:string,isFree:number) {
       },
       body: JSON.stringify({ aid: aid.value, md5: md5, url: url, isFree: isFree })
     });
-    const data = await response.json();
+    const data = await response.data;
     if (data.code == 200) {
       $q.notify({
         type: 'positive',

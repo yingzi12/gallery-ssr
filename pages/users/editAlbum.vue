@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { useUserStore } from '@/stores/useUserStore';
-import {useRoute} from "vue-router";
-import {ref} from "vue";
+import { useUserStore } from "~/stores/useUserStore";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
@@ -36,7 +34,7 @@ function onReset() {
   gril.value = null;
   intro.value = null;
   tags.value = null;
-  imgUrl.value = null;
+  imgUrl.value = "";
   charge.value=1;
   accept.value = false;
 }
@@ -45,7 +43,7 @@ async function onSubmit() {
   // if (!accept.value) {
   //   notify('You need to accept the license and terms first', 'red-5');
   // } else {server≈.get.ts
-  const response = await fetch("/api/admin/userAlbum/edit", {
+  const response = await axios.post("/api/admin/userAlbum/edit", {
     method: "post",
     headers: {
       'Content-Type': 'application/json',
@@ -64,7 +62,7 @@ async function onSubmit() {
       vipPrice: vipPrice.value,
     }),
   });
-  const data = await response.json();
+  const data = await response.data;
   if(data.code==200){
     $q.notify({
       color: 'green-4',
@@ -75,9 +73,6 @@ async function onSubmit() {
     router.push('/users/album'); // Redirect to login page
 
   }else {
-    if(data.code==401){
-      router.push('/login'); // Redirect to login page
-    }
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -90,32 +85,26 @@ async function onSubmit() {
 }
 
 async function getDetail(){
-  const response = await fetch('/api/admin/userAlbum/info?id='+aid.value, {
+  const response = await axios.get('/api/admin/userAlbum/info?id='+aid.value, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  const data = await response.json();
+  const data = await response.data;
   console.log(data.code)
-  if(data.code ==401){
-    await userStore.logout();
-    router.push('/login'); // 注销后重定向到登录页面
-  }
   if(data.code==200){
-    title.value= data.data.title;
-    intro.value= data.data.intro;
-    gril.value= data.data.gril;
-    imgUrl.value= data.data.imgUrl;
-    tags.value= data.data.tags;
-    charge.value=data.data.charge;
-    price.value= data.data.price;
-    vipPrice.value= data.data.vipPrice;
+    title.value= data.title;
+    intro.value= data.intro;
+    gril.value= data.gril;
+    imgUrl.value= data.imgUrl;
+    tags.value= data.tags;
+    charge.value=data.charge;
+    price.value= data.price;
+    vipPrice.value= data.vipPrice;
     userStore.setUser(userStore.user,userStore.token);
   }
-  if(data.code==401){
-    router.push('/login'); // Redirect to login page
-  }
+
 }
 getDetail()
 async function handleImageUpload(event: Event) {

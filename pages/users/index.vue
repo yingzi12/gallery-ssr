@@ -2,7 +2,8 @@
 definePageMeta({
   key: route => route.fullPath
 })
-import { useUserStore } from '@/stores/useUserStore';
+import { useUserStore } from "~/stores/useUserStore";
+
 const userStore = useUserStore();
 const lorem= 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 const previewImage = (userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl;
@@ -10,7 +11,6 @@ const previewImage = (userStore.user == null || userStore.user.imgUrl==null) ?"/
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 onMounted(() => {
   userStore.restoreUserFromCookie();
-
   // 当组件挂载时检查用户的登录状态
   if (!userStore.user || !userStore.token) {
     // 如果用户未登录，则重定向到登录页面

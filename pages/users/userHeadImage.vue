@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/useUserStore';
+import { useUserStore } from "~/stores/useUserStore";
 import {useQuasar} from "quasar";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-
 const userStore = useUserStore();
 const selectedImage = ref<File | null>(null);
 const previewImage = ref((userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl);

@@ -4,8 +4,10 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
 
     const query = getQuery(event)
-    const cookies = parseCookies(event)
-    const token = cookies["token"]; // 从用户存储库中获取token
+     // 获取请求头
+    const headers = event.req.headers;
+    // 从请求头中获取 token
+    const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     // Use the GET parameters to make a GET request to `/album/list`
     // const response = await fetch(config.public.baseUrl+`/album/info?id=`+query.id);
     const response = await fetch(config.public.baseUrl+`/admin/userImage/updateIsFree?${tansParams(query)}`, {

@@ -18,9 +18,6 @@ const accept = ref(false)
 const introduce=ref(null)
 const timeType=ref(1)
 const timeLong=ref(1);
-// const timeTypeList=[
-//   '天', '周', '月', '年', '永久'
-// ]
 const timeTypeList=[
   {
     label: '天',
@@ -99,12 +96,9 @@ async function onSubmit() {
       icon: 'cloud_done',
       message: 'Create Success'
     });
-    router.push('/users/album'); // Redirect to login page
+    router.push('/users/vip'); // Redirect to login page
 
   }else {
-    if(data.code==401){
-      router.push('/login'); // Redirect to login page
-    }
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -121,14 +115,11 @@ async function getDetail(){
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
     },
   });
   const data = await response.json();
   console.log(data.code)
-  if(data.code ==401){
-    await userStore.logout();
-    router.push('/login'); // 注销后重定向到登录页面
-  }
   if(data.code==200){
     title.value= data.data.title;
     intro.value= data.data. intro;
@@ -138,9 +129,6 @@ async function getDetail(){
     timeLong.value= data.data.timeLong;
     introduce.value= data.data.introduce;
     userStore.setUser(userStore.user,userStore.token);
-  }
-  if(data.code==401){
-    router.push('/login'); // Redirect to login page
   }
 }
 getDetail()

@@ -1,35 +1,46 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
-import { useUserStore } from '@/stores/useUserStore';
-import { tansParams } from "~/server/utils/urlUtils";
+import { useUserStore } from "~/stores/useUserStore";
+definePageMeta({
+  key: route => route.fullPath
+})
 import { useRoute } from "vue-router";
 import {useQuasar} from "quasar";
-const $q = useQuasar();
-
+const config = useRuntimeConfig();
 const userStore = useUserStore();
+
+const $q = useQuasar();
 const route = useRoute();
 const aid = ref(route.query.aid);
-const updateUrl = ref("http://127.0.0.1:8098/admin/userImage/upload");
+const updateUrl = ref(config.public.baseUrl+"/admin/userImage/upload");
 const imageList = ref([]);
 const total = ref(0);
-const token = ref("Bearer 1");
 
 const queryData = reactive({
   queryParams: {
     pageNum: 1,
     title: '',
+    aid: aid.value,
   }
 });
 const { queryParams } = toRefs(queryData);
 
 async function getList(page: number) {
+  queryParams.value.aid = aid.value;
   queryParams.value.pageNum = page;
-  const { data } = await useFetch('/api/admin/userImage/list?' + tansParams(queryParams.value), {
-    credentials: 'include',
-  });
-  if (data.value) {
-    total.value = data.value.total || imageList.value.length;
-    imageList.value = data.value.data;
+  try {
+    const response = await axios.get('/api/admin/userImage/list?' + tansParams(queryParams.value),{
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
+    });
+    console.log(response.data);
+    console.log("response.data:"+response.data.code)
+    if (response.data.code ==200) {
+      total.value = response.data.total || imageList.value.length;
+      imageList.value = response.data.data;
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
   }
 }
 
@@ -45,11 +56,13 @@ async function deleteImage(id: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const { data } = await useFetch('/api/admin/userImage/remove?id=' + id.toString(), {
+    const response = await axios.get('/api/admin/userImage/remove?id=' + id.toString(), {
       method: 'get',
-      credentials: 'include',
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
     });
-    if (data.value && data.value.code === 200) {
+    if (response.data.code ==200) {
       await getList(1);
     }
   }).onCancel(() => {
@@ -69,10 +82,13 @@ async function updateIsFree(id: number, isFree: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const { data } = await useFetch('/api/admin/userImage/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
-      credentials: 'include',
+    const response = await axios.get('/api/admin/userImage/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
     });
-    if (data.value && data.value.code === 200) {
+    const  data=response.data;
+    if ( data.code === 200) {
       await getList(1);
     }
   }).onCancel(() => {
@@ -82,11 +98,8 @@ async function updateIsFree(id: number, isFree: number) {
 }
 onMounted(() => {
   userStore.restoreUserFromCookie();
-  token.value = "Bearer " + userStore.token;
   getList(1);
 });
-getList(1);
-
 watch(() => route.query.aid, (newAid) => {
   aid.value = newAid;
   getList(1);
@@ -103,7 +116,7 @@ watch(() => route.query.aid, (newAid) => {
       <q-uploader
           :url="updateUrl"
           field-name="file"
-          :headers="[{name: 'Authorization', value: `${token}`}]"
+          :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
           :with-credentials="false"
           label="上传图集预览图片（预览图片公开观看）"
           multiple
@@ -119,7 +132,7 @@ watch(() => route.query.aid, (newAid) => {
       <q-uploader
           :url="updateUrl"
           field-name="file"
-          :headers="[{name: 'Authorization', value: `${token}`}]"
+          :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
           :with-credentials="false"
           label="上传图集正式图片"
           multiple

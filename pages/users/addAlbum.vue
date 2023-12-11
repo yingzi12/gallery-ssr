@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { useUserStore } from '@/stores/useUserStore';
-
+import { useUserStore } from "~/stores/useUserStore";
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
 const config = useRuntimeConfig();
@@ -42,13 +41,12 @@ async function onSubmit() {
   // if (!accept.value) {
   //   notify('You need to accept the license and terms first', 'red-5');
   // } else {server≈.get.ts
-    const response = await fetch("/api/admin/userAlbum/add", {
+    const response = await axios.post("/api/admin/userAlbum/add", {
       method: "post",
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${userStore.token}`
       },
-      credentials: 'include', // 确保携带 cookie
       body: JSON.stringify({
         title: title.value,
         intro: intro.value,
@@ -60,7 +58,7 @@ async function onSubmit() {
         vipPrice: vipPrice.value,
       }),
     });
-    const data = await response.json();
+    const data = await response.data();
     if(data.code==200){
       $q.notify({
         color: 'green-4',

@@ -51,7 +51,6 @@ export default defineNuxtConfig({
   ],
   plugins: [
     '~/plugins/error-handler.ts',
-    '~/plugins/axios.js'
   ],
   i18n: {
     /* module options */

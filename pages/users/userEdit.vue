@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/useUserStore';
+import { useUserStore } from "~/stores/useUserStore";
+
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
 const userStore = useUserStore();
-const userInfoCookie = useCookie('userInfo');
 const userInfo=userStore.user;
 
 const nickname = ref('');
 const email = ref('');
 const intro = ref('');
-nickname.value=userInfo.nickname;
-email.value=userInfo.email;
-intro.value=userInfo.intro;
+nickname.value=userStore.user.nickname;
+email.value=userStore.user.email;
+intro.value=userStore.user.intro;
 
 const accept = ref(false);
 const selectedFile = ref(null);
@@ -40,7 +39,7 @@ const onSubmit = async () => {
   }
 
   try {
-    const response = await fetch("/api/admin/users/edit", {
+    const response = await axios.post("/api/admin/users/edit", {
       method: "post",
       headers: {
         'Content-Type': 'application/json',
@@ -51,14 +50,12 @@ const onSubmit = async () => {
         intro: intro.value,
       }),
     });
-    const data = await response.json();
+    const data = await response.data;
     if(data.code==200){
-
       userInfo.isEmail=data.data.isEmail;
       userInfo.nickname=data.data.nickname;
       userInfo.intro=data.data.intro;
       userInfo.email=data.data.email;
-      userInfoCookie.value=userInfo;
 
       $q.notify({
         color: 'green-4',

@@ -5,8 +5,10 @@ export default defineEventHandler(async (event) => {
 
     const query = getQuery(event)
 
-    const cookies = parseCookies(event)
-    const token = cookies["token"]; // 从用户存储库中获取token
+     // 获取请求头
+    const headers = event.req.headers;
+    // 从请求头中获取 token
+    const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     const response = await fetch(config.public.baseUrl+`/admin/userVideo/remove/${query.id}`, {
             headers: {
                 'Content-Type': 'application/json',

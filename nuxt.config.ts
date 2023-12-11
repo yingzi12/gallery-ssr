@@ -41,14 +41,19 @@ export default defineNuxtConfig({
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' } // 指向你的 favicon
     ],
   },
-  sitemap:{
-    sources: [
-      '/api/__sitemap__/urls',
-    ]
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', 'sitemap.xml'],
+      ignore: ['/tak', '/konfiguration', '/checkout'],
+    },
   },
-  serverMiddleware: [
-    '~/middleware/cache.js'
-  ],
+  site: {
+    url: 'https://www.aiavr.uk',
+  },
+  sitemap: {
+    sources: ['/api/sitemap'],
+  },
   plugins: [
     '~/plugins/error-handler.ts',
   ],

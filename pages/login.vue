@@ -14,16 +14,17 @@ const captcha = ref('');
 const accept = ref(false);
 const captchaImage = ref('');
 
-// 修正此函数
 async function refreshCaptcha() {
   try {
-    const { data } = await useFetch("/api/users/captcha");
-    if (data.value.code == 200) {
-      captchaImage.value = "data:image/png;base64," + data.value.img;
-      uuid.value = data.value.uuid;
+    const response = await fetch("/api/users/captcha");
+    const data = await response.json();
+    if (data && data.code == 200) {
+      captchaImage.value = "data:image/png;base64," + data.img;
+      uuid.value = data.uuid;
+    } else {
+      throw new Error("Invalid response");
     }
   } catch (error) {
-    // 处理错误，例如显示通知
     $q.notify({
       color: 'red-5',
       textColor: 'white',

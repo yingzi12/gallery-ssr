@@ -24,8 +24,6 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(response => {
 
     console.log("-------------------处理响应数据------------")
-    console.log(response.data)
-    console.log(response.config.url)
     console.log(response.data.code === 401)
     // 检查错误响应并执行特定操作
     if (response.config.url.startsWith('/api/admin') && response.data.code === 401) {

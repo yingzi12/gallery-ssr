@@ -62,7 +62,7 @@ async function onSubmit() {
           'Content-Type': 'application/json',
         },
       });
-  const data = await response.data;
+  const data = response.data;
   if (data.code == 200) {
     $q.notify({
       color: 'green-4',
@@ -91,7 +91,7 @@ async function getDetail() {
       'Content-Type': 'application/json',
     },
   });
-  const data = await response.data;
+  const data = response.data;
   console.log(data.code)
   if (data.code == 200) {
     title.value = data.data.title;
@@ -104,7 +104,6 @@ async function getDetail() {
     charge.value = data.data.charge;
     price.value = data.data.price;
     vipPrice.value = data.data.vipPrice;
-    userStore.setUser(userStore.user, userStore.token);
   }
 
 }
@@ -128,7 +127,7 @@ async function handleImageUpload(event: Event) {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = response.data;
         console.log(data.data)
         previewImage.value = "https://image.51x.uk" + data.data;
         imgUrl.value = "https://image.51x.uk" + data.data;

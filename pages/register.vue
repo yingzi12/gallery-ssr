@@ -54,7 +54,7 @@ async function onSubmit() {
         password: password.value
       }),
     });
-    const data = await response.json();
+    const data = response.data;
 
     if (data && data.code === 200) {
       // Handle successful registration

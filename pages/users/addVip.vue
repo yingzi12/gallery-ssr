@@ -63,39 +63,21 @@ function onReset() {
 }
 
 async function onSubmit() {
-  // if (accept.value !== true) {
-  //   $q.notify({
-  //     color: 'red-5',
-  //     textColor: 'white',
-  //     icon: 'warning',
-  //     message: 'You need to accept the license and terms first'
-  //   })
-  // } else {
-  //   $q.notify({
-  //     color: 'green-4',
-  //     textColor: 'white',
-  //     icon: 'cloud_done',
-  //     message: 'Submitted'
-  //   })
-  // }
-  const response = await fetch("/api/admin/userSettingVip/add", {
-    method: "post",
+  const response = await axios.post("/api/admin/userSettingVip/add", JSON.stringify({
+    title: title.value,
+    intro: intro.value,
+    tags: tags.value,
+    price: price.value,
+    timeType: timeType.value,
+    timeLong: timeLong.value,
+    introduce: introduce.value
+  }),{
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${userStore.token}`
-    },
-    credentials: 'include', // 确保携带 cookie
-    body: JSON.stringify({
-      title: title.value,
-      intro: intro.value,
-      tags: tags.value,
-      price: price.value,
-      timeType: timeType.value,
-      timeLong: timeLong.value,
-      introduce: introduce.value
-    }),
+    }
   });
-  const data = await response.json();
+  const data = response.data;
   if (data.code == 200) {
     $q.notify({
       color: 'green-4',

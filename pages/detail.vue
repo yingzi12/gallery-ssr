@@ -116,7 +116,7 @@ async function closeCollection(album:any) {
 }
 async function handleImageError() {
   const response = await axios.get("/api/album/error?id=" + aid.value)
-  const data = await response.data;
+  const data = response.data;
   if (data.code == 200) {
   }
   alert("提交成功,等待管理员处理中.")

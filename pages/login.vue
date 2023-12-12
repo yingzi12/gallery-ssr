@@ -18,7 +18,7 @@ const captchaImage = ref('');
 async function refreshCaptcha() {
   try {
     const response = await fetch("/api/users/captcha");
-    const data = await response.json();
+    const data = response.data;
     if (data && data.code == 200) {
       captchaImage.value = "data:image/png;base64," + data.img;
       uuid.value = data.uuid;

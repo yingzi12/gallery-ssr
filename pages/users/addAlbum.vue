@@ -11,7 +11,7 @@ const title = ref(null);
 const girl = ref(null);
 const intro = ref(null);
 const tags = ref(null);
-const imgUrl = ref("");
+const imgUrl = ref("/favicon.png");
 const vipPrice = ref(0.0);
 const price = ref(0.0);
 const accept = ref(false);
@@ -33,7 +33,7 @@ function onReset() {
   girl.value = null;
   intro.value = null;
   tags.value = null;
-  imgUrl.value = null;
+  imgUrl.value = "/favicon.png";
   charge.value = 1;
   accept.value = false;
 }
@@ -54,7 +54,7 @@ async function onSubmit() {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  const data = await response.data;
+  const data = response.data;
   console.log(data)
   if (data.code == 200) {
     $q.dialog({
@@ -99,7 +99,7 @@ async function handleImageUpload(event: Event) {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = response.data;
         console.log(data.data)
         previewImage.value = "https://image.51x.uk" + data.data;
         imgUrl.value = "https://image.51x.uk" + data.data;

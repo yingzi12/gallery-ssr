@@ -16,6 +16,9 @@ const aid = ref(route.query.aid);
 const updateUrl = ref(config.public.baseUrl + "/admin/userImage/upload");
 const imageList = ref([]);
 const total = ref(0);
+const maxPage = ref(0);
+
+const current=ref(1)
 
 const queryData = reactive({
   queryParams: {
@@ -36,7 +39,8 @@ async function getList(page: number) {
       }
     });
     if (response.data.code == 200) {
-      total.value = response.data.total || imageList.value.length;
+      total.value = response.data.total;
+      maxPage.value=  total.value/20+1;
       imageList.value = response.data.data;
     }
   } catch (error) {
@@ -98,14 +102,14 @@ async function updateIsFree(image: any, isFree: number) {
   ;
 }
 
-onMounted(() => {
-  userStore.restoreUserFromCookie();
-  getList(1);
-});
+// onMounted(() => {
+//   getList(1);
+// });
 watch(() => route.query.aid, (newAid) => {
   aid.value = newAid;
   getList(1);
 });
+getList(1);
 </script>
 
 <template>
@@ -167,6 +171,16 @@ watch(() => route.query.aid, (newAid) => {
           </q-card-section>
         </q-card>
       </q-intersection>
+
+    </div>
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+          v-model="current"
+          :max="maxPage"
+          direction-links
+          @update:modelValue="getList(current)"
+
+      />
     </div>
   </div>
 </template>

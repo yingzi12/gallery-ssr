@@ -24,12 +24,12 @@ axiosInstance.interceptors.request.use(config => {
             // 注：这里的重定向实现取决于您的路由设置
             // 例如：window.location.href = '/login';
             // 清空 token 或其他认证数据
-            const userStore = useUserStore();
-            userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
+            // const userStore = useUserStore();
+            // userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
 
             // 重定向到登录页面
             // window.location.href = '/login';
-            console.log(`-----------login--------请求---${config.url}-----${token}----`)
+            // console.log(`-----------login--------请求---${config.url}-----${token}----`)
         }
     }
     if (token) {
@@ -47,6 +47,7 @@ axiosInstance.interceptors.response.use(response => {
     console.log(response.data.code === 401)
     const userStore = useUserStore();
     userStore.restoreUserFromCookie();
+    console.log(`-----------处理响应数据--------请求---${response.config.url}---------`)
 
     // 检查错误响应并执行特定操作
     if (response.config.url.startsWith('/api/admin') && response.data.code === 401) {
@@ -59,12 +60,12 @@ axiosInstance.interceptors.response.use(response => {
         // 注：这里的重定向实现取决于您的路由设置
         // 例如：window.location.href = '/login';
         // 清空 token 或其他认证数据
-        const userStore = useUserStore();
-        userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
+        // const userStore = useUserStore();
+        // userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
 
         // 重定向到登录页面
         // window.location.href = '/login';
-        console.log(`-----------处理响应数据--------请求---${response.config.url}-----${token}----`)
+        // console.log(`-----------处理响应数据--------请求---${response.config.url}-----${token}----`)
 
     }
     // 处理响应数据

@@ -9,13 +9,12 @@ const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
 const user = ref(null);
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-const previewImage = (userStore.user == null || userStore.user.imgUrl == null) ? "/favicon.png" : userStore.user.imgUrl;
 
 const id = ref(userStore.id);
 const name = ref(null);
 const nickname = ref(null);
 const email = ref(null);
-const imgUrl = ref(null);
+const imgUrl = ref("/favicon.png");
 const isEmail = ref(null);
 const intro = ref(null);
 const countSee = ref(0);
@@ -26,19 +25,18 @@ const vipExpirationTime = ref(null);
 
 async function getDetail() {
   const response = await axios.get(`/api/admin/users/info`, {
-    method: 'get',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  const data = await response.data;
-  console.log(data.code)
+  const data = response.data;
   if (data.code == 200) {
+    id.value=data.data.id;
     name.value = data.data.name;
     nickname.value = data.data.nickname;
     email.value = data.data.email;
-    imgUrl.value = data.data.imgUrl;
+    imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
     intro.value = data.data.intro;
     isEmail.value = data.data.isEmail;
     countSee.value = data.data.countSee;
@@ -46,7 +44,6 @@ async function getDetail() {
     countAttention.value = data.data.countAttention;
     vip.value = data.data.vip;
     vipExpirationTime.value = data.data.vipExpirationTime;
-    userStore.setUser(id, userStore.user, userStore.token);
   }
 }
 
@@ -69,23 +66,23 @@ onMounted(() => {
     <q-card bordered class="my-card" flat>
       <q-item>
         <q-item-section>
-          <q-avatar v-if="userStore.user" font-size="52px" size="100px">
-            <img :src="previewImage">
+          <q-avatar v-if="imgUrl != null" font-size="52px" size="100px">
+            <img :src="imgUrl">
           </q-avatar>
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ userStore.user != null ? userStore.user.nickname : '待登录' }}
-            ({{ userStore.user != null ? userStore.user.name : '待登录' }})
+          <q-item-label>{{ nickname != null ? nickname : '待登录' }}
+            ({{ name != null ? name : '待登录' }})
           </q-item-label>
-          <q-item-label v-if="userStore.user" caption>
-            ID:{{ userStore.user.id }}
+          <q-item-label v-if="id" caption>
+            ID:{{ id }}
           </q-item-label>
-          <q-item-label v-if="userStore.user" caption>
-            {{ userStore.user.email }}
-            <q-icon v-if="userStore.user && userStore.user.isEmail ==2 " name="warning" style="color: red"/>
+          <q-item-label v-if="email" caption>
+            {{ email }}
+            <q-icon v-if="isEmail ==2 " name="warning" style="color: red"/>
           </q-item-label>
-          <q-item-label v-if="userStore.user && userStore.user.isEmail ==2 " caption>
+          <q-item-label v-if="isEmail ==2 " caption>
             （点击发送邮箱验证码）
           </q-item-label>
         </q-item-section>

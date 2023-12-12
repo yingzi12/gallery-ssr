@@ -31,7 +31,6 @@ async function addNewFramework() {
   loading.value = true;
 
   const {error} = await axios.post("/api/add", {name, language, url, stars}, {
-    method: "post",
   });
   loading.value = false;
 

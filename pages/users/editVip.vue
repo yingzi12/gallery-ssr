@@ -84,7 +84,7 @@ async function onSubmit() {
       'Content-Type': 'application/json',
     },
   });
-  const data = await response.data;
+  const data = response.data;
   if (data.code == 200) {
     $q.notify({
       color: 'green-4',
@@ -107,14 +107,12 @@ async function onSubmit() {
 }
 
 async function getDetail() {
-  const response = await fetch('/api/admin/userSettingVip/info?id=' + vid.value, {
-    method: 'get',
+  const response = await axios.get('/api/admin/userSettingVip/info?id=' + vid.value, {
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  const data = await response.json();
-  // console.log(data.code)
+  const data = response.data;
   if (data.code == 200) {
     title.value = data.data.title;
     intro.value = data.data.intro;
@@ -123,7 +121,6 @@ async function getDetail() {
     timeType.value = data.data.timeType;
     timeLong.value = data.data.timeLong;
     introduce.value = data.data.introduce;
-    userStore.setUser(userStore.user, userStore.token);
   }
 }
 

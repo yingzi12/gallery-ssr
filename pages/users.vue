@@ -13,7 +13,7 @@ const id = ref(userStore.id);
 const name = ref(null);
 const nickname = ref(null);
 const email = ref(null);
-const imgUrl = ref(null);
+const imgUrl = ref("/favicon.png");
 const isEmail = ref(null);
 const intro = ref(null);
 const countSee = ref(0);
@@ -32,13 +32,13 @@ async function getDetail() {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  const data = await response.data;
+  const data = response.data;
   // console.log(data.code)
   if (data.code == 200) {
     name.value = data.data.name;
     nickname.value = data.data.nickname;
     email.value = data.data.email;
-    imgUrl.value = data.data.imgUrl;
+    imgUrl.value = data.data.imgUrl ==null?"/favicon.png":data.data.imgUrl ;
     intro.value = data.data.intro;
     isEmail.value = data.data.isEmail;
     countSee.value = data.data.countSee;
@@ -46,7 +46,6 @@ async function getDetail() {
     countAttention.value = data.data.countAttention;
     vip.value = data.data.vip;
     vipExpirationTime.value = data.data.vipExpirationTime;
-    userStore.setUser(id, userStore.user, userStore.token);
   }
 }
 
@@ -280,15 +279,15 @@ onMounted(() => {
 
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
           <div class="absolute-bottom bg-transparent">
-            <q-avatar v-if="userStore.user" class="q-mb-sm" size="56px">
-              <img :src="previewImage">
+            <q-avatar v-if="imgUrl" class="q-mb-sm" size="56px">
+              <img :src="imgUrl">
             </q-avatar>
-            <div class="text-weight-bold">{{ userStore.user != null ? userStore.user.nickname : '待登录' }}</div>
-            <div v-if="userStore.user">
-              {{ userStore.user.email }}
-              <q-icon v-if="userStore.user.isEmail==2" name="warning" style="color: red"/>
+            <div class="text-weight-bold">{{ nickname != null ? nickname : '待登录' }}</div>
+            <div v-if="email">
+              {{ email }}
+              <q-icon v-if="isEmail==2" name="warning" style="color: red"/>
             </div>
-            <div v-if="userStore.user && userStore.user.isEmail==2">
+            <div v-if="isEmail==2">
               ( {{ $t(`user.emailVerification`) }})
             </div>
           </div>

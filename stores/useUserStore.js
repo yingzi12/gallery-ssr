@@ -8,6 +8,7 @@ export const useUserStore = defineStore('userStore', {
     }),
     actions: {
         setUser(id,userData, token) {
+            console.log("-------------setUser---------------")
             this.id = id;
             this.user = userData;
             this.token = token;
@@ -23,6 +24,7 @@ export const useUserStore = defineStore('userStore', {
             userCookie.value = userData;
         },
         clearUser() {
+            console.log("-------------clearUser---------------")
             this.user = null;
             this.token = null;
             this.id = null;
@@ -36,6 +38,7 @@ export const useUserStore = defineStore('userStore', {
             userCookie.value = null;
         },
         restoreUserFromCookie() {
+            console.log("-------------restoreUserFromCookie---------------")
             // this.refreshCookieExpiration()
             const tokenCookie = useCookie('token');
             const userCookie = useCookie('userInfo');
@@ -43,11 +46,12 @@ export const useUserStore = defineStore('userStore', {
             if (tokenCookie.value && userCookie.value) {
                 this.token = tokenCookie.value;
                 this.user = userCookie.value;
-                this.idCookie = idCookie.value;
+                this.id = idCookie.value;
             }
 
         },
         refreshCookieExpiration() {
+            console.log("-------------refreshCookieExpiration---------------")
             const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
 
             // 如果存在 token，更新其过期时间
@@ -56,7 +60,7 @@ export const useUserStore = defineStore('userStore', {
                 tokenCookie.value = tokenCookie.value; // 重新设置 token 的值
                 document.cookie = `token=${tokenCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
             }
-            const idCookie = useCookie('token');
+            const idCookie = useCookie('id');
             if (idCookie.value) {
                 idCookie.value = idCookie.value; // 重新设置 token 的值
                 document.cookie = `id=${idCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
@@ -87,11 +91,13 @@ export const useUserStore = defineStore('userStore', {
                     throw new Error(data.message || 'Login failed');
                 }
             } catch (error) {
+                console.log("-------------Login clearUser---------------")
                 this.clearUser();
                 throw error; // 继续抛出错误以供调用者处理
             }
         },
         logout() {
+            console.log("-------------logout clearUser---------------")
             this.clearUser();
             // 可能还需要添加向服务器发送登出请求的逻辑
         },

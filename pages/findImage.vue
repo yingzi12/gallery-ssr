@@ -38,7 +38,7 @@ async function onSubmit() {
     // body: form.value,
   });
 
-  const data = await response.data;
+  const data = response.data;
   if (data.code == 200) {
     $q.dialog({
       title: '通知',

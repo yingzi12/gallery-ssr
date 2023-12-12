@@ -32,7 +32,7 @@ async function getDetail() {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  const data = await response.data;
+  const data = response.data;
   console.log(data.code)
   if (data.code == 200) {
     name.value = data.data.name;
@@ -46,7 +46,6 @@ async function getDetail() {
     countAttention.value = data.data.countAttention;
     vip.value = data.data.vip;
     vipExpirationTime.value = data.data.vipExpirationTime;
-    userStore.setUser(id, userStore.user, userStore.token);
   }
 }
 
@@ -80,7 +79,7 @@ const onSubmit = async () => {
             'Content-Type': 'application/json',
           },
         });
-    const data = await response.data;
+    const data = response.data;
     if (data.code == 200) {
       isEmail.value = data.data.isEmail;
       nickname.value = data.data.nickname;

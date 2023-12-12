@@ -13,24 +13,14 @@ const route = useRoute();
 const aid = ref(route.query.aid);
 const videoList = ref([]);
 const total = ref(0);
-const queryData = reactive({
-  queryParams: {
-    pageNum: 1,
-    title: '',
-    aid: aid.value,
-  }
-});
-const {queryParams} = toRefs(queryData);
 
 async function getList(page: number) {
-  queryParams.value.aid = aid.value;
-  queryParams.value.pageNum = page;
-  const response = await axios.get('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
+  const response = await axios.get(`/api/admin/userVideo/list?aid=${aid.value}&pageNum=${1}`, {
     headers: {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
-  const data = await response.data;
+  const data =  response.data;
   if (data.code == 200) {
     total.value = data.total || videoList.value.length;
     videoList.value = data.data;
@@ -81,7 +71,7 @@ async function updateIsFree(id: number, isFree: number) {
         'Authorization': `Bearer ${userStore.token}`
       },
     });
-    const data = await response.data;
+    const data = response.data;
     console.log(data.code)
     if (data.code == 200) {
       await getList(1);
@@ -168,7 +158,7 @@ async function uploadVideoFile() {
           'Authorization': `Bearer ${userStore.token}`
         },
       });
-      const data = await response.json();
+      const data = response.data;
       // const data= checkFileExistence(md5);
       console.log(data);
       const isFree = 2;
@@ -229,7 +219,7 @@ async function addVideoRecord(md5: string, url: string, isFree: number) {
             'Authorization': `Bearer ${userStore.token}`
           },
         });
-    const data = await response.data;
+    const data = response.data;
     if (data.code == 200) {
       $q.notify({
         type: 'positive',
@@ -258,7 +248,7 @@ async function uploadPreviewVideoFile() {
           'Authorization': `Bearer ${userStore.token}`
         },
       });
-      const data = await response.json();
+      const data = response.data;
       console.log("checkFileExistence");
       console.log(data);
       const isFree = 1;

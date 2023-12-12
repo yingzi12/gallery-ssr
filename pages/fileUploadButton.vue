@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="file" @change="handleVideoFileChange" />
+    <input type="file" @change="handleVideoFileChange"/>
     <button @click="uploadVideoFile">Upload</button>
     <div v-if="uploadVideoProgress">
       <p>Uploading: {{ uploadVideoProgress }}%</p>
@@ -8,8 +8,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script lang="ts" setup>
+import {ref} from 'vue';
 import FileUploader from "~/utils/FileUploader";
 
 const selectedFile = ref<File | null>(null);
@@ -26,7 +26,8 @@ function handleVideoFileChange(event: Event) {
 function updateVideoProgress(chunkNumber: number, totalChunks: number) {
   uploadVideoProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
-const day= getCurrentDateFormatted();
+
+const day = getCurrentDateFormatted();
 
 async function uploadVideoFile() {
   if (selectedFile.value) {
@@ -42,6 +43,7 @@ async function uploadVideoFile() {
     }
   }
 }
+
 function getCurrentDateFormatted() {
   const now = new Date();
   const year = now.getFullYear();

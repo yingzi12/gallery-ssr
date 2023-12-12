@@ -8,10 +8,30 @@ const axiosInstance = axios.create({
 
 // 请求拦截器
 axiosInstance.interceptors.request.use(config => {
-    console.log("-------------------请求------------")
     const userStore = useUserStore();
+    userStore.restoreUserFromCookie();
     const token = userStore.token;
-    console.log("-------------------请求------------:"+token)
+    console.log(`-------------------请求---${config.url}-----${token}----`)
+    // console.log(!token)
+    if (config.url.startsWith('/api/admin')) {
+        // router.push("/login")
+        // 清空 cookie
+        // 注：这里的具体实现取决于您如何管理 cookie
+        // 例如：document.cookie = 'token=; Max-Age=0';
+
+        if(!token){
+            // 重定向到登录页面
+            // 注：这里的重定向实现取决于您的路由设置
+            // 例如：window.location.href = '/login';
+            // 清空 token 或其他认证数据
+            const userStore = useUserStore();
+            userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
+
+            // 重定向到登录页面
+            // window.location.href = '/login';
+            console.log(`-----------login--------请求---${config.url}-----${token}----`)
+        }
+    }
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,6 +45,9 @@ axiosInstance.interceptors.response.use(response => {
 
     console.log("-------------------处理响应数据------------")
     console.log(response.data.code === 401)
+    const userStore = useUserStore();
+    userStore.restoreUserFromCookie();
+
     // 检查错误响应并执行特定操作
     if (response.config.url.startsWith('/api/admin') && response.data.code === 401) {
         // router.push("/login")
@@ -40,7 +63,9 @@ axiosInstance.interceptors.response.use(response => {
         userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
 
         // 重定向到登录页面
-        window.location.href = '/login';
+        // window.location.href = '/login';
+        console.log(`-----------处理响应数据--------请求---${response.config.url}-----${token}----`)
+
     }
     // 处理响应数据
     return response;

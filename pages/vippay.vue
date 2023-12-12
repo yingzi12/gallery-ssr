@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import PayPalButton from './payPalButton.vue';
 </script>
 

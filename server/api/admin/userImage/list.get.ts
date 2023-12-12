@@ -1,14 +1,12 @@
 import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
-    console.log("----------userIamge    list--------")
     const config = useRuntimeConfig();
     const query = getQuery(event)
      // 获取请求头
     const headers = event.req.headers;
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
-    console.log("----------userIamge    token--------"+token)
 
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/admin/userImage/list?${tansParams(query)}`, {
@@ -19,7 +17,6 @@ export default defineEventHandler(async (event) => {
         }
     );
     const dataJson = await response.json();
-    console.log(dataJson.data)
     const sourceWeb=config.public.sourceWeb;
     const list= dataJson.data;
     if(list!=null) {

@@ -9,12 +9,13 @@
             <p class="yw-hd-slide-p app-yhsp">用户自建图集，用户自行定价，用户自定会员</p>
             <p class="yw-hd-slide-p app-yhsp">电脑站、手机站、app，多种终端无广告</p>
             <div class="yw-hd-app-dld">
-              <a href="https://www.aiavr.uk/Album-Gallery-1.0.1.apk" class="yw-hd-app-btn" target="_blank"><i class="icon-android"></i>安卓版下载</a>
-              <div class="qr-box" onmouseover="this.className='qr-box cur'" onmouseout="this.className='qr-box'">
+              <a class="yw-hd-app-btn" href="https://www.aiavr.uk/Album-Gallery-1.0.1.apk" target="_blank"><i
+                  class="icon-android"></i>安卓版下载</a>
+              <div class="qr-box" onmouseout="this.className='qr-box'" onmouseover="this.className='qr-box cur'">
                 <a class="qq-qr-icon jsLoadQr"><i class="icon-qr"></i></a>
               </div>
             </div>
-            <div class="yw-app-mb-pic"><img style="width: 400px" src="/frame.png" class="yw-app-mb"></div>
+            <div class="yw-app-mb-pic"><img class="yw-app-mb" src="/frame.png" style="width: 400px"></div>
           </div>
         </div>
       </div>

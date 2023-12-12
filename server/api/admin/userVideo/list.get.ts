@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
     let list= dataJson.data;
     if(list!=null) {
         for (let image of list) {
-            console.log(image);
             try {
                 image.url = await getBase64FromImageUrl(sourceWeb + image.imgUrl);
             } catch (error) {

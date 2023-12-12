@@ -1,6 +1,6 @@
-<script setup lang="ts">
-import { useQuasar } from 'quasar';
-import { useUserStore } from "~/stores/useUserStore";
+<script lang="ts" setup>
+import {useQuasar} from 'quasar';
+import {useUserStore} from "~/stores/useUserStore";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
@@ -9,14 +9,14 @@ const $q = useQuasar();
 const route = useRoute();
 const aid = ref(route.query.id);
 const title = ref(null);
-const gril = ref(null);
+const girl = ref(null);
 const intro = ref(null);
 const tags = ref(null);
 const imgUrl = ref("");
 const vipPrice = ref(0.0);
 const price = ref(0.0);
 const accept = ref(false);
-const charge=ref(1);
+const charge = ref(1);
 const previewImage = ref("/favicon.png");
 const selectedImage = ref<File | null>(null);
 
@@ -31,11 +31,12 @@ function notify(message: string, color: string) {
 
 function onReset() {
   title.value = null;
-  gril.value = null;
+  girl
+      .value = null;
   intro.value = null;
   tags.value = null;
   imgUrl.value = "";
-  charge.value=1;
+  charge.value = 1;
   accept.value = false;
 }
 
@@ -43,27 +44,26 @@ async function onSubmit() {
   // if (!accept.value) {
   //   notify('You need to accept the license and terms first', 'red-5');
   // } else {server≈.get.ts
-  const response = await axios.post("/api/admin/userAlbum/edit", {
-    method: "post",
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
-    },
-    credentials: 'include', // 确保携带 cookie
-    body: JSON.stringify({
-      id: aid.value,
-      title: title.value,
-      intro: intro.value,
-      gril: gril.value,
-      imgUrl: imgUrl.value,
-      tags: tags.value,
-      charge:charge.value,
-      price: price.value,
-      vipPrice: vipPrice.value,
-    }),
-  });
+  const response = await axios.post("/api/admin/userAlbum/edit",
+      JSON.stringify({
+        id: aid.value,
+        title: title.value,
+        intro: intro.value,
+        girl: girl
+            .value,
+        imgUrl: imgUrl.value,
+        tags: tags.value,
+        charge: charge.value,
+        price: price.value,
+        vipPrice: vipPrice.value,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
   const data = await response.data;
-  if(data.code==200){
+  if (data.code == 200) {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -72,7 +72,7 @@ async function onSubmit() {
     });
     router.push('/users/album'); // Redirect to login page
 
-  }else {
+  } else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -84,8 +84,8 @@ async function onSubmit() {
   // }
 }
 
-async function getDetail(){
-  const response = await axios.get('/api/admin/userAlbum/info?id='+aid.value, {
+async function getDetail() {
+  const response = await axios.get('/api/admin/userAlbum/info?id=' + aid.value, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -93,20 +93,22 @@ async function getDetail(){
   });
   const data = await response.data;
   console.log(data.code)
-  if(data.code==200){
-    title.value= data.title;
-    intro.value= data.intro;
-    gril.value= data.gril;
-    imgUrl.value= data.imgUrl;
-    tags.value= data.tags;
-    charge.value=data.charge;
-    price.value= data.price;
-    vipPrice.value= data.vipPrice;
-    userStore.setUser(userStore.user,userStore.token);
+  if (data.code == 200) {
+    title.value = data.data.title;
+    intro.value = data.data.intro;
+    girl
+        .value = data.data.girl
+    ;
+    imgUrl.value = data.data.imgUrl;
+    tags.value = data.data.tags;
+    charge.value = data.data.charge;
+    price.value = data.data.price;
+    vipPrice.value = data.data.vipPrice;
+    userStore.setUser(userStore.user, userStore.token);
   }
 
 }
-getDetail()
+
 async function handleImageUpload(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file && file.size <= 2 * 1024 * 1024) { // 2MB限制
@@ -128,8 +130,8 @@ async function handleImageUpload(event: Event) {
       if (response.ok) {
         const data = await response.json();
         console.log(data.data)
-        previewImage.value = "https://image.51x.uk"+data.data;
-        imgUrl.value = "https://image.51x.uk"+data.data;
+        previewImage.value = "https://image.51x.uk" + data.data;
+        imgUrl.value = "https://image.51x.uk" + data.data;
       } else {
         throw new Error('Image upload failed');
       }
@@ -142,7 +144,7 @@ async function handleImageUpload(event: Event) {
   }
 }
 
-const chargeList=[
+const chargeList = [
   {
     label: '免费',
     value: 1
@@ -165,10 +167,14 @@ const chargeList=[
     value: 5
   }
 ]
-function updateCharge(charge:number){
-  price.value=0.5;
-  vipPrice.value=0.5;
+
+function updateCharge(charge: number) {
+  price.value = 0.5;
+  vipPrice.value = 0.5;
 }
+
+getDetail()
+
 </script>
 
 <template>
@@ -176,9 +182,9 @@ function updateCharge(charge:number){
   <div class="q-pa-md" style="max-width: 400px">
 
     <q-form
-        @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
+        @reset="onReset"
+        @submit="onSubmit"
     >
       <div class="q-pa-md q-gutter-sm">
         <div>
@@ -188,78 +194,79 @@ function updateCharge(charge:number){
               style="height: 140px; max-width: 150px"
           />
         </div>
-        <input type="file" @change="handleImageUpload" accept="image/*" />
+        <input accept="image/*" type="file" @change="handleImageUpload"/>
       </div>
       <q-input
-          filled
           v-model="title"
-          label="图集名称 *"
-          hint="输入图集名称"
-          lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="输入图集名称"
+          label="图集名称 *"
+          lazy-rules
       />
       <q-input
-          filled
-          v-model="gril"
-          label="模特 *"
-          hint="Name and surname"
-          lazy-rules
+          v-model="girl
+"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="Name and surname"
+          label="模特 *"
+          lazy-rules
       />
       <q-input
           v-model="intro"
-          label="简介 *"
-          filled
-          type="textarea"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          label="简介 *"
+          type="textarea"
       />
       <!--      </div>-->
       <q-input
-          filled
-          type="text"
           v-model="tags"
+          :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
           label="标签 *"
           lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
+          type="text"
       />
 
       <div>
-        <q-select outlined hint="收费方式" v-model="charge" :options="chargeList" label="收费方式"
-                  @update:modelValue="updateCharge"
-                  emit-value
-                  map-options />
+        <q-select v-model="charge" :options="chargeList" emit-value hint="收费方式" label="收费方式"
+                  map-options
+                  outlined
+                  @update:modelValue="updateCharge"/>
         <q-input v-if="charge =='2' || charge =='3' || charge=='5'"
-                 filled
                  v-model="price"
-                 label="价格"
-                 mask="#.##"
-                 fill-mask="0"
-                 reverse-fill-mask
-                 hint="Mask: #.##"
-                 input-class="text-right"
                  :rules="[
           val => (val !== null && val !== '') || '请输入金额',
         val => (val > 0.5 && val < 10000) || '金额不能小与0.5大于1000'
                   ]"
-        />
-        <q-input v-if="charge =='3' || charge=='4'"
-                 filled
-                 v-model="vipPrice"
-                 label="VIP价格"
-                 mask="#.##"
                  fill-mask="0"
-                 reverse-fill-mask
+                 filled
                  hint="Mask: #.##"
                  input-class="text-right"
+                 label="价格"
+                 mask="#.##"
+                 reverse-fill-mask
+        />
+        <q-input v-if="charge =='3' || charge=='4'"
+                 v-model="vipPrice"
                  :rules="[
           val => (val !== null && val !== '') || '请输入金额',
         val => (val > 0.5 && val < 10000) || '金额不能小与0.5不能大于1000'
                   ]"
+                 fill-mask="0"
+                 filled
+                 hint="Mask: #.##"
+                 input-class="text-right"
+                 label="VIP价格"
+                 mask="#.##"
+                 reverse-fill-mask
         />
       </div>
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn color="primary" label="Submit" type="submit"/>
+        <q-btn class="q-ml-sm" color="primary" flat label="Reset" type="reset"/>
       </div>
     </q-form>
   </div>

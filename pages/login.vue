@@ -1,7 +1,8 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import { useQuasar } from 'quasar';
-import { useUserStore } from '@/stores/useUserStore';
+<script lang="ts" setup>
+import {ref} from 'vue';
+import {useQuasar} from 'quasar';
+import {useUserStore} from '@/stores/useUserStore';
+
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
@@ -76,7 +77,8 @@ async function onSubmit() {
     });
   }
 }
-function isLogin(){
+
+function isLogin() {
   if (userStore.user) {
     // 如果用户未登录，则重定向到登录页面
     router.push('/users'); // 假设登录页面的路由为 '/login'
@@ -102,33 +104,33 @@ onMounted(() => {
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-form @submit.prevent="onSubmit" class="q-gutter-md">
+          <q-form class="q-gutter-md" @submit.prevent="onSubmit">
             <!-- 账号输入框 -->
             <q-input
-                filled
                 v-model="username"
+                :rules="[val => val && val.length > 0 || 'Please enter your account']"
+                filled
                 label="账号 *"
                 lazy-rules
-                :rules="[val => val && val.length > 0 || 'Please enter your account']"
             />
 
             <!-- 密码输入框 -->
             <q-input
-                filled
-                type="password"
                 v-model="password"
+                :rules="[val => val && val.length > 0 || 'Please enter your password']"
+                filled
                 label="密码 *"
                 lazy-rules
-                :rules="[val => val && val.length > 0 || 'Please enter your password']"
+                type="password"
             />
 
             <!-- 验证码输入框 -->
             <q-input
-                filled
                 v-model="captcha"
+                :rules="[val => val && val.length > 0 || '请输入验证码']"
+                filled
                 label="验证码 *"
                 lazy-rules
-                :rules="[val => val && val.length > 0 || '请输入验证码']"
             />
             <div class="q-mb-md">
               <img :src="captchaImage" @click="refreshCaptcha">
@@ -136,10 +138,10 @@ onMounted(() => {
             </div>
 
             <!-- 接受条款切换 -->
-            <q-toggle v-model="accept" label="I accept the license and terms" />
+            <q-toggle v-model="accept" label="I accept the license and terms"/>
 
             <div>
-              <q-btn label="登录" type="submit" color="primary" style="width: 100%;" />
+              <q-btn color="primary" label="登录" style="width: 100%;" type="submit"/>
             </div>
 
             <!-- 注册与忘记密码链接 -->

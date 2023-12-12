@@ -1,72 +1,115 @@
-<script setup  lang="ts">
+<script lang="ts" setup>
 definePageMeta({
   key: route => route.fullPath
 })
-import { useUserStore } from "~/stores/useUserStore";
-
-const userStore = useUserStore();
-const lorem= 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-const previewImage = (userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl;
+import {useUserStore} from "~/stores/useUserStore";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-onMounted(() => {
-  userStore.restoreUserFromCookie();
-  // 当组件挂载时检查用户的登录状态
-  if (!userStore.user || !userStore.token) {
-    // 如果用户未登录，则重定向到登录页面
-    router.push('/login'); // 假设登录页面的路由为 '/login'
-  } else {
-    console.log(userStore.token)
-    console.log(JSON.stringify(userStore.user))
+
+const userStore = useUserStore();
+const user = ref(null);
+const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+const previewImage = (userStore.user == null || userStore.user.imgUrl == null) ? "/favicon.png" : userStore.user.imgUrl;
+
+const id = ref(userStore.id);
+const name = ref(null);
+const nickname = ref(null);
+const email = ref(null);
+const imgUrl = ref(null);
+const isEmail = ref(null);
+const intro = ref(null);
+const countSee = ref(0);
+const countLike = ref(0);
+const countAttention = ref(0);
+const vip = ref(0);
+const vipExpirationTime = ref(null);
+
+async function getDetail() {
+  const response = await axios.get(`/api/admin/users/info`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    },
+  });
+  const data = await response.data;
+  console.log(data.code)
+  if (data.code == 200) {
+    name.value = data.data.name;
+    nickname.value = data.data.nickname;
+    email.value = data.data.email;
+    imgUrl.value = data.data.imgUrl;
+    intro.value = data.data.intro;
+    isEmail.value = data.data.isEmail;
+    countSee.value = data.data.countSee;
+    countLike.value = data.data.countLike;
+    countAttention.value = data.data.countAttention;
+    vip.value = data.data.vip;
+    vipExpirationTime.value = data.data.vipExpirationTime;
+    userStore.setUser(id, userStore.user, userStore.token);
   }
+}
+
+getDetail();
+onMounted(() => {
 })
 </script>
 
 <template>
   <div>
     <router-link to="/users/userHeadImage">
-      <q-btn color="primary" label="编辑头像" />
+      <q-btn color="primary" label="编辑头像"/>
     </router-link>
     <router-link to="/users/userEdit">
-      <q-btn color="primary" label="编辑个人信息" />
+      <q-btn color="primary" label="编辑个人信息"/>
     </router-link>
   </div>
 
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="my-card" flat bordered>
+    <q-card bordered class="my-card" flat>
       <q-item>
-        <q-item-section >
-          <q-avatar v-if="userStore.user"  size="100px" font-size="52px">
+        <q-item-section>
+          <q-avatar v-if="userStore.user" font-size="52px" size="100px">
             <img :src="previewImage">
           </q-avatar>
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{  userStore.user!=null ? userStore.user.nickname : '待登录'  }} ({{userStore.user!=null ? userStore.user.name : '待登录'}})</q-item-label>
+          <q-item-label>{{ userStore.user != null ? userStore.user.nickname : '待登录' }}
+            ({{ userStore.user != null ? userStore.user.name : '待登录' }})
+          </q-item-label>
           <q-item-label v-if="userStore.user" caption>
             ID:{{ userStore.user.id }}
           </q-item-label>
           <q-item-label v-if="userStore.user" caption>
-            {{ userStore.user.email }}<q-icon v-if="userStore.user && userStore.user.isEmail ==2 " name="warning" style="color: red" />
+            {{ userStore.user.email }}
+            <q-icon v-if="userStore.user && userStore.user.isEmail ==2 " name="warning" style="color: red"/>
           </q-item-label>
-          <q-item-label  v-if="userStore.user && userStore.user.isEmail ==2 " caption>
+          <q-item-label v-if="userStore.user && userStore.user.isEmail ==2 " caption>
             （点击发送邮箱验证码）
           </q-item-label>
         </q-item-section>
 
       </q-item>
 
-      <q-separator />
+      <q-separator/>
 
       <q-card-section v-if="userStore.user" horizontal>
-        {{ userStore.user.intro  }}
+        {{ userStore.user.intro }}
       </q-card-section>
-      <q-separator />
+      <q-separator/>
 
       <q-card-actions>
-        <q-btn flat round icon="favorite"  color="red-8">{{ userStore.user!=null ?   userStore.user.countAttention :0 }}</q-btn>
-        <q-btn flat round icon="thumb_up" color="red-8">{{ userStore.user!=null ? userStore.user.countLike  :0}}</q-btn>
-        <q-btn flat round icon="visibility" color="red-8">{{ userStore.user!=null ? userStore.user.countSee :0  }}</q-btn>
+        <q-btn color="red-8" flat icon="favorite" round>{{
+            userStore.user != null ? userStore.user.countAttention : 0
+          }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="thumb_up" round>{{ userStore.user != null ? userStore.user.countLike : 0 }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="visibility" round>{{
+            userStore.user != null ? userStore.user.countSee : 0
+          }}
+        </q-btn>
       </q-card-actions>
     </q-card>
 

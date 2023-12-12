@@ -1,5 +1,5 @@
-<script setup lang="ts">
-const fourth =ref(true);
+<script lang="ts" setup>
+const fourth = ref(true);
 const $q = useQuasar()
 
 const oldPassword = ref(null)
@@ -13,8 +13,7 @@ if (accept.value !== true) {
     icon: 'warning',
     message: 'You need to accept the license and terms first'
   })
-}
-else {
+} else {
   $q.notify({
     color: 'green-4',
     textColor: 'white',
@@ -22,7 +21,8 @@ else {
     message: 'Submitted'
   })
 }
-function onSubmit () {
+
+function onSubmit() {
   if (accept.value !== true) {
     $q.notify({
       color: 'red-5',
@@ -30,8 +30,7 @@ function onSubmit () {
       icon: 'warning',
       message: 'You need to accept the license and terms first'
     })
-  }
-  else {
+  } else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -47,36 +46,36 @@ function onSubmit () {
   <div class="q-pa-md" style="max-width: 400px">
 
     <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
     >
       <q-input
-          filled
           v-model="oldPassword"
-          label="Your name *"
-          hint="Name and surname"
-          lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="Name and surname"
+          label="Your name *"
+          lazy-rules
       />
       <q-input
-          filled
           v-model="newPassword"
-          label="Your name *"
-          hint="Name and surname"
-          lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="Name and surname"
+          label="Your name *"
+          lazy-rules
       />
       <q-input
-          filled
           v-model="newPassword2"
-          label="Your name *"
-          hint="Name and surname"
-          lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="Name and surname"
+          label="Your name *"
+          lazy-rules
       />
 
       <div>
-        <q-btn label="重置密码" type="submit" color="primary"/>
+        <q-btn color="primary" label="重置密码" type="submit"/>
       </div>
     </q-form>
 

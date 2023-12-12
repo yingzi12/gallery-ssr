@@ -1,3 +1,4 @@
+import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
@@ -5,23 +6,19 @@ export default defineEventHandler(async (event) => {
     const headers = event.req.headers;
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
-    // console.log(cookies)
-
-    // const token = cookies["token"]; // 从用户存储库中获取token
-    const body = await readBody(event)
-    // console.log(body)
-
+    const query = getQuery(event)
+    // const response = await fetch(config.public.baseUrl+`/album/list?${tansParams(query)}`);
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userSettingVip/edit`,{
-            method: 'POST',
+    const response = await fetch(config.public.baseUrl+`/admin/userCollection/getInfo?${tansParams(query)}`, {
+            method: 'get',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(body)
         }
     );
     const dataJson = await response.json();
+    // console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: dataJson.message,

@@ -1,17 +1,19 @@
-<script setup lang="ts">
-import { useUserStore } from "~/stores/useUserStore";
+<script lang="ts" setup>
+import {useUserStore} from "~/stores/useUserStore";
+import {useRoute} from "vue-router";
+import {useQuasar} from "quasar";
+
 definePageMeta({
   key: route => route.fullPath
 })
-import { useRoute } from "vue-router";
-import {useQuasar} from "quasar";
+
 const config = useRuntimeConfig();
 const userStore = useUserStore();
 
 const $q = useQuasar();
 const route = useRoute();
 const aid = ref(route.query.aid);
-const updateUrl = ref(config.public.baseUrl+"/admin/userImage/upload");
+const updateUrl = ref(config.public.baseUrl + "/admin/userImage/upload");
 const imageList = ref([]);
 const total = ref(0);
 
@@ -22,20 +24,18 @@ const queryData = reactive({
     aid: aid.value,
   }
 });
-const { queryParams } = toRefs(queryData);
+const {queryParams} = toRefs(queryData);
 
 async function getList(page: number) {
   queryParams.value.aid = aid.value;
   queryParams.value.pageNum = page;
   try {
-    const response = await axios.get('/api/admin/userImage/list?' + tansParams(queryParams.value),{
+    const response = await axios.get('/api/admin/userImage/list?' + tansParams(queryParams.value), {
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       }
     });
-    console.log(response.data);
-    console.log("response.data:"+response.data.code)
-    if (response.data.code ==200) {
+    if (response.data.code == 200) {
       total.value = response.data.total || imageList.value.length;
       imageList.value = response.data.data;
     }
@@ -62,7 +62,7 @@ async function deleteImage(id: number) {
         'Authorization': `Bearer ${userStore.token}`
       }
     });
-    if (response.data.code ==200) {
+    if (response.data.code == 200) {
       await getList(1);
     }
   }).onCancel(() => {
@@ -70,7 +70,7 @@ async function deleteImage(id: number) {
   });
 }
 
-async function updateIsFree(id: number, isFree: number) {
+async function updateIsFree(image: any, isFree: number) {
   $q.dialog({
     title: '通知',
     message: '是否确认修改.',
@@ -82,20 +82,22 @@ async function updateIsFree(id: number, isFree: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const response = await axios.get('/api/admin/userImage/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
+    const response = await axios.get('/api/admin/userImage/updateIsFree?id=' + image.id.toString() + "&isFree=" + isFree.toString(), {
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       }
     });
-    const  data=response.data;
-    if ( data.code === 200) {
-      await getList(1);
+    const data = response.data;
+    if (data.code === 200) {
+      image.isFree = isFree;
+      // await getList(1);
     }
   }).onCancel(() => {
     // console.log('Cancel')
   })
   ;
 }
+
 onMounted(() => {
   userStore.restoreUserFromCookie();
   getList(1);
@@ -108,57 +110,60 @@ watch(() => route.query.aid, (newAid) => {
 
 <template>
   <q-breadcrumbs gutter="none">
-    <q-breadcrumbs-el label="这是我的图集" />
-    <q-breadcrumbs-el label="图片列表" />
+    <q-breadcrumbs-el label="这是我的图集"/>
+    <q-breadcrumbs-el label="图片列表"/>
   </q-breadcrumbs>
   <div class="q-pa-md">
     <div class="q-gutter-sm row items-start">
       <q-uploader
-          :url="updateUrl"
-          field-name="file"
+          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `1`}]"
           :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
+          :url="updateUrl"
           :with-credentials="false"
+          accept=".jpg, image/*"
+          field-name="file"
           label="上传图集预览图片（预览图片公开观看）"
           multiple
-          accept=".jpg, image/*"
-          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `1`}]"
-          @finish="getList(1)"
           style="max-width: 300px"
+          @finish="getList(1)"
       />
     </div>
   </div>
   <div class="q-pa-md">
     <div class="q-gutter-sm row items-start">
       <q-uploader
-          :url="updateUrl"
-          field-name="file"
+          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `2`}]"
           :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
+          :url="updateUrl"
           :with-credentials="false"
+          accept=".jpg, image/*"
+          field-name="file"
           label="上传图集正式图片"
           multiple
-          accept=".jpg, image/*"
-          :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `2`}]"
-          @finish="getList(1)"
           style="max-width: 300px"
+          @finish="getList(1)"
       />
     </div>
   </div>
-<q-th>图片列表（{{total}}）</q-th>
+  <q-th>图片列表（{{ total }}）</q-th>
   <div class="q-pa-md">
     <div class="row justify-center q-gutter-sm">
       <q-intersection
           v-for="(image,index) in imageList"
           :key="index"
-          transition="scale"
           class="example-item"
+          transition="scale"
       >
-        <q-card flat bordered class="q-ma-sm">
+        <q-card bordered class="q-ma-sm" flat>
           <img :src="image.imgUrl">
 
           <q-card-section>
-            <q-btn  v-if="image.isFree == 2" square color="primary" icon="visibility"  @click="updateIsFree(image.id,1)">预览</q-btn>
-            <q-btn v-if="image.isFree == 1" square color="primary" icon="sunny" @click="updateIsFree(image.id,2)" >正式</q-btn>
-            <q-btn square color="primary" icon="delete"  @click="deleteImage(image.id)" >删除</q-btn>
+            <q-btn v-if="image.isFree == 2" color="primary" icon="visibility" square @click="updateIsFree(image,1)">
+              预览
+            </q-btn>
+            <q-btn v-if="image.isFree == 1" color="primary" icon="sunny" square @click="updateIsFree(image,2)">正式
+            </q-btn>
+            <q-btn color="primary" icon="delete" square @click="deleteImage(image.id)">删除</q-btn>
           </q-card-section>
         </q-card>
       </q-intersection>
@@ -170,6 +175,7 @@ watch(() => route.query.aid, (newAid) => {
 .my-card
   width: 100%
   max-width: 350px
+
 .example-item
   height: 290px
   width: 290px

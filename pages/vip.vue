@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const vips = ref([
   {
     id: 1,
@@ -6,7 +6,7 @@ const vips = ref([
     sourcePrice: "",
     price: '2.99$',
     date: 'month', // 对应于 messages 中的键
-    features: ['download', 'exclusiveLogo',  'videos']
+    features: ['download', 'exclusiveLogo', 'videos']
   },
   {
     id: 2,
@@ -41,53 +41,65 @@ const buyvip = (id: number) => {
 <template>
   <div>
     <div class="flex flex-center q-gutter-md" style="padding: 20px">
-      <div class="row justify-center" v-for="vip in vips" :key="vip.id">
+      <div v-for="vip in vips" :key="vip.id" class="row justify-center">
         <div class="col">
-        <q-card class="my-card">
-          <q-card-section class="bg-secondary text-white">
-            <div class="text-h5" style="padding: 10px;">{{ $t(`vip.${vip.name}`) }}</div>
-            <div class="text-subtitle2">
-              <p style="font-size: 36px;" id="cache47">
-                <span id="cache48" >{{vip.price}}</span>
-                <span id="cache38" class="strikethrough">{{vip.sourcePrice}}</span>
-                <span style="font-size: 20px;" id="cache49">/{{ $t(`vip.date.${vip.date}`) }}</span>
-              </p>
-            </div>
-            <div><span style="font-size: 10px;" >{{ $t(`vip.cancellation`) }}</span></div>
-          </q-card-section>
-          <q-separator dark />
+          <q-card class="my-card">
+            <q-card-section class="bg-secondary text-white">
+              <div class="text-h5" style="padding: 10px;">{{ $t(`vip.${vip.name}`) }}</div>
+              <div class="text-subtitle2">
+                <p id="cache47" style="font-size: 36px;">
+                  <span id="cache48">{{ vip.price }}</span>
+                  <span id="cache38" class="strikethrough">{{ vip.sourcePrice }}</span>
+                  <span id="cache49" style="font-size: 20px;">/{{ $t(`vip.date.${vip.date}`) }}</span>
+                </p>
+              </div>
+              <div><span style="font-size: 10px;">{{ $t(`vip.cancellation`) }}</span></div>
+            </q-card-section>
+            <q-separator dark/>
 
-          <q-card-section  class="card-section" style="min-height: 176px">
-            <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">
-              <p   style="color:#999999;"> {{ $t(`vip.features.${feature}`) }}</p>
-            </div>
-          </q-card-section>
+            <q-card-section class="card-section" style="min-height: 176px">
+              <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">
+                <p style="color:#999999;"> {{ $t(`vip.features.${feature}`) }}</p>
+              </div>
+            </q-card-section>
 
-          <q-card-actions align="right" style="padding: 10px">
-            <q-btn color="primary" icon="shopping_cart" label="购买"  @click="buyvip(vip.id)" />
-          </q-card-actions>
-        </q-card>
+            <q-card-actions align="right" style="padding: 10px">
+              <q-btn color="primary" icon="shopping_cart" label="购买" @click="buyvip(vip.id)"/>
+            </q-card-actions>
+          </q-card>
+        </div>
       </div>
     </div>
   </div>
-  </div>
   <div class="row">
-    <div class="col-2"> </div>
+    <div class="col-2"></div>
     <div class="col-auto" style="margin: 0px">
       <div class="footter" style="margin: 0px;text-align: center;">
-        <router-link to="">关于图集</router-link>|
-        <router-link to="">联系我们</router-link>|
-        <router-link to="">帮助中心</router-link>|
-        <router-link to="">提交建议</router-link>|
-        <router-link to="">举报中心</router-link>|
-        <router-link to="/privacyPolicy">隐私政策</router-link>|
-        <router-link to="/use">使用条款</router-link>|
-        <router-link to="">漏洞提交</router-link>|
+        <router-link to="">关于图集</router-link>
+        |
+        <router-link to="">联系我们</router-link>
+        |
+        <router-link to="">帮助中心</router-link>
+        |
+        <router-link to="">提交建议</router-link>
+        |
+        <router-link to="">举报中心</router-link>
+        |
+        <router-link to="/privacyPolicy">隐私政策</router-link>
+        |
+        <router-link to="/use">使用条款</router-link>
+        |
+        <router-link to="">漏洞提交</router-link>
+        |
       </div>
-      <div class="footerText text-weight-thin"> <p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有 心世界未来科技有限公司</p></div>
+      <div class="footerText text-weight-thin"><p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有
+        心世界未来科技有限公司</p></div>
       <div class="footerText text-weight-thin"><p>图片,美女,写真,图集</p></div>
-      <div class="footerText text-weight-light"><p>本站所收录的作品、社区话题、用户评论、用户上传内容或图片等均属用户个人行为。如前述内容侵害您的权益，欢迎举报投诉，一经核实，立即删除，本站不承担任何责任</p></div>
-      <div class="footerText text-weight-thin"><a href="https://www.51k.uk">心世界小说网</a>|<a  href="https://www.30dizhi.uk">30导航</a>|<a  href="https://www.aravrw.com">心世界</a></div>
+      <div class="footerText text-weight-light"><p>
+        本站所收录的作品、社区话题、用户评论、用户上传内容或图片等均属用户个人行为。如前述内容侵害您的权益，欢迎举报投诉，一经核实，立即删除，本站不承担任何责任</p>
+      </div>
+      <div class="footerText text-weight-thin"><a href="https://www.51k.uk">心世界小说网</a>|<a
+          href="https://www.30dizhi.uk">30导航</a>|<a href="https://www.aravrw.com">心世界</a></div>
     </div>
     <div class="col-2"></div>
   </div>
@@ -102,12 +114,12 @@ const buyvip = (id: number) => {
   justify-content: center;
   width: 350px;
   height: 360px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
 
 .my-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .bg-secondary, .card-section {
@@ -122,12 +134,14 @@ const buyvip = (id: number) => {
 .card-section p {
   margin: 0; /* 移除段落默认的外边距 */
 }
+
 .flex-center {
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
   height: 100%; /* 或者根据需要设置高度 */
 }
+
 .strikethrough {
   text-decoration: line-through;
 }

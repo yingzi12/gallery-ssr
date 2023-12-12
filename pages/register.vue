@@ -1,5 +1,6 @@
-<script setup lang="ts">
-import { useQuasar } from 'quasar';
+<script lang="ts" setup>
+import {useQuasar} from 'quasar';
+
 const $q = useQuasar()
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
@@ -14,8 +15,7 @@ if (accept.value !== true) {
     icon: 'warning',
     message: 'You need to accept the license and terms first'
   })
-}
-else {
+} else {
   $q.notify({
     color: 'green-4',
     textColor: 'white',
@@ -23,7 +23,8 @@ else {
     message: 'Submitted'
   })
 }
-function  onReset () {
+
+function onReset() {
   name.value = null
   email.value = null
   password.value = null
@@ -113,44 +114,44 @@ const togglePasswordVisibility = () => {
 
         <q-card-section class="q-pt-none">
           <q-form
-              @submit="onSubmit"
-              @reset="onReset"
               class="q-gutter-md"
+              @reset="onReset"
+              @submit="onSubmit"
           >
             <!-- 账号输入框 -->
             <q-input
-                filled
                 v-model="name"
                 :label="$t('login.name')+' *'"
                 :rules="usernameRules"
+                filled
             />
             <q-input
-                filled
-                type="email"
                 v-model="email"
                 :label="$t('login.email')+' *'"
                 :rules="[ val => val && val.length > 5 || 'Please enter your email']"
+                filled
+                type="email"
             />
 
             <!-- 密码输入框 -->
             <q-input
-                filled
-                :type="showPassword ? 'text' : 'password'"
                 v-model="password"
                 :label="$t('login.password')+' *'"
                 :rules="passwordRules"
+                :type="showPassword ? 'text' : 'password'"
+                filled
             >
               <template v-slot:append>
                 <q-icon :name="showPassword ? 'visibility_off' : 'visibility'"
                         class="cursor-pointer"
-                        @click="togglePasswordVisibility" />
+                        @click="togglePasswordVisibility"/>
               </template>
             </q-input>
 
-            <q-toggle v-model="accept" label="I accept the license and terms" />
+            <q-toggle v-model="accept" label="I accept the license and terms"/>
 
             <div>
-              <q-btn :label=" $t('login.regis')" type="submit" color="primary" style="width: 100%;"/>
+              <q-btn :label=" $t('login.regis')" color="primary" style="width: 100%;" type="submit"/>
             </div>
 
             <!-- 注册与忘记密码链接 -->

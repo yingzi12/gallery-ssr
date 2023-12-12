@@ -16,7 +16,6 @@ const defaultLanguage = ref('en');
 // 设置默认语言的方法
 const setDefaultLanguage = () => {
   const userLang = navigator.language || navigator.userLanguage;
-  console.log(userLang)
   const availableLanguages = ['en', 'zh-CN']; // 示例语言列表
 
   if (availableLanguages.includes(userLang)) {

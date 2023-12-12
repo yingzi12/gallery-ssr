@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useUserStore} from "~/stores/useUserStore";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
@@ -13,12 +13,12 @@ const title = ref(null)
 const desc = ref(null)
 const intro = ref(null)
 const tags = ref(null)
-const price =ref(0);
+const price = ref(0);
 const accept = ref(false)
-const introduce=ref(null)
-const timeType=ref(1)
-const timeLong=ref(1);
-const timeTypeList=[
+const introduce = ref(null)
+const timeType = ref(1)
+const timeLong = ref(1);
+const timeTypeList = [
   {
     label: '天',
     value: 1
@@ -48,8 +48,7 @@ if (accept.value !== true) {
     icon: 'warning',
     message: 'You need to accept the license and terms first'
   })
-}
-else {
+} else {
   $q.notify({
     color: 'green-4',
     textColor: 'white',
@@ -57,39 +56,36 @@ else {
     message: 'Submitted'
   })
 }
-function  onReset () {
+
+function onReset() {
   title.value = null
   desc.value = null
   intro.value = null
   tags.value = null
   accept.value = false
-  introduce.value=null
+  introduce.value = null
 }
 
 async function onSubmit() {
   // if (!accept.value) {
   //   notify('You need to accept the license and terms first', 'red-5');
   // } else {server≈.get.ts
-  const response = await fetch("/api/admin/userSettingVip/edit", {
-    method: "post",
+  const response = await axios.post("/api/admin/userSettingVip/edit", JSON.stringify({
+    id: vid.value,
+    title: title.value,
+    intro: intro.value,
+    tags: tags.value,
+    price: price.value,
+    timeType: timeType.value,
+    timeLong: timeLong.value,
+    introduce: introduce.value
+  }), {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
     },
-    credentials: 'include', // 确保携带 cookie
-    body: JSON.stringify({
-      id: vid.value,
-      title: title.value,
-      intro: intro.value,
-      tags: tags.value,
-      price: price.value,
-      timeType:timeType.value,
-      timeLong:timeLong.value,
-      introduce:introduce.value
-    }),
   });
-  const data = await response.json();
-  if(data.code==200){
+  const data = await response.data;
+  if (data.code == 200) {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -98,7 +94,7 @@ async function onSubmit() {
     });
     router.push('/users/vip'); // Redirect to login page
 
-  }else {
+  } else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
@@ -110,27 +106,27 @@ async function onSubmit() {
   // }
 }
 
-async function getDetail(){
-  const response = await fetch('/api/admin/userSettingVip/info?id='+vid.value, {
+async function getDetail() {
+  const response = await fetch('/api/admin/userSettingVip/info?id=' + vid.value, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
     },
   });
   const data = await response.json();
-  console.log(data.code)
-  if(data.code==200){
-    title.value= data.data.title;
-    intro.value= data.data. intro;
-    tags.value= data.data. tags;
-    price.value= data.data. price;
-    timeType.value= data.data.timeType;
-    timeLong.value= data.data.timeLong;
-    introduce.value= data.data.introduce;
-    userStore.setUser(userStore.user,userStore.token);
+  // console.log(data.code)
+  if (data.code == 200) {
+    title.value = data.data.title;
+    intro.value = data.data.intro;
+    tags.value = data.data.tags;
+    price.value = data.data.price;
+    timeType.value = data.data.timeType;
+    timeLong.value = data.data.timeLong;
+    introduce.value = data.data.introduce;
+    userStore.setUser(userStore.user, userStore.token);
   }
 }
+
 getDetail()
 </script>
 
@@ -139,71 +135,71 @@ getDetail()
   <div class="q-pa-md" style="max-width: 400px">
 
     <q-form
-        @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
+        @reset="onReset"
+        @submit="onSubmit"
     >
       <q-input
-          filled
           v-model="title"
-          label="会员名称 *"
-          hint="会员名称"
-          lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          hint="会员名称"
+          label="会员名称 *"
+          lazy-rules
       />
       <q-input
           v-model="intro"
-          label="简介 *"
-          filled
-          type="textarea"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          label="简介 *"
+          type="textarea"
       />
       <q-input
           v-model="introduce"
-          label="说明 *"
-          filled
-          type="textarea"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
+          filled
+          label="说明 *"
+          type="textarea"
       />
       <div>
         <q-input v-if="timeType != 5 "
-                 filled
-                 type="number"
                  v-model="timeLong"
-                 label="会员时长 *"
-                 lazy-rules
                  :rules="[
           val => (val !== null && val !== '') || '请输入时长',
         val => (val > 0 && val < 1000) || '不能小与0，大于1000'
                   ]"
+                 filled
+                 label="会员时长 *"
+                 lazy-rules
+                 type="number"
         />
-        <q-select outlined
-                  v-model="timeType"
+        <q-select v-model="timeType"
                   :options="timeTypeList"
-                  label="单位"
                   emit-value
+                  label="单位"
                   map-options
+                  outlined
         />
       </div>
 
       <q-input
-          filled
           v-model="price"
-          label="Price with 2 decimals"
-          mask="#.##"
-          fill-mask="0"
-          reverse-fill-mask
-          hint="美元: #.##"
-          input-class="text-right"
           :rules="[
           val => (val !== null && val !== '') || '请输入金额',
         val => (val > 0 && val < 10000) || '金额不能大于1000'
                   ]"
+          fill-mask="0"
+          filled
+          hint="美元: #.##"
+          input-class="text-right"
+          label="Price with 2 decimals"
+          mask="#.##"
+          reverse-fill-mask
 
       />
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn color="primary" label="Submit" type="submit"/>
+        <q-btn class="q-ml-sm" color="primary" flat label="Reset" type="reset"/>
       </div>
     </q-form>
   </div>

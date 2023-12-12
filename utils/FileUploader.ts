@@ -20,8 +20,6 @@ class FileUploader {
             });
             const dataJson = await response.json();
 
-            console.log(dataJson)
-            console.log(dataJson.code)
             if(dataJson.code == 200){
                 return true;
             }else {

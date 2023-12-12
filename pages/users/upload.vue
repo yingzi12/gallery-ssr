@@ -1,5 +1,5 @@
-<script setup lang="ts">
-function factoryFn (files) {
+<script lang="ts" setup>
+function factoryFn(files) {
   return {
     url: 'http://localhost:4444/upload',
     method: 'POST'

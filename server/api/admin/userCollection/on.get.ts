@@ -1,21 +1,17 @@
+import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
-     // 获取请求头
+    const query = getQuery(event)
+    // 获取请求头
     const headers = event.req.headers;
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
-    const body = await readBody(event)
-    console.log(token)
-
-    // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userAlbum/add`,{
-            method: 'POST',
+    const response = await fetch(config.public.baseUrl+`/admin/userCollection/on?${tansParams(query)}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(body)
+            }
         }
     );
     const dataJson = await response.json();

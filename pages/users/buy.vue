@@ -1,4 +1,4 @@
-<script setup  lang="ts">
+<script lang="ts" setup>
 definePageMeta({
   key: route => route.fullPath
 })
@@ -10,32 +10,34 @@ definePageMeta({
       <q-item-label header>列表（0）</q-item-label>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
-<!--        <q-item-section side top>-->
-<!--          <q-item-label caption></q-item-label>-->
-<!--          <q-item-label caption>2023-11-11</q-item-label>-->
+        <!--        <q-item-section side top>-->
+        <!--          <q-item-label caption></q-item-label>-->
+        <!--          <q-item-label caption>2023-11-11</q-item-label>-->
 
-<!--        </q-item-section>-->
+        <!--        </q-item-section>-->
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
@@ -43,16 +45,17 @@ definePageMeta({
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
@@ -60,16 +63,17 @@ definePageMeta({
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
@@ -77,16 +81,17 @@ definePageMeta({
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
@@ -94,16 +99,17 @@ definePageMeta({
         </q-item-section>
       </q-item>
 
-      <q-separator spaced />
+      <q-separator spaced/>
 
       <q-item>
-        <q-item-section top thumbnail class="q-ml-none">
+        <q-item-section class="q-ml-none" thumbnail top>
           <img src="https://cdn.quasar.dev/img/mountains.jpg">
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>

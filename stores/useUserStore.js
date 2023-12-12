@@ -2,21 +2,22 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('userStore', {
     state: () => ({
+        id: null,
         user: null,
         token: null,
     }),
     actions: {
-        setUser(userData, token) {
+        setUser(id,userData, token) {
+            this.id = id;
             this.user = userData;
             this.token = token;
-
             // 获取当前时间并设置过期时间为 1 小时后
             const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
-
             // 设置 token 到 cookie
             const tokenCookie = useCookie('token', { expires: inOneHour });
             tokenCookie.value = token;
-
+            const idCookie = useCookie('id', { expires: inOneHour });
+            idCookie.value = id;
             // 设置用户信息到另一个 cookie
             const userCookie = useCookie('userInfo', { expires: inOneHour });
             userCookie.value = userData;
@@ -24,9 +25,13 @@ export const useUserStore = defineStore('userStore', {
         clearUser() {
             this.user = null;
             this.token = null;
+            this.id = null;
+
             // 清除 cookies
             const tokenCookie = useCookie('token');
             tokenCookie.value = null;
+            const idCookie = useCookie('id');
+            idCookie.value = null;
             const userCookie = useCookie('userInfo');
             userCookie.value = null;
         },
@@ -34,10 +39,11 @@ export const useUserStore = defineStore('userStore', {
             // this.refreshCookieExpiration()
             const tokenCookie = useCookie('token');
             const userCookie = useCookie('userInfo');
-
+            const idCookie = useCookie('id');
             if (tokenCookie.value && userCookie.value) {
                 this.token = tokenCookie.value;
                 this.user = userCookie.value;
+                this.idCookie = idCookie.value;
             }
 
         },
@@ -50,7 +56,11 @@ export const useUserStore = defineStore('userStore', {
                 tokenCookie.value = tokenCookie.value; // 重新设置 token 的值
                 document.cookie = `token=${tokenCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
             }
-
+            const idCookie = useCookie('token');
+            if (idCookie.value) {
+                idCookie.value = idCookie.value; // 重新设置 token 的值
+                document.cookie = `id=${idCookie.value};expires=${inOneHour.toUTCString()}`; // 更新 expires
+            }
             // 如果存在用户信息，更新其过期时间
             const userCookie = useCookie('userInfo');
             if (userCookie.value) {
@@ -60,17 +70,19 @@ export const useUserStore = defineStore('userStore', {
         },
         async login(credentials) {
             try {
-                const response = await fetch('/api/users/login', {
-                    method: 'POST',
+                const response = await axios.post('/api/users/login', JSON.stringify(credentials), {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(credentials),
                 });
-
-                const data = await response.json();
+                console.log(response.data)
+                const data = await response.data;
+                console.log(data.token)
                 if (data && data.token) {
-                    this.setUser(data.user, data.token);
+                    console.log("login");
+                    console.log(data.user)
+                    console.log(data.token)
+                    this.setUser(data.user.id,data.user, data.token);
                 } else {
                     throw new Error(data.message || 'Login failed');
                 }
@@ -79,7 +91,7 @@ export const useUserStore = defineStore('userStore', {
                 throw error; // 继续抛出错误以供调用者处理
             }
         },
-        async logout() {
+        logout() {
             this.clearUser();
             // 可能还需要添加向服务器发送登出请求的逻辑
         },

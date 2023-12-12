@@ -1,61 +1,91 @@
-<script setup lang="ts">
-import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
-import { useUserStore } from "~/stores/useUserStore";
+<script lang="ts" setup>
+import {useQuasar} from 'quasar';
+import {useRouter} from 'vue-router';
+import {useUserStore} from "~/stores/useUserStore";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
 const userStore = useUserStore();
-const userInfo=userStore.user;
 
-const nickname = ref('');
-const email = ref('');
-const intro = ref('');
-nickname.value=userStore.user.nickname;
-email.value=userStore.user.email;
-intro.value=userStore.user.intro;
+const id = ref(userStore.id);
+const name = ref(null);
+const nickname = ref(null);
+const email = ref(null);
+const imgUrl = ref(null);
+const isEmail = ref(null);
+const intro = ref(null);
+const countSee = ref(0);
+const countLike = ref(0);
+const countAttention = ref(0);
+const vip = ref(0);
+const vipExpirationTime = ref(null);
+
 
 const accept = ref(false);
 const selectedFile = ref(null);
 
-const onSubmit = async () => {
-  if (!accept.value) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    });
-    return;
+async function getDetail() {
+  const response = await axios.get(`/api/admin/users/info`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    },
+  });
+  const data = await response.data;
+  console.log(data.code)
+  if (data.code == 200) {
+    name.value = data.data.name;
+    nickname.value = data.data.nickname;
+    email.value = data.data.email;
+    imgUrl.value = data.data.imgUrl;
+    isEmail.value = data.data.isEmail;
+    intro.value = data.data.intro;
+    countSee.value = data.data.countSee;
+    countLike.value = data.data.countLike;
+    countAttention.value = data.data.countAttention;
+    vip.value = data.data.vip;
+    vipExpirationTime.value = data.data.vipExpirationTime;
+    userStore.setUser(id, userStore.user, userStore.token);
   }
+}
 
+getDetail();
+const onSubmit = async () => {
+  // if (!accept.value) {
+  //   $q.notify({
+  //     color: 'red-5',
+  //     textColor: 'white',
+  //     icon: 'warning',
+  //     message: 'You need to accept the license and terms first'
+  //   });
+  //   return;
+  // }
   const formData = new FormData();
   formData.append('nickname', nickname.value);
   formData.append('email', email.value);
   formData.append('intro', intro.value);
-  if (selectedFile.value) {
-    formData.append('file', selectedFile.value);
-  }
+  // if (selectedFile.value) {
+  //   formData.append('file', selectedFile.value);
+  // }
 
   try {
-    const response = await axios.post("/api/admin/users/edit", {
-      method: "post",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        nickname: nickname.value,
-        email: email.value,
-        intro: intro.value,
-      }),
-    });
+    const response = await axios.post("/api/admin/users/edit",
+        JSON.stringify({
+          nickname: nickname.value,
+          email: email.value,
+          intro: intro.value,
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
     const data = await response.data;
-    if(data.code==200){
-      userInfo.isEmail=data.data.isEmail;
-      userInfo.nickname=data.data.nickname;
-      userInfo.intro=data.data.intro;
-      userInfo.email=data.data.email;
+    if (data.code == 200) {
+      isEmail.value = data.data.isEmail;
+      nickname.value = data.data.nickname;
+      intro.value = data.data.intro;
+      email.value = data.data.email;
 
       $q.notify({
         color: 'green-4',
@@ -65,7 +95,7 @@ const onSubmit = async () => {
       });
       router.push('/users'); // Redirect to login page
 
-    }else {
+    } else {
       $q.notify({
         color: 'green-4',
         textColor: 'white',
@@ -79,22 +109,23 @@ const onSubmit = async () => {
     // 处理错误...
   }
 };
-
+onMounted(() => {
+  userStore.restoreUserFromCookie();
+  // 当组件挂载时检查用户的登录状态
+})
 </script>
 
 <template>
   <div class="q-pa-md" style="max-width: 400px">
-    <q-form @submit.prevent="onSubmit" class="q-gutter-md">
-
-      <q-input filled v-model="nickname" label="Your Name *" :rules="[val => !!val || 'Please enter your nickname']" />
-      <q-input filled v-model="email" type="email" label="E-mail *" :rules="[val => !!val || 'Please enter your email']" />
-      <q-input filled v-model="intro" label="Intro *" :rules="[val => !!val || 'Please enter a Intro']" />
-
-      <q-toggle v-model="accept" label="I accept the license and terms" />
-
+    <q-form class="q-gutter-md" @submit.prevent="onSubmit">
+      <q-input v-model="nickname" :rules="[val => !!val || 'Please enter your nickname']" filled label="Your Name *"/>
+      <q-input v-model="email" :rules="[val => !!val || 'Please enter your email']" filled label="E-mail *"
+               type="email"/>
+      <q-input v-model="intro" :rules="[val => !!val || 'Please enter a Intro']" filled label="Intro *"/>
+      <q-toggle v-model="accept" label="I accept the license and terms"/>
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn color="primary" label="Submit" type="submit"/>
+        <q-btn class="q-ml-sm" color="primary" flat label="Reset" type="reset"/>
       </div>
     </q-form>
   </div>

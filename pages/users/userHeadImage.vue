@@ -1,11 +1,11 @@
-<script setup lang="ts">
-import { useUserStore } from "~/stores/useUserStore";
+<script lang="ts" setup>
+import {useUserStore} from "~/stores/useUserStore";
 import {useQuasar} from "quasar";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const userStore = useUserStore();
 const selectedImage = ref<File | null>(null);
-const previewImage = ref((userStore.user == null || userStore.user.imgUrl==null) ?"/favicon.png": userStore.user.imgUrl);
+const previewImage = ref((userStore.user == null || userStore.user.imgUrl == null) ? "/favicon.png" : userStore.user.imgUrl);
 const config = useRuntimeConfig();
 const handleImageUpload = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
@@ -34,7 +34,6 @@ const uploadImage = async () => {
     // 使用fetch或axios等方式将formData上传到后端
     // 例如：fetch('/upload', { method: 'POST', body: formData })
     try {
-      console.log('Authorization Header:', `Bearer ${userStore.token}`);
       const response = await fetch(config.public.baseUrl + '/admin/systemUser/upload', {
         method: 'POST',
         body: formData,
@@ -44,11 +43,11 @@ const uploadImage = async () => {
       });
 
       const data = await response.json();
-      console.log(data)
-      console.log(data.value)
-      console.log(data.code)
+      // console.log(data)
+      // console.log(data.data)
+      // console.log(data.code)
 
-      if(data.code ==200){
+      if (data.code == 200) {
         useQuasar().dialog({
           title: '信息',
           message: '替换头像成功.'
@@ -61,7 +60,7 @@ const uploadImage = async () => {
         })
         router.push('/users'); // Redirect to login page
 
-      }else{
+      } else {
         useQuasar().dialog({
           title: '信息',
           message: '替换头像失败.'
@@ -85,15 +84,14 @@ const uploadImage = async () => {
 };
 
 
-
 </script>
 
 <template>
   <div>
-    <input type="file" @change="handleImageUpload" accept="image/*" />
+    <input accept="image/*" type="file" @change="handleImageUpload"/>
   </div>
   <div>
-    <q-avatar v-if="previewImage"  size="100px" font-size="52px">
+    <q-avatar v-if="previewImage" font-size="52px" size="100px">
       <img :src="previewImage">
     </q-avatar>
   </div>

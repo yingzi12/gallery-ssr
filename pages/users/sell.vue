@@ -1,4 +1,4 @@
-<script setup  lang="ts">
+<script lang="ts" setup>
 definePageMeta({
   key: route => route.fullPath
 })
@@ -19,11 +19,11 @@ definePageMeta({
         <q-item-section side top>
           <q-item-label caption>2023-11-12 11:11:11</q-item-label>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -34,11 +34,11 @@ definePageMeta({
         <q-item-section side top>
           <q-item-label caption>2023-11-12 11:11:11</q-item-label>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -49,11 +49,11 @@ definePageMeta({
         <q-item-section side top>
           <q-item-label caption>2023-11-12 11:11:11</q-item-label>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -64,7 +64,7 @@ definePageMeta({
         <q-item-section side top>
           <q-item-label caption>2023-11-12 11:11:11</q-item-label>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 

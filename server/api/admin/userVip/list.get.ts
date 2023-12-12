@@ -1,7 +1,6 @@
 import {tansParams} from "~/server/utils/urlUtils";
 
 export default defineEventHandler(async (event) => {
-    console.log("dataJson.data start")
     const config = useRuntimeConfig();
     const query = getQuery(event)
      // 获取请求头
@@ -17,7 +16,6 @@ export default defineEventHandler(async (event) => {
         }
     );
     const dataJson = await response.json();
-    console.log("dataJson.data end")
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

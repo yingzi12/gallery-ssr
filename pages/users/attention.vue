@@ -1,4 +1,4 @@
-<script  setup lang="ts">
+<script lang="ts" setup>
 //关注
 definePageMeta({
   key: route => route.fullPath
@@ -11,7 +11,7 @@ definePageMeta({
       <q-item-label header>关注列表（11）</q-item-label>
 
       <q-item>
-        <q-item-section top avatar>
+        <q-item-section avatar top>
           <q-avatar>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
@@ -19,19 +19,20 @@ definePageMeta({
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
-          <q-badge label="10k" />
+          <q-badge label="10k"/>
         </q-item-section>
       </q-item>
 
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top avatar>
+        <q-item-section avatar top>
           <q-avatar>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
@@ -39,18 +40,19 @@ definePageMeta({
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
-          <q-badge label="10k" />
+          <q-badge label="10k"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top avatar>
+        <q-item-section avatar top>
           <q-avatar>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
@@ -58,18 +60,19 @@ definePageMeta({
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
-          <q-badge label="10k" />
+          <q-badge label="10k"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top avatar>
+        <q-item-section avatar top>
           <q-avatar>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
@@ -77,18 +80,19 @@ definePageMeta({
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>
-          <q-badge label="10k" />
+          <q-badge label="10k"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
-        <q-item-section top avatar>
+        <q-item-section avatar top>
           <q-avatar rounded>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
           </q-avatar>
@@ -96,7 +100,8 @@ definePageMeta({
 
         <q-item-section>
           <q-item-label>Single line item</q-item-label>
-          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+          <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+          </q-item-label>
         </q-item-section>
 
         <q-item-section side top>

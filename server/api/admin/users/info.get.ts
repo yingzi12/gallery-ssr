@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
 
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/systemUser/getInfo/`+query.id, {
+    const response = await fetch(config.public.baseUrl+`/admin/systemUser/getInfo`, {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',

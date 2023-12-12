@@ -1,4 +1,4 @@
-<script  setup lang="ts">
+<script lang="ts" setup>
 const text = ref('https://www.aiavr.uk/index?invite=111111111111111213123231');
 const textToCopy = ref(null);
 
@@ -26,9 +26,9 @@ const copyToClipboard = async () => {
             <h5>被邀请者在网站消费你都将获得奖励，邀请人越多，奖励越高！</h5>
           </div>
           <div>
-          <input ref="textToCopy" type="text" v-model="text" />
-          <button @click="copyToClipboard">复制</button>
-        </div>
+            <input ref="textToCopy" v-model="text" type="text"/>
+            <button @click="copyToClipboard">复制</button>
+          </div>
         </div>
       </template>
 
@@ -47,11 +47,11 @@ const copyToClipboard = async () => {
         </q-item-section>
         <q-item-section side top>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -62,11 +62,11 @@ const copyToClipboard = async () => {
         </q-item-section>
         <q-item-section side top>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -77,11 +77,11 @@ const copyToClipboard = async () => {
         </q-item-section>
         <q-item-section side top>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 
-      <q-separator spaced inset="item" />
+      <q-separator inset="item" spaced/>
 
       <q-item>
         <q-item-section>
@@ -92,7 +92,7 @@ const copyToClipboard = async () => {
         </q-item-section>
         <q-item-section side top>
           <q-item-label caption>11.2</q-item-label>
-          <q-icon name="star" color="yellow" />
+          <q-icon color="yellow" name="star"/>
         </q-item-section>
       </q-item>
 

@@ -1,7 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import SparkMD5 from 'spark-md5';
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import {useQuasar} from "quasar";
+
 const $q = useQuasar();
 const config = useRuntimeConfig();
 definePageMeta({
@@ -10,37 +11,33 @@ definePageMeta({
 const userStore = useUserStore();
 const route = useRoute();
 const aid = ref(route.query.aid);
-// const updateUrl = ref(config.public.baseUrl+"/admin/userVideo/upload");
 const videoList = ref([]);
 const total = ref(0);
-// const token = ref("Bearer 1");
-console.log(userStore.token)
 const queryData = reactive({
   queryParams: {
     pageNum: 1,
     title: '',
-    aid:aid.value,
+    aid: aid.value,
   }
 });
-const { queryParams } = toRefs(queryData);
+const {queryParams} = toRefs(queryData);
 
 async function getList(page: number) {
   queryParams.value.aid = aid.value;
   queryParams.value.pageNum = page;
-  const response  = await axios.get('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
+  const response = await axios.get('/api/admin/userVideo/list?' + tansParams(queryParams.value), {
     headers: {
       'Authorization': `Bearer ${userStore.token}`
     },
   });
   const data = await response.data;
-  console.log(data.code)
-  if(data.code==200){
+  if (data.code == 200) {
     total.value = data.total || videoList.value.length;
     videoList.value = data.data;
   }
 }
 
-async function deleteVideo(id: number) {
+async function deleteVideo(video: any, index: number) {
   $q.dialog({
     title: '通知',
     message: '是否确认删除.',
@@ -52,13 +49,14 @@ async function deleteVideo(id: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const { data } = await  axios.get('/api/admin/userVideo/remove?id=' + id.toString(), {
+    const response = await axios.get('/api/admin/userVideo/remove?id=' + video.id.toString(), {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       },
     });
-    if (data.value && data.value.code === 200) {
+    const data = response.data;
+    if (data.code === 200) {
       await getList(1);
     }
   }).onCancel(() => {
@@ -85,7 +83,7 @@ async function updateIsFree(id: number, isFree: number) {
     });
     const data = await response.data;
     console.log(data.code)
-    if(data.code==200){
+    if (data.code == 200) {
       await getList(1);
     }
   }).onCancel(() => {
@@ -93,6 +91,7 @@ async function updateIsFree(id: number, isFree: number) {
   })
   ;
 }
+
 onMounted(() => {
   userStore.restoreUserFromCookie();
   getList(1);
@@ -111,7 +110,7 @@ const selectedPreviewFile = ref<File | null>(null);
 const uploadPreviewProgress = ref<number | null>(null);
 const uploaderVideoPreview = new FileUploader(config.public.baseUrl, updateVideoPreviewProgress);
 
-const day=getCurrentDateFormatted();
+const day = getCurrentDateFormatted();
 
 function handleVideoFileChange(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -133,11 +132,10 @@ function handleVideoFileChange(event: Event) {
       alert('File size should not exceed 1GB.');
       return;
     }
-
     selectedFile.value = file;
-
   }
 }
+
 function handlePreviewVideoFileChange(event: Event) {
   const target = event.target as HTMLInputElement;
   if (target.files) {
@@ -154,6 +152,7 @@ function handlePreviewVideoFileChange(event: Event) {
     selectedPreviewFile.value = file;
   }
 }
+
 function updateVideoProgress(chunkNumber: number, totalChunks: number) {
   uploadVideoProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
@@ -172,28 +171,30 @@ async function uploadVideoFile() {
       const data = await response.json();
       // const data= checkFileExistence(md5);
       console.log(data);
-      const isFree=2;
-      if (data!=null && data.code == 200) {
-         await addVideoRecord(md5,data.data.sourceUrl,isFree);
+      const isFree = 2;
+      if (data != null && data.code == 200) {
+        await addVideoRecord(md5, data.data.sourceUrl, isFree);
         console.log('Upload update complete');
-      }else {
+      } else {
         // 生成唯一标识符：文件名-时间戳
         const identifier = `${selectedFile.value.name}`;
         // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-        await uploaderVideo.uploadFile(selectedFile.value, identifier,userStore.token,day,aid.value,isFree,md5);
+        await uploaderVideo.uploadFile(selectedFile.value, identifier, userStore.token, day, aid.value, isFree, md5);
         console.log('Upload complete');
       }
       uploadVideoProgress.value = 100; // 更新进度条到100
-      selectedFile.value=null;
+      selectedFile.value = null;
     } catch (error) {
       console.error('Upload failed', error);
       uploadVideoProgress.value = 0; // 更新进度条到100%
     }
   }
 }
+
 function updateVideoPreviewProgress(chunkNumber: number, totalChunks: number) {
   uploadPreviewProgress.value = Math.round((chunkNumber / totalChunks) * 100);
 }
+
 //计算md5
 async function calculateMd5(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -201,7 +202,6 @@ async function calculateMd5(file: File): Promise<string> {
       reject(new TypeError("calculateMd5 The provided value is not a Blob"));
       return;
     }
-
     const reader = new FileReader();
     reader.onload = function (e) {
       const data = e.target.result;
@@ -219,16 +219,16 @@ async function calculateMd5(file: File): Promise<string> {
   });
 }
 
-async function addVideoRecord(md5: string,url:string,isFree:number) {
+async function addVideoRecord(md5: string, url: string, isFree: number) {
   try {
-    const response = await  axios.post('/api/admin/userVideo/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userStore.token}`
-      },
-      body: JSON.stringify({ aid: aid.value, md5: md5, url: url, isFree: isFree })
-    });
+    const response = await axios.post('/api/admin/userVideo/add',
+        JSON.stringify({aid: aid.value, md5: md5, url: url, isFree: isFree})
+        , {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userStore.token}`
+          },
+        });
     const data = await response.data;
     if (data.code == 200) {
       $q.notify({
@@ -246,6 +246,7 @@ async function addVideoRecord(md5: string,url:string,isFree:number) {
     console.error('Error adding video record', error);
   }
 }
+
 async function uploadPreviewVideoFile() {
   if (selectedPreviewFile.value) {
     try {
@@ -260,13 +261,13 @@ async function uploadPreviewVideoFile() {
       const data = await response.json();
       console.log("checkFileExistence");
       console.log(data);
-      const isFree=1;
-      if (data!=null && data.code == 200) {
-        await addVideoRecord(md5,data.data.sourceUrl,isFree);
+      const isFree = 1;
+      if (data != null && data.code == 200) {
+        await addVideoRecord(md5, data.data.sourceUrl, isFree);
         console.log('Upload update complete');
-      }else {
+      } else {
         const identifier = `${selectedPreviewFile.value.name}`;
-        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree,md5);
+        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree, md5);
       }
       uploadPreviewProgress.value = 100;
       selectedPreviewFile.value = null;
@@ -291,6 +292,7 @@ async function uploadPreviewVideoFile() {
 }
 
 const file = ref(null);
+
 function getCurrentDateFormatted() {
   const now = new Date();
   const year = now.getFullYear();
@@ -303,15 +305,16 @@ function getCurrentDateFormatted() {
 
 <template>
   <q-breadcrumbs gutter="none">
-    <q-breadcrumbs-el label="这是我的图集" />
-    <q-breadcrumbs-el label="视频列表" />
+    <q-breadcrumbs-el label="这是我的图集"/>
+    <q-breadcrumbs-el label="视频列表"/>
   </q-breadcrumbs>
   <div class="q-pa-md">
     <div>
       <p class="text-body2">预览视频最大100M,最多3个文件</p>
       <p class="text-body2">正式视频最大1024M,最多10个文件</p>
       <p class="text-body2">视频文件只支持.mp4</p>
-      <p class="text-body2">推荐电脑端免费转码工具:<a  href="http://www.pcfreetime.com/formatfactory/cn/index.html">格式工厂</a></p>
+      <p class="text-body2">推荐电脑端免费转码工具:<a
+          href="http://www.pcfreetime.com/formatfactory/cn/index.html">格式工厂</a></p>
 
     </div>
   </div>
@@ -321,12 +324,14 @@ function getCurrentDateFormatted() {
       <q-card-section>
         <div class="text-subtitle1">上传预览视频（公开可看）</div>
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-card-actions vertical>
-        <q-btn flat> <input type="file" @change="handlePreviewVideoFileChange" accept=".mp4" /></q-btn>
-        <q-btn flat><button @click="uploadPreviewVideoFile">Upload Preview</button></q-btn>
+        <q-btn flat><input accept=".mp4" type="file" @change="handlePreviewVideoFileChange"/></q-btn>
+        <q-btn flat>
+          <button @click="uploadPreviewVideoFile">Upload Preview</button>
+        </q-btn>
       </q-card-actions>
-      <q-separator />
+      <q-separator/>
       <q-card-actions vertical>
         <div v-if="uploadPreviewProgress">
           <p>Uploading Preview: {{ uploadPreviewProgress }}%</p>
@@ -336,12 +341,14 @@ function getCurrentDateFormatted() {
       <q-card-section>
         <div class="text-subtitle1">上传正式视频</div>
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-card-actions vertical>
-        <q-btn flat> <input type="file" @change="handleVideoFileChange" accept=".mp4"  /></q-btn>
-        <q-btn flat><button @click="uploadVideoFile">Upload</button></q-btn>
+        <q-btn flat><input accept=".mp4" type="file" @change="handleVideoFileChange"/></q-btn>
+        <q-btn flat>
+          <button @click="uploadVideoFile">Upload</button>
+        </q-btn>
       </q-card-actions>
-      <q-separator />
+      <q-separator/>
       <q-card-actions vertical>
         <div v-if="uploadVideoProgress">
           <p>Uploading: {{ uploadVideoProgress }}%</p>
@@ -349,37 +356,37 @@ function getCurrentDateFormatted() {
       </q-card-actions>
     </q-card>
   </div>
-<!--  <q-th>视频列表（{{total}}）</q-th>-->
+  <!--  <q-th>视频列表（{{total}}）</q-th>-->
   <q-list bordered class="rounded-borders" style="max-width: 400px">
-    <q-item-label header>视频列表（{{total}}）</q-item-label>
-    <div  v-for="(video,index) in videoList"
-          :key="index"
+    <q-item-label header>视频列表（{{ total }}）</q-item-label>
+    <div v-for="(video,index) in videoList"
+         :key="index"
     >
-    <q-item>
-      <q-item-section >
-        <q-img
-            :src="video.url"
-            spinner-color="white"
-            style="height: 140px; max-width: 150px"
-        />
-      </q-item-section>
+      <q-item>
+        <q-item-section>
+          <q-img
+              :src="video.url"
+              spinner-color="white"
+              style="height: 140px; max-width: 150px"
+          />
+        </q-item-section>
 
-      <q-item-section side >
-        <q-item-label v-if="video.isFree == 1" caption>预览视频</q-item-label>
-        <q-item-label v-if="video.isFree == 2" caption>正式视频</q-item-label>
-        <q-item-label v-if="video.status == 1"  caption>等待转码</q-item-label>
-        <q-item-label v-if="video.status == 2"  caption>转码中</q-item-label>
-        <q-item-label v-if="video.status == 3"  caption>可以播放</q-item-label>
+        <q-item-section side>
+          <q-item-label v-if="video.isFree == 1" caption>预览视频</q-item-label>
+          <q-item-label v-if="video.isFree == 2" caption>正式视频</q-item-label>
+          <q-item-label v-if="video.status == 1" caption>等待转码</q-item-label>
+          <q-item-label v-if="video.status == 2" caption>转码中</q-item-label>
+          <q-item-label v-if="video.status == 3" caption>可以播放</q-item-label>
 
-        <q-item-label caption>{{ video.createTime }}</q-item-label>
-      </q-item-section>
-      <q-item-section  side>
-        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" >删除</q-btn>
-      </q-item-section>
-    </q-item>
+          <q-item-label caption>{{ video.createTime }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn class="gt-xs" dense flat icon="delete" round size="12px" @click="deleteVideo(video,index)">删除</q-btn>
+        </q-item-section>
+      </q-item>
 
-    <q-separator spaced />
-</div>
+      <q-separator spaced/>
+    </div>
   </q-list>
 
 </template>
@@ -388,6 +395,7 @@ function getCurrentDateFormatted() {
 .my-card
   width: 100%
   max-width: 350px
+
 .example-item
   height: 290px
   width: 290px

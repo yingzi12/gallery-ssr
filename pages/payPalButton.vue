@@ -2,9 +2,9 @@
   <div id="paypal-button-container"></div>
 </template>
 
-<script setup lang="ts">
-import { loadScript } from "@paypal/paypal-js";
-import { onMounted, ref, defineProps } from 'vue';
+<script lang="ts" setup>
+import {loadScript} from "@paypal/paypal-js";
+import {defineProps, onMounted, ref} from 'vue';
 
 // 定义接收的 props
 const props = defineProps({
@@ -30,7 +30,7 @@ onMounted(async () => {
     console.log(userLang)
     const clientId = "AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm";
     paypalRef.value = await loadScript({
-      "client-id": clientId ,
+      "client-id": clientId,
       // "Locale": userLang // 使用用户的语言和地区设置
     });
     if (paypalRef.value) {
@@ -59,7 +59,7 @@ function setupPayPalButton(amount, transactionId, transactionDescription) {
       });
     },
     onApprove: (data, actions) => {
-      return actions.order.capture().then(function(details) {
+      return actions.order.capture().then(function (details) {
         alert("Payment Successful! Thank you for your purchase, " + details.payer.name.given_name);
       });
     },

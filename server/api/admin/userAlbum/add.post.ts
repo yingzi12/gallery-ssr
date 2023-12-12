@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     const body = await readBody(event)
-     console.log(token)
 
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/admin/userAlbum/add`,{

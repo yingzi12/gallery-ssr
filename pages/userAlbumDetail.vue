@@ -215,42 +215,52 @@ watch(isSee, (newValue, oldValue) => {
     getVideoList();
   }
 }, {immediate: true}); // immediate: true 确保在挂载时立即触发一次
-
+const  stars=ref(3);
 </script>
 <template>
   <q-page>
     <div class="q-pa-md">
-      <div class="row">
-        <div>
-          <q-img :src="imageUrl(album)"
-                 class="head-iamge"
+      <q-card class="my-card" flat bordered>
+        <q-card-section horizontal>
+          <q-img
+              class="col headImage"
+              src="https://cdn.quasar.dev/img/mountains.jpg"
           />
-        </div>
-        <div style="padding-left: 10px;width: 70%">
-          <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{ album.title }}</h5></div>
-          <div style="word-wrap: break-word; white-space: pre-line;">
-            <p>{{ album.intro }}</p>
-          </div>
-          <div>模特:{{
-              album.girl
-            }}
-          </div>
-          <div>照片:{{ album.photoNumber }}</div>
-          <div>浏览次数:{{ album.countSee }}</div>
-          <div>类型: {{ album.tags }}</div>
-          <div>创建时间：{{ album.createTime }}</div>
-          <div>
-            <q-btn v-if="album.charge != 1" @click="openPayPalDialog(album)">购买</q-btn>
-            <div>
-              <q-btn v-if="isCollection == 2" @click="onCollection(album)">收藏</q-btn>
-              <q-btn v-if="isCollection == 1" @click="closeCollection(album)">取消收藏</q-btn>
+          <q-card-actions vertical class="justify-around q-px-md">
+            <div style="padding-left: 10px;width: 100%">
+              <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{ album.title }}</h5></div>
+              <div>
+                <q-rating v-model="stars" :max="5" size="32px" />
+              </div>
+              <div style="word-wrap: break-word; white-space: pre-line;">
+                <p>{{ album.intro }}</p>
+              </div>
+              <div> <span v-if="album.charge == 1" class="text-primary" >免费</span>
+                <span v-if="album.charge == 2" class="text-primary" >VIP免费</span>
+                <span v-if="album.charge == 3" class="text-primary" >VIP折扣</span>
+                <span v-if="album.charge == 4" class="text-primary" >VIP独享</span>
+                <span  v-if="album.charge == 5" class="text-primary" >统一</span>
+              </div>
+              <div v-if="album.charge == 2 || album.charge == 3 ||album.charge == 5 ">价格:{{album.price }}</div>
+              <div v-if="album.charge == 3">VIP价格: 0 </div>
+              <div v-if="album.charge == 4 || album.charge == 5">VIP价格: {{album.vipPrice }} </div>
+
+              <div>模特:{{album.girl }}</div>
+              <div>类型: {{ album.photoNumber }}</div>
+              <div>照片:{{ album.photoNumber }}</div>
+              <div>浏览次数:{{ album.countSee }}</div>
+              <div>标签: {{ album.tags }}</div>
+              <div>创建时间：{{ album.createTime }}</div>
+              <div class="q-pa-md q-gutter-sm">
+                <q-btn square color="primary" icon="shopping_cart" />
+                <q-btn v-if="album.charge != 1" @click="openPayPalDialog(album)">购买</q-btn>
+                <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection(album)">收藏</q-btn>
+                <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection(album)">取消收藏</q-btn>
+              </div>
             </div>
-          </div>
-        </div>
-        <div style="width: 10%">
-          <button class="text-h6" @click="handleImageError()"> 报告异常</button>
-        </div>
-      </div>
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
       <div>
 
         <div>
@@ -440,5 +450,9 @@ watch(isSee, (newValue, oldValue) => {
   margin: 0 auto
   padding: 20px
   text-align: center
-
+.my-card
+  width: 100%
+  max-width: 550px
+.headImage
+  width: 220px
 </style>

@@ -9,7 +9,7 @@ const vips = ref([
     features: ['download', 'exclusiveLogo', 'videos']
   },
   {
-    id: 2,
+    id: 3,
     name: 'halfYear',
     sourcePrice: "16.9$",
     price: '14.9$',
@@ -17,7 +17,7 @@ const vips = ref([
     features: ['download', 'exclusiveLogo', 'discount98', 'videos']
   },
   {
-    id: 3,
+    id: 4,
     name: 'yearly',
     sourcePrice: "32.9$",
     price: '28.9$',
@@ -25,7 +25,7 @@ const vips = ref([
     features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount95', 'videos']
   },
   {
-    id: 4,
+    id: 5,
     name: 'lifetime',
     sourcePrice: "99.9$",
     price: '49.9$',

@@ -1,34 +1,70 @@
 <template>
-<div>
-  <div id="paypal-button-container" class="paypal-button-container"></div>
-  <div id="checkout-form">
-    <div id="card-name-field-container"></div>
-    <div id="card-number-field-container"></div>
-    <div id="card-expiry-field-container"></div>
-    <div id="card-cvv-field-container"></div>
-    <button id="card-field-submit-button" type="button">Pay now with Card Fields</button>
-  </div>
-</div>
+  <q-card class="my-card">
+    <q-card-section class="bg-primary text-white">
+      <div class="text-h6">{{ props.title }}</div>
+      <div class="text-subtitle2">by John Doe</div>
+    </q-card-section>
+    <q-card-section>
+      {{ props.intro }}
+    </q-card-section>
+    <q-separator />
+    <q-separator dark />
+
+    <q-card-actions >
+      <q-btn  class="left-3" flat>价格：{{props.amount}}</q-btn>
+      <q-btn  class="left-3" flat>付款金额：{{discountAmount}}</q-btn>
+
+    </q-card-actions>
+    <q-separator />
+
+    <q-card-actions justify-center>
+      <div >
+        <div id="paypal-button-container" class="paypal-button-container"></div>
+<!--        <div id="checkout-form">-->
+<!--          <div id="card-name-field-container"></div>-->
+<!--          <div id="card-number-field-container"></div>-->
+<!--          <div id="card-expiry-field-container"></div>-->
+<!--          <div id="card-cvv-field-container"></div>-->
+<!--          <button id="card-field-submit-button" type="button">Pay now with Card Fields</button>-->
+<!--        </div>-->
+      </div>
+    </q-card-actions>
+  </q-card>
+
+
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import {defineProps, onMounted} from 'vue';
+const props = defineProps({
+  amount: {
+    type: String,
+    required: true
+  },
+  aid: {
+    type: Number,
+  },
+  vid: {
+    type: Number,
+  },
+  kind: {
+    type: Number,
+    required: true
+  },
+  productType: {
+    type: Number,
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  intro: {
+    type: String
+  }
+});
 
 const clientId = 'AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm'; // 替换为您的 PayPal Client ID
 // const clientToken = ref(null); // 替换为您的 PayPal Client Token
-
-//server/api/paypal/token.get.ts
-// async function getToken() {
-//   const response = await axios("/api/paypal/token", {
-//     method: "get",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//
-//   const data = await response.data;
-//   clientToken.value=data.clientToken;
-// }
 
 onMounted(async () => {
   console.log("------------1-------------")
@@ -119,9 +155,14 @@ async function createOrderCallback() {
   console.log("------------createOrderCallback-------------")
 
   try {
-    const response = await axios.post("/api/paypal/orders", JSON.stringify({
-      aid: 11111,
-      amount: "10.1",
+    const response = await axios.post("/api/admin/paypal/create", JSON.stringify({
+      aid: props.aid,
+      amount: props.amount,
+      vid: props.vid,
+      kind: props.kind,
+      productType: props.productType,
+      title: props.title,
+      description: props.intro,
     }), {
       headers: {
         "Content-Type": "application/json",
@@ -151,7 +192,7 @@ async function onApproveCallback(data, actions) {
   console.log(data)
   try {
     //server/api/paypal/ordersCapture.get.ts
-    const response = await axios.get(`/api/paypal/ordersCapture?orderId=${data}`, {
+    const response = await axios.get(`/api/admin/paypal/ordersCapture?orderId=${data}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -215,6 +256,27 @@ function resultMessage(message) {
   const container = document.querySelector("#result-message");
   container.innerHTML = message;
 }
+const discountAmount=ref(props.amount);
+async function getAmount() {
+  // 滚动到顶部
+  const response = await axios.post("/api/admin/paypal/getAmount",JSON.stringify({
+    aid: props.aid,
+    amount: props.amount,
+    vid: props.vid,
+    kind: props.kind,
+    productType: props.productType,
+  }),  {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+  const data = response.data;
+  // console.log(data)
+  if (data.code === 200) {
+    discountAmount.value=data.data
+  }
+}
+getAmount();
 </script>
 
 <style scoped>

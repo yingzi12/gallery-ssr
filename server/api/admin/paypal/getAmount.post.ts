@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
 
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/payments/create`,{
+    const response = await fetch(config.public.baseUrl+`/admin/payments/getAmount`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

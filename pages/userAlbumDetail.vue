@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import {useRoute} from "vue-router";
-import PayPalButton from './payPalButton.vue';
 import {useUserStore} from "~/stores/useUserStore";
+import PayaplCard from "~/pages/payaplCard.vue";
+// import PayaplCard from './payaplCard.vue';
+const amount=ref(1.0);
+// const title=ref("这是图集名称");
+const intro=ref("这是简介，这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介");
 
 const userStore = useUserStore();
 
@@ -203,7 +207,8 @@ function imageUrl(album) {
 
 const paypalDialog = ref(false);
 
-const openPayPalDialog = (album) => {
+function openPayPalDialog (){
+  console.log("------------openPayPalDialog---------------------------")
   paypalDialog.value = true;
 };
 // console.log(userStore.token)
@@ -252,8 +257,8 @@ const  stars=ref(3);
               <div>标签: {{ album.tags }}</div>
               <div>创建时间：{{ album.createTime }}</div>
               <div class="q-pa-md q-gutter-sm">
-                <q-btn square color="primary" icon="shopping_cart" />
-                <q-btn v-if="album.charge != 1" @click="openPayPalDialog(album)">购买</q-btn>
+<!--                <q-btn square color="primary" icon="shopping_cart" />-->
+                <q-btn v-if="album.charge != 1" @click="openPayPalDialog()">购买 </q-btn>
                 <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection(album)">收藏</q-btn>
                 <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection(album)">取消收藏</q-btn>
               </div>
@@ -388,22 +393,7 @@ const  stars=ref(3);
   </q-page>
 
   <q-dialog v-model="paypalDialog">
-    <q-card>
-      <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">购买图集</div>
-        <q-space/>
-        <q-btn v-close-popup dense flat icon="close" round/>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="container">
-          <h1>欢迎使用我们的服务</h1>
-          <p>请选择您的支付方案：</p>
-          <PayPalButton :amount="album.price" :transaction-description="album.intro"
-                        :transaction-id="album.id"></PayPalButton>
-        </div>
-      </q-card-section>
-    </q-card>
+    <PayaplCard :amount="amount.toString()" :aid="album.id" :kind="4" :intro="album.intro" :title="album.title"/>
   </q-dialog>
 </template>
 

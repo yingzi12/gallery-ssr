@@ -20,23 +20,6 @@ export function tansParams(params: { [x: string]: any; }) {
     return result
 }
 
-// export function getBase64FromImageUrl(url:string) {
-//     return fetch(url)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.blob();
-//         })
-//         .then(blob => {
-//             return new Promise((resolve, reject) => {
-//                 const reader = new FileReader();
-//                 reader.onloadend = () => resolve(reader.result);
-//                 reader.onerror = reject;
-//                 reader.readAsDataURL(blob);
-//             });
-//         });
-// }
 export function getBase64FromImageUrl(url: string) {
     return fetch(url)
         .then(response => {

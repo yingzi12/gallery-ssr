@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     // const response = await fetch(config.public.baseUrl+`/album/list?${tansParams(query)}`);
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userCollection/getInfo?${tansParams(query)}`, {
+    const response = await fetch(config.public.baseUrl+`/userCollection/getInfo?${tansParams(query)}`, {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',

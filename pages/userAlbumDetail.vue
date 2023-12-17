@@ -114,6 +114,7 @@ async function getInfo() {
       }
     }
     album.value = data.data;
+    isCollection.value=album.value.isCollection
     title.value = "图集网-" + album.value.title
     ortTile.value = album.value.title
     orgDec.value = album.value.description
@@ -123,7 +124,7 @@ async function getInfo() {
 
 async function getCollection() {
   // 滚动到顶部
-  const response = await axios.get(`/api/userCollection/getInfo?aid=${album.id}&ctype=2&title=${album.title}`)
+  const response = await axios.get(`/api/userCollection/getInfo?aid=${aid.value}&ctype=2&title=${ortTile.value}`)
   const data = response.data;
   if (data.code == 200) {
     if(data.data){
@@ -133,18 +134,17 @@ async function getCollection() {
     }
   }
 }
-getCollection();
-async function onCollection(album:any) {
+async function onCollection() {
   // 滚动到顶部
-  const response = await axios.get(`/api/admin/userCollection/on?aid=${album.id}&ctype=2&title=${album.title}`)
+  const response = await axios.get(`/api/admin/userCollection/on?aid=${aid.value}&ctype=2&title=${ortTile.value}`)
   const data = response.data;
   if (data.code == 200) {
     isCollection.value=1;
   }
 }
-async function closeCollection(album:any) {
+async function closeCollection() {
   // 滚动到顶部
-  const response = await axios.get(`/api/admin/userCollection/close?aid=${album.id}&ctype=2&title=${album.title}`)
+  const response = await axios.get(`/api/admin/userCollection/close?aid=${aid.value}&ctype=2&title=${title.value}`)
   const data = response.data;
   if (data.code == 200) {
     isCollection.value=2;
@@ -225,12 +225,17 @@ const  stars=ref(3);
 <template>
   <q-page>
     <div class="q-pa-md">
+      <div>
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
-          <q-img
+          <q-card-section style="width: 220px;height: 376px">
+          <q-img fit="fill"
               class="col headImage"
               src="https://cdn.quasar.dev/img/mountains.jpg"
           />
+          </q-card-section>
+          <q-separator vertical />
+
           <q-card-actions vertical class="justify-around q-px-md">
             <div style="padding-left: 10px;width: 100%">
               <div class="text-h5 q-mt-sm q-mb-xs"><h5>{{ album.title }}</h5></div>
@@ -259,13 +264,14 @@ const  stars=ref(3);
               <div class="q-pa-md q-gutter-sm">
 <!--                <q-btn square color="primary" icon="shopping_cart" />-->
                 <q-btn v-if="album.charge != 1" @click="openPayPalDialog()">购买 </q-btn>
-                <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection(album)">收藏</q-btn>
-                <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection(album)">取消收藏</q-btn>
+                <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection()">收藏</q-btn>
+                <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection()">取消收藏</q-btn>
               </div>
             </div>
           </q-card-actions>
         </q-card-section>
       </q-card>
+      </div>
       <div>
 
         <div>
@@ -393,7 +399,7 @@ const  stars=ref(3);
   </q-page>
 
   <q-dialog v-model="paypalDialog">
-    <PayaplCard :amount="amount.toString()" :aid="album.id" :kind="4" :intro="album.intro" :title="album.title"/>
+    <PayaplCard :amount="album.amount" :productId="album.id" :kind="4" :intro="album.intro" :productName="album.title"/>
   </q-dialog>
 </template>
 
@@ -442,7 +448,8 @@ const  stars=ref(3);
   text-align: center
 .my-card
   width: 100%
-  max-width: 550px
+  max-width: 750px
 .headImage
-  width: 220px
+  max-width: 220px
+  height: 376px
 </style>

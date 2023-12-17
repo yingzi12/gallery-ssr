@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card">
     <q-card-section class="bg-primary text-white">
-      <div class="text-h6">{{ props.title }}</div>
+      <div class="text-h6">{{ props.productName }}</div>
       <div class="text-subtitle2">by John Doe</div>
     </q-card-section>
     <q-card-section>
@@ -36,32 +36,31 @@
 
 <script setup>
 import {defineProps, onMounted} from 'vue';
+import {useQuasar} from "quasar";
+const $q = useQuasar();
+
 const props = defineProps({
   amount: {
     type: String,
     required: true
   },
-  aid: {
-    type: Number,
-  },
-  vid: {
-    type: Number,
-  },
   kind: {
     type: Number,
     required: true
   },
-  productType: {
+  productId: {
     type: Number,
+    required: true
   },
-  title: {
+  productName: {
     type: String,
     required: true
   },
   intro: {
     type: String
-  }
+  },
 });
+
 
 const clientId = 'AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm'; // 替换为您的 PayPal Client ID
 // const clientToken = ref(null); // 替换为您的 PayPal Client Token
@@ -154,14 +153,12 @@ function loadStyleSheet() {
 async function createOrderCallback() {
   console.log("------------createOrderCallback-------------")
 
-  try {
-    const response = await axios.post("/api/admin/paypal/create", JSON.stringify({
-      aid: props.aid,
-      amount: props.amount,
-      vid: props.vid,
+  try {//server/api/admin/paypal/orders.post.ts
+    const response = await axios.post("/api/admin/paypal/orders", JSON.stringify({
+      amount: discountAmount.value,
       kind: props.kind,
-      productType: props.productType,
-      title: props.title,
+      productId: props.productId,
+      productName: props.productName,
       description: props.intro,
     }), {
       headers: {
@@ -203,6 +200,41 @@ async function onApproveCallback(data, actions) {
     //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
     //   (2) Other non-recoverable errors -> Show a failure message
     //   (3) Successful transaction -> Show confirmation or thank you message
+    const message=orderData.message;
+    console.log(message);
+    if(orderData.data.code==200) {
+      $q.dialog({
+        title: '通知',
+        message: '支付完成.',
+        ok: {
+          push: true
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+      }).onOk(async () => {
+
+      }).onCancel(() => {
+        // console.log('Cancel')
+      });
+    }else{
+      $q.dialog({
+        title: '通知',
+        message: '支付失败.',
+        ok: {
+          push: true
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+      }).onOk(async () => {
+
+      }).onCancel(() => {
+        // console.log('Cancel')
+      });
+    }
 
     const transaction =
         orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
@@ -260,11 +292,11 @@ const discountAmount=ref(props.amount);
 async function getAmount() {
   // 滚动到顶部
   const response = await axios.post("/api/admin/paypal/getAmount",JSON.stringify({
-    aid: props.aid,
+    productId: props.productId,
     amount: props.amount,
-    vid: props.vid,
+    description: props.description,
     kind: props.kind,
-    productType: props.productType,
+    productName: props.productName,
   }),  {
     headers: {
       "Content-Type": "application/json",

@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(config => {
     const userStore = useUserStore();
     userStore.restoreUserFromCookie();
     const token = userStore.token;
-    console.log(`-------------------请求---${config.url}-----${token}----`)
+    console.log(`-------------------请求---${config.url}----token:-${token}---userStore:${userStore}-`)
     // console.log(!token)
     if (config.url.startsWith('/api/admin')) {
         // router.push("/login")

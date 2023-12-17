@@ -1,8 +1,42 @@
 <script lang="ts" setup>
 //关注
+import {useUserStore} from "~/stores/useUserStore";
+
+const userStore = useUserStore();
+
 definePageMeta({
   key: route => route.fullPath
 })
+const total = ref(0);
+const maxPage = ref(0);
+
+const current=ref(1)
+const sellList = ref([]);
+const queryData = reactive({
+  queryParams: {
+    pageNum: 1,
+  }
+});
+const {queryParams} = toRefs(queryData);
+
+async function getList(page: number) {
+  queryParams.value.pageNum = page;
+  try {
+    const response = await axios.get('/api/admin/userAttention/list?' + tansParams(queryParams.value), {
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
+    });
+    if (response.data.code == 200) {
+      total.value = response.data.total;
+      maxPage.value=  total.value/20+1;
+      sellList.value = response.data.data;
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
+  }
+}
+getList(1)
 </script>
 
 <template>
@@ -111,6 +145,14 @@ definePageMeta({
 
 
     </q-list>
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+          v-model="current"
+          :max="maxPage"
+          direction-links
+          @update:modelValue="getList(current)"
+      />
+    </div>
   </div>
 </template>
 

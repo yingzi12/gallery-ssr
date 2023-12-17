@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 //收藏
 import {useUserStore} from "~/stores/useUserStore";
-
 const userStore = useUserStore();
-
 definePageMeta({
   key: route => route.fullPath
 })
@@ -17,17 +15,15 @@ const collectionUserList = ref([]);
 const queryData = reactive({
   queryParams: {
     pageNum: 1,
-    ctype:1
   }
 });
 const {queryParams} = toRefs(queryData);
 
-async function getList(page: number,ctype:number) {
+async function getListSystem(page: number) {
   queryParams.value.pageNum = page;
-  queryParams.value.ctype = ctype;
-
-  try {//server/api/admin/userCollection/list.get.ts
-    const response = await axios.get('/api/admin/userCollection/list?' + tansParams(queryParams.value), {
+  try {
+    //server/api/admin/userCollection/list.get.ts
+    const response = await axios.get('/api/admin/userCollection/listSystem?' + tansParams(queryParams.value), {
       headers: {
         'Authorization': `Bearer ${userStore.token}`
       }
@@ -35,18 +31,32 @@ async function getList(page: number,ctype:number) {
     if (response.data.code == 200) {
       total.value = response.data.total;
       maxPage.value=  total.value/20+1;
-      if(ctype==1){
-        collectionSystemList.value = response.data.data;
-      }else {
-        collectionUserList.value = response.data.data;
-      }
+      collectionSystemList.value = response.data.data;
     }
   } catch (error) {
     console.error('Error fetching images:', error);
   }
 }
-getList(1,1);
-getList(1,2);
+async function getListUser(page: number) {
+  queryParams.value.pageNum = page;
+  try {
+    //server/api/admin/userCollection/list.get.ts
+    const response = await axios.get('/api/admin/userCollection/listUser?' + tansParams(queryParams.value), {
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
+    });
+    if (response.data.code == 200) {
+      total.value = response.data.total;
+      maxPage.value=  total.value/20+1;
+      collectionUserList.value = response.data.data;
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
+  }
+}
+getListSystem(1);
+getListUser(1);
 
 const tab = ref('mails')
 </script>
@@ -112,7 +122,8 @@ const tab = ref('mails')
 
                     <q-item-section side top>
                       <q-item-label caption>{{ collectionUser.createTime }}</q-item-label>
-                      <!--                    <q-icon color="yellow" name="star"/>-->
+                      <q-icon color="yellow" name="star"/>
+                      <q-icon color="white" name="star_border"/>
                     </q-item-section>
                   </q-item>
                   <q-separator spaced/>

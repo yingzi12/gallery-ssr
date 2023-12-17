@@ -135,14 +135,24 @@ async function getCollection() {
   }
 }
 async function onCollection() {
+  if ( isCollection.value==1) {
+    return; // 如果已经在处理收藏请求，则不执行任何操作
+  }else{
+    isCollection.value=1;
+  }
   // 滚动到顶部
   const response = await axios.get(`/api/admin/userCollection/on?aid=${aid.value}&ctype=2&title=${ortTile.value}`)
   const data = response.data;
   if (data.code == 200) {
     isCollection.value=1;
+  }else{
+    isCollection.value=2;
   }
 }
 async function closeCollection() {
+  if ( isCollection.value==2) {
+    return; // 如果已经在处理收藏请求，则不执行任何操作
+  }
   // 滚动到顶部
   const response = await axios.get(`/api/admin/userCollection/close?aid=${aid.value}&ctype=2&title=${title.value}`)
   const data = response.data;

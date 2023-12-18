@@ -141,13 +141,13 @@ getDetail();
               <div class="text-h5" style="padding: 10px;">{{ vip.title }}</div>
               <div class="text-subtitle2">
                 <p id="cache47" style="font-size: 36px;">
-                  <span id="cache48">{{ vip.price }}</span>
+                  <span id="cache48">{{ vip.price }}$</span>
 <!--                  <span id="cache38" v-if="vip.timeType != 5" class="strikethrough">{{ vip.timeLong }}</span>-->
-                  <span id="cache49" v-if="vip.timeType == 1" style="font-size: 20px;">{{ vip.timeLong }}/天</span>
-                  <span id="cache49" v-if="vip.timeType == 2" style="font-size: 20px;">{{ vip.timeLong }}/周</span>
-                  <span id="cache49" v-if="vip.timeType == 3" style="font-size: 20px;">{{ vip.timeLong }}/月</span>
-                  <span id="cache49" v-if="vip.timeType == 4" style="font-size: 20px;">{{ vip.timeLong }}/年</span>
-                  <span id="cache49" v-if="vip.timeType == 5" style="font-size: 20px;">永久</span>
+<!--                  <span id="cache49" v-if="vip.timeType == 1" style="font-size: 20px;">{{ vip.timeLong }}/天</span>-->
+<!--                  <span id="cache49" v-if="vip.timeType == 2" style="font-size: 20px;">{{ vip.timeLong }}/周</span>-->
+<!--                  <span id="cache49" v-if="vip.timeType == 3" style="font-size: 20px;">{{ vip.timeLong }}/月</span>-->
+<!--                  <span id="cache49" v-if="vip.timeType == 4" style="font-size: 20px;">{{ vip.timeLong }}/年</span>-->
+<!--                  <span id="cache49" v-if="vip.timeType == 5" style="font-size: 20px;">永久</span>-->
                 </p>
               </div>
             </q-card-section>
@@ -155,8 +155,16 @@ getDetail();
 
             <q-card-section class="card-section" style="height: 176px">
 <!--              <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">-->
+              <div  class="q-mb-sm">
+                <p  v-if="vip.timeType == 1" >时长 ：{{ vip.timeLong }}天</p>
+                <p  v-if="vip.timeType == 2" >时长 ：{{ vip.timeLong }}周</p>
+                <p  v-if="vip.timeType == 3" >时长 ：{{ vip.timeLong }}月</p>
+                <p  v-if="vip.timeType == 4" >时长 ：{{ vip.timeLong }}年</p>
+                <p  v-if="vip.timeType == 5" >时长 ：永久</p>
+              </div>
+              <div  class="q-mb-sm">
                 <pre id="myPre" style="color:#999999;"> {{ vip.introduce }}</pre>
-
+              </div>
 <!--              </div>-->
             </q-card-section>
 

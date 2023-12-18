@@ -1,45 +1,95 @@
 <script lang="ts" setup>
-const vips = [
-  {
-    id: 1,
-    name: '包月套餐',
-    sourcePrice: "",
-    price: '18元',
-    date: '月',
-    features: ['1个月使用期限', '下载', '专属标志']
-  },
-  {
-    id: 2,
-    name: '半年套餐',
-    sourcePrice: "99元",
-    price: '89元',
-    date: '半年',
-    features: ['6个月使用期限', '下载', '专属标志']
-  },
-  {
-    id: 3,
-    name: '一年套餐',
-    sourcePrice: "199元",
-    price: '180元',
-    date: '年',
-    features: ['12个月使用期限', '下载', '专属标志', 'App消费9.5折', '视频'],
+import {useUserStore} from "~/stores/useUserStore";
+import {useRoute} from "vue-router";
+import PayaplCard from "~/pages/payaplCard.vue";
+const route = useRoute();
 
-  },
-  {
-    id: 4,
-    name: '永久套餐',
-    sourcePrice: "399元",
-    price: '299元',
-    date: '永久',
-    features: ['永久更新', '下载', '专属标志', '视频', '全部图库', 'App消费9折', '专属服务'],
+const userStore = useUserStore();
+const userId = ref(route.query.userId);
+const current = ref(1)
+const slide = ref('first')
+const nickname = ref('')
+const intro = ref('')
+const imgUrl = ref("/favicon.png");
+const countSee = ref(0);
+const countLike = ref(0);
+const countAttention = ref(0);
 
+const productName = ref(null);
+const productId = ref(null);
+const productAmount = ref(null);
+const productIntro = ref(null);
+
+const vipList = ref([]);
+const total = ref(0);
+const isAttention = ref(2)
+
+const queryData = reactive({
+  form: {},
+  queryParams: {
+    pageNum: 1,
+    title: '',
+  },
+  rules: {}
+});
+useHead({
+  title: "图集网",
+  meta: [
+    {name: 'description', content: "图集网 美女 写真 摄影 秀人网 Photo Gallery, Beauty, Photo, Photography, Showman.com."},
+    {name: 'title', content: "图集网"}
+
+  ],
+})
+const image = ref("")
+const {queryParams, form, rules} = toRefs(queryData);
+
+async function getList(page: number) {
+  // 滚动到顶部
+  current.value = page
+  // queryParams.value.title = title.value;
+  queryParams.value.pageNum = page;
+  const response = await axios.get('/api/userSettingVip/list?' + tansParams(queryParams.value))
+  const data = response.data;
+  console.log(data.code)
+  if (data.code == 200) {
+    total.value = data.total
+    vipList.value = data.data
   }
-];
-const lorem = "这是个人简介"
+}
 
-const buyvip = (id: number) => {
-  // 处理购买逻辑
+getList(1)
+const paypalDialog = ref(false);
+function openPayPalDialog (vip:any){
+  console.log("------------openPayPalDialog---------------------------")
+  paypalDialog.value = true;
+  productId.value=vip.id;
+  productName.value=vip.title;
+  productIntro.value=vip.intro;
+  productAmount.value=vip.price;
+
 };
+async function getDetail() {
+  const response = await axios.get(`/api/systemUser/info?userId=${userId.value}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    },
+  });
+  const data = response.data;
+  if (data.code == 200) {
+    nickname.value=data.data.nickname;
+    intro.value = data.data.intro;
+    imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
+    countSee.value = data.data.countSee;
+    countLike.value = data.data.countLike;
+    countAttention.value = data.data.countAttention;
+  }
+}
+
+getDetail();
+
+
+
 </script>
 
 <template>
@@ -50,17 +100,27 @@ const buyvip = (id: number) => {
 
       </q-avatar>
       <q-card-section>
-        <div class="text-h6"><a href="/userDetail">Our Changing Planet</a></div>
-        <div class="text-subtitle2">by John Doe</div>
+        <div class="text-h6"><a href="/userDetail">{{ nickname }}</a></div>
+<!--        <div class="text-subtitle2">by John Doe</div>-->
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        {{ lorem }}
+        {{ intro }}
       </q-card-section>
       <q-separator dark/>
       <q-card-actions>
-        <q-btn flat>关注</q-btn>
-        <a href="/userVip">VIP</a>
+        <q-btn color="red-8" flat icon="favorite" round>{{countAttention }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="thumb_up" round>{{  countLike }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="visibility" round>{{ countSee }}
+        </q-btn>
+      </q-card-actions>
+      <q-separator dark/>
+
+      <q-card-actions>
+        <q-btn color="secondary" flat>关注</q-btn>
+        <q-btn color="secondary" flat><a href="/userVip">VIP</a></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -68,30 +128,40 @@ const buyvip = (id: number) => {
 
   <div>
     <div class="flex flex-center q-gutter-md" style="padding: 20px">
-      <div v-for="vip in vips" :key="vip.id" class="row justify-center">
+      <div v-for="(vip,index) in vipList" :key="vip.id" class="row justify-center">
         <div class="col">
           <q-card class="my-card">
             <q-card-section class="bg-secondary text-white">
-              <div class="text-h5" style="padding: 10px;">{{ vip.name }}</div>
+              <div class="text-h5" style="padding: 10px;">{{ vip.title }}</div>
               <div class="text-subtitle2">
                 <p id="cache47" style="font-size: 36px;">
                   <span id="cache48">{{ vip.price }}</span>
-                  <span id="cache38" class="strikethrough">{{ vip.sourcePrice }}</span>
-                  <span id="cache49" style="font-size: 20px;">/{{ vip.date }}</span>
+                  <span id="cache38" v-if="vip.timeType != 5" class="strikethrough">{{ vip.timeLong }}</span>
+                  <span id="cache49" v-if="vip.timeType == 1" style="font-size: 20px;">/天</span>
+                  <span id="cache49" v-if="vip.timeType == 2" style="font-size: 20px;">/周</span>
+                  <span id="cache49" v-if="vip.timeType == 3" style="font-size: 20px;">/月</span>
+                  <span id="cache49" v-if="vip.timeType == 4" style="font-size: 20px;">/年</span>
+                  <span id="cache49" v-if="vip.timeType == 5" style="font-size: 20px;">永久</span>
                 </p>
               </div>
             </q-card-section>
             <q-separator dark/>
 
             <q-card-section class="card-section" style="height: 176px">
-              <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">
-                <p style="color:#999999;"> {{ feature }}</p>
-              </div>
+<!--              <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">-->
+                <pre id="myPre" style="color:#999999;"> {{ vip.features }}</pre>
+
+<!--              </div>-->
             </q-card-section>
 
             <q-card-actions align="right" style="padding: 10px">
-              <q-btn color="primary" icon="shopping_cart" label="购买" @click="buyvip(vip.id)"/>
+              <q-btn  @click="openPayPalDialog(vip)">购买 </q-btn>
             </q-card-actions>
+<!--            <div class="q-pa-md q-gutter-sm">-->
+<!--              <q-btn v-if="album.charge != 1" @click="openPayPalDialog()">购买 </q-btn>-->
+<!--              <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection()">收藏</q-btn>-->
+<!--              <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection()">取消收藏</q-btn>-->
+<!--            </div>-->
           </q-card>
         </div>
       </div>
@@ -129,7 +199,9 @@ const buyvip = (id: number) => {
     </div>
     <div class="col-2"></div>
   </div>
-
+  <q-dialog v-model="paypalDialog">
+    <PayaplCard :amount="productAmount" :productId="productId" :kind="2" :intro="productIntro" :productName="productName"/>
+  </q-dialog>
 </template>
 
 <style scoped>
@@ -177,5 +249,8 @@ const buyvip = (id: number) => {
 
 .strikethrough {
   text-decoration: line-through;
+}
+#myPre {
+  white-space: pre-wrap; /* 允许自动换行，同时保留空白符 */
 }
 </style>

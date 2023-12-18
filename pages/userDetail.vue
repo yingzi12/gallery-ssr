@@ -1,14 +1,22 @@
 <script lang="ts" setup>
 import {useUserStore} from "~/stores/useUserStore";
+import {useRoute} from "vue-router";
+const route = useRoute();
 
 const userStore = useUserStore();
-const lorem = "这是个人简介"
+const userId = ref(route.query.userId);
 const current = ref(1)
 const slide = ref('first')
-const title = ref('')
+const nickname = ref('')
+const intro = ref('')
+const imgUrl = ref("/favicon.png");
+const countSee = ref(0);
+const countLike = ref(0);
+const countAttention = ref(0);
+
 const albumList = ref([]);
 const total = ref(0);
-const isCollection = ref(2)
+const isAttention = ref(2)
 
 const queryData = reactive({
   form: {},
@@ -32,9 +40,9 @@ const {queryParams, form, rules} = toRefs(queryData);
 async function getList(page: number) {
   // 滚动到顶部
   current.value = page
-  queryParams.value.title = title.value;
+  // queryParams.value.title = title.value;
   queryParams.value.pageNum = page;
-  const response = await axios.get('/api/album/listAlbum?' + tansParams(queryParams.value))
+  const response = await axios.get('/api/userAlbum/list?' + tansParams(queryParams.value))
   const data = response.data;
   console.log(data.code)
   if (data.code == 200) {
@@ -45,35 +53,84 @@ async function getList(page: number) {
 
 getList(1)
 
-function imageUrl(album) {
-  if (album.sourceUrl != null && album.sourceUrl.startsWith('/image')) {
-    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
+async function getDetail() {
+  const response = await axios.get(`/api/systemUser/info?userId=${userId.value}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    },
+  });
+  const data = response.data;
+  if (data.code == 200) {
+    nickname.value=data.data.nickname;
+    intro.value = data.data.intro;
+    imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
+    countSee.value = data.data.countSee;
+    countLike.value = data.data.countLike;
+    countAttention.value = data.data.countAttention;
   }
-  return album.sourceWeb + album.imgUrl;
 }
 
-console.log(userStore.token)
+getDetail();
+
+async function onAttention() {
+  if ( isAttention.value==1) {
+    return; // 如果已经在处理收藏请求，则不执行任何操作
+  }else{
+    isAttention.value=1;
+  }
+  // 滚动到顶部
+  const response = await axios.get(`/api/admin/userAttention/on?attUserId=${userId.value}&attUserName=${nickname.value}`)
+  const data = response.data;
+  if (data.code == 200) {
+    isAttention.value=1;
+  }else{
+    isAttention.value=2;
+  }
+}
+async function closeAttention() {
+  if ( isAttention.value==2) {
+    return; // 如果已经在处理收藏请求，则不执行任何操作
+  }
+  // 滚动到顶部
+  const response = await axios.get(`/api/admin/userAttention/close?attUserId=${userId.value}&attUserName=${nickname.value}`)
+  const data = response.data;
+  if (data.code == 200) {
+    isAttention.value=2;
+  }
+}
 </script>
 
 <template>
   <div class="caption">
     <q-card class="my-card">
+      <div>
       <q-avatar font-size="52px" size="100px">
-        <img src="https://cdn.quasar.dev/img/mountains.jpg">
-
+        <img :src="imgUrl">
       </q-avatar>
+      </div>
       <q-card-section>
-        <div class="text-h6">Our Changing Planet</div>
-        <div class="text-subtitle2">by John Doe</div>
+        <div class="text-h6">{{nickname}}</div>
       </q-card-section>
-
       <q-card-section class="q-pt-none">
-        {{ lorem }}
+        {{ intro }}
       </q-card-section>
       <q-separator dark/>
       <q-card-actions>
-        <q-btn flat>关注</q-btn>
-        <a href="/userVip">VIP</a>
+        <q-btn color="red-8" flat icon="favorite" round>{{countAttention }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="thumb_up" round>{{  countLike }}
+        </q-btn>
+        <q-btn color="red-8" flat icon="visibility" round>{{ countSee }}
+        </q-btn>
+      </q-card-actions>
+      <q-separator dark/>
+
+      <q-card-actions>
+<!--        <q-btn color="secondary" flat>关注</q-btn>-->
+        <q-btn v-if="isAttention == 2" icon="favorite_border" @click="onAttention()">关注</q-btn>
+        <q-btn v-if="isAttention == 1"  icon="favorite"  @click="closeAttention()">取消关注</q-btn>
+        <q-btn color="secondary" flat><a :href=`/userVip?userId=${userId}`>VIP</a></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -88,7 +145,7 @@ console.log(userStore.token)
           transition="scale"
       >
         <q-card bordered class="q-ma-sm" flat>
-          <img :src="imageUrl(album)">
+          <img :src="album.imgUrl">
           <q-card-section>
             <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{ album.title }}</a></div>
             <div class="text-subtitle2">{{ album.createTime }}</div>

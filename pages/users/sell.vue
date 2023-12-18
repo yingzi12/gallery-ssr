@@ -55,8 +55,6 @@ getList(1)
         <q-item-section side top>
           <q-item-label caption>{{ sell.createTime }}</q-item-label>
           <q-item-label caption>{{ sell.amount }}</q-item-label>
-
-<!--          <q-icon color="yellow" name="star"/>-->
         </q-item-section>
       </q-item>
 

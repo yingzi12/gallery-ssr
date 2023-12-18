@@ -97,7 +97,7 @@ function imageUrl(album) {
         <q-card bordered class="q-ma-sm" flat>
           <img :src="imageUrl(album)">
           <q-card-section>
-            <div class="text-h6"><a :href='"/userAlbumDetail?aid="+album.id'>{{ album.title }}</a></div>
+            <div class="text-h6"><a :href='"/userAlbumDetail?aid="+album.id+"&userId="+album.userId'>{{ album.title }}</a></div>
             <div class="text-subtitle2">{{ album.createTime }}</div>
           </q-card-section>
           <!--            <q-card-section class="q-pt-none">-->

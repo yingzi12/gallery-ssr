@@ -48,8 +48,7 @@ async function getDetail() {
 }
 
 getDetail();
-onMounted(() => {
-})
+
 </script>
 
 <template>

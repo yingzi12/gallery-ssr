@@ -13,6 +13,7 @@
     "@nuxt/devtools": "latest",
     "@nuxtjs/i18n": "^8.0.0-rc.7",
     "@nuxtseo/module": "^2.0.0-beta.46",
+    "@types/spark-md5": "^3.0.4",
     "nuxt": "^3.8.0",
     "nuxt-quasar-ui": "^2.0.6",
     "nuxt-simple-sitemap": "^4.1.3",

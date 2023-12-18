@@ -5,7 +5,7 @@ import {tansParams} from "~/server/utils/urlUtils";
 const current = ref(1)
 const slide = ref('first')
 const title = ref('')
-const albumList = ref([]);
+const userList = ref([]);
 const total = ref(0);
 const queryData = reactive({
   form: {},
@@ -35,7 +35,7 @@ async function getList(page: number) {
   const data = response.data
   if (data.code == 200) {
     total.value = data.total
-    albumList.value = data.data
+    userList.value = data.data
   }
 }
 
@@ -49,7 +49,7 @@ getList(1)
   <div class="q-pa-md">
     <div class="row justify-center q-gutter-sm">
       <q-intersection
-          v-for="(album ,index) in albumList"
+          v-for="(user ,index) in userList"
           :key="index"
           class="example-item"
           once
@@ -58,11 +58,11 @@ getList(1)
         <q-card bordered class="q-ma-sm" flat>
           <div>
           <q-avatar font-size="52px" size="100px">
-            <img :src="album.imgUrl">
+            <img :src="user.imgUrl">
           </q-avatar>
           </div>
           <q-card-section>
-            <div class="text-h6"><a :href='"/userDetail?aid="+album.id'>{{ album.nickname }}</a></div>
+            <div class="text-h6"><a :href='"/userDetail?userId="+user.id'>{{ user.nickname }}</a></div>
           </q-card-section>
           <q-separator dark/>
 

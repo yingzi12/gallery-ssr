@@ -1,17 +1,19 @@
 <script lang="ts" setup>
 
 const $q = useQuasar()
+const userStore = useUserStore();
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
-const title = ref(null)
-const desc = ref(null)
-const intro = ref(null)
-const tags = ref(null)
-const price = ref(0);
+const email = ref(null)
+const withdrawName = ref(null)
+const withdrawType = ref(1)
+const amount = ref(0.0)
 const accept = ref(false)
-const timeType = ref(null)
-const timeLong = ref(1);
-const timeTypeList = [
-  '天', '周', '月', '年', '永久'
+const withdrawTypeList = [
+  {
+    label: 'Paypal',
+    value: 1
+  }
 ]
 if (accept.value !== true) {
   $q.notify({
@@ -30,28 +32,43 @@ if (accept.value !== true) {
 }
 
 function onReset() {
-  title.value = null
-  desc.value = null
-  intro.value = null
-  tags.value = null
+  email.value = null
+  withdrawName.value = null
+  withdrawType.value = 1
+  amount.value = 0.0
   accept.value = false
 }
 
-function onSubmit() {
-  if (accept.value !== true) {
+
+async function onSubmit() {
+  const response = await axios.post("/api/admin/userWithdraw/add", JSON.stringify({
+    email: email.value,
+    withdrawName: withdrawName.value,
+    withdrawType: withdrawType.value,
+    amount: amount.value,
+  }),{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    }
+  });
+  const data = response.data;
+  if (data.code == 200) {
     $q.notify({
-      color: 'red-5',
+      color: 'green-4',
       textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    })
+      icon: 'cloud_done',
+      message: 'Create Success'
+    });
+    router.push('/users/withdraw'); // Redirect to login page
+
   } else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
-      message: 'Submitted'
-    })
+      message: 'Update Error'
+    });
   }
 }
 </script>
@@ -65,36 +82,36 @@ function onSubmit() {
         @reset="onReset"
         @submit="onSubmit"
     >
+      <q-select v-model="withdrawType"
+                :options="withdrawTypeList"
+                emit-value
+                label="提现方式"
+                map-options
+                outlined
+      />
       <q-input
-          v-model="title"
+          v-model="email"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
-          hint="银行卡号"
-          label="银行卡号 *"
+          hint="Paypal E-mail"
+          label="Paypal E-mail *"
           lazy-rules
       />
       <q-input
-          v-model="intro"
+          v-model="withdrawName"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
-          label="银行名称 *"
+          hint="Paypal 用户名"
+          label="Paypal 用户名 *"
           lazy-rules
           type="text"
 
       />
       <q-input
-          v-model="desc"
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
-          filled
-          label="姓名 *"
-          lazy-rules
-          type="text"
-      />
-      <q-input
-          v-model="price"
+          v-model="amount"
           :rules="[
           val => (val !== null && val !== '') || '请输入金额',
-        val => (val > 0 && val < 10000) || '金额不能大于1000'
+        val => (val > 0 && val < 10000) || '金额不能大于10000'
                   ]"
           fill-mask="0"
           filled

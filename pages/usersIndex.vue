@@ -31,7 +31,7 @@ async function getList(page: number) {
   current.value = page
   queryParams.value.title = title.value;
   queryParams.value.pageNum = page;
-  const response = await axios.get('/api/album/listAlbum?' + tansParams(queryParams.value))
+  const response = await axios.get('/api/systemUser/list?' + tansParams(queryParams.value))
   const data = response.data
   if (data.code == 200) {
     total.value = data.total
@@ -40,14 +40,6 @@ async function getList(page: number) {
 }
 
 getList(1)
-
-function imageUrl(album) {
-  if (album.sourceUrl != null && album.sourceUrl.startsWith('/image')) {
-    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
-  }
-  return album.sourceWeb + album.imgUrl;
-}
-
 </script>
 <template>
   <q-tabs shrink stretch>
@@ -64,13 +56,13 @@ function imageUrl(album) {
           transition="scale"
       >
         <q-card bordered class="q-ma-sm" flat>
+          <div>
           <q-avatar font-size="52px" size="100px">
-            <img :src="imageUrl(album)">
-
+            <img :src="album.imgUrl">
           </q-avatar>
-
+          </div>
           <q-card-section>
-            <div class="text-h6"><a :href='"/userDetail?aid="+album.id'>{{ album.title }}</a></div>
+            <div class="text-h6"><a :href='"/userDetail?aid="+album.id'>{{ album.nickname }}</a></div>
           </q-card-section>
           <q-separator dark/>
 

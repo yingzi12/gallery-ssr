@@ -120,7 +120,6 @@ onMounted(() => {
                 :rules="[val => val && val.length > 0 || 'Please enter your password']"
                 filled
                 label="密码 *"
-                lazy-rules
                 type="password"
             />
 
@@ -130,7 +129,6 @@ onMounted(() => {
                 :rules="[val => val && val.length > 0 || '请输入验证码']"
                 filled
                 label="验证码 *"
-                lazy-rules
             />
             <div class="q-mb-md">
               <img :src="captchaImage" @click="refreshCaptcha">

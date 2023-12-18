@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 
+import Big from "big.js/big.mjs";
+
 const $q = useQuasar()
 const userStore = useUserStore();
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
@@ -8,6 +10,7 @@ const email = ref(null)
 const withdrawName = ref(null)
 const withdrawType = ref(1)
 const amount = ref(0.0)
+const amountReceived=ref(0.0);
 const accept = ref(false)
 const withdrawTypeList = [
   {
@@ -37,6 +40,12 @@ function onReset() {
   withdrawType.value = 1
   amount.value = 0.0
   accept.value = false
+}
+function updateAmount(amou:number){
+  amountReceived.value=multiplyAndFix(amou, 0.7);
+}
+function multiplyAndFix(num1, num2, precision = 2) {
+  return new Big(num1).times(num2).toFixed(precision);
 }
 
 
@@ -74,6 +83,17 @@ async function onSubmit() {
 </script>
 
 <template>
+  <q-card class="my-card bg-purple text-white">
+    <q-card-section>
+      <div class="text-h6">说明</div>
+    </q-card-section>
+    <q-card-section>
+      <p class="text-body1">提现手续费30%</p>
+      <p class="text-body1">到账时间7个工作日</p>
+      <p class="text-body1">目前只支持paypal</p>
+    </q-card-section>
+    <q-separator dark />
+  </q-card>
 
   <div class="q-pa-md" style="max-width: 400px">
 
@@ -95,7 +115,7 @@ async function onSubmit() {
           filled
           hint="Paypal E-mail"
           label="Paypal E-mail *"
-          lazy-rules
+          type="email"
       />
       <q-input
           v-model="withdrawName"
@@ -103,15 +123,15 @@ async function onSubmit() {
           filled
           hint="Paypal 用户名"
           label="Paypal 用户名 *"
-          lazy-rules
           type="text"
 
       />
       <q-input
           v-model="amount"
+          @update:modelValue="updateAmount(amount)"
           :rules="[
-          val => (val !== null && val !== '') || '请输入金额',
-        val => (val > 0 && val < 10000) || '金额不能大于10000'
+          val => (val !== null && val !== '') || '请输入提现金额',
+        val => (val > 10 && val < 10000) || '金额不能小于10大于10000'
                   ]"
           fill-mask="0"
           filled
@@ -121,6 +141,21 @@ async function onSubmit() {
           mask="#.##"
           reverse-fill-mask
 
+      />
+      <q-input
+          v-model="amountReceived"
+          :readonly="true"
+          :rules="[
+          val => (val !== null && val !== '') || '到账金额',
+        val => (val > 0 && val < 10000) || '金额不能大于10000'
+                  ]"
+          fill-mask="0"
+          filled
+          hint="Mask: #.##"
+          input-class="text-right"
+          label="到账金额"
+          mask="#.##"
+          reverse-fill-mask
       />
       <div>
         <q-btn color="primary" label="Submit" type="submit"/>

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-const fourth = ref(true);
+import {useUserStore} from "~/stores/useUserStore";
+
 const $q = useQuasar()
+const userStore = useUserStore();
 
 const oldPassword = ref(null)
 const newPassword = ref(null)
@@ -22,21 +24,55 @@ if (accept.value !== true) {
   })
 }
 
-function onSubmit() {
-  if (accept.value !== true) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first'
-    })
+async function onSubmit() {
+  if(newPassword.value != newPassword2.value){
+    $q.dialog({
+      title: '错误',
+      message: '2次密码输入不一致.',
+      ok: {
+        push: true
+      },
+    }).onOk(async () => {
+
+    }).onCancel(() => {
+      // console.log('Cancel')
+    });
+    return;
+  }
+  const response = await axios.post("/api/admin/users/updatePassworld", JSON.stringify({
+    oldPassword: oldPassword.value,
+    newPassword: newPassword.value,
+  }),{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userStore.token}`
+    }
+  });
+  const data = response.data;
+  if (data.code == 200) {
+    $q.dialog({
+      title: '通知',
+      message: '修改密码成功.',
+      ok: {
+        push: true
+      },
+    }).onOk(async () => {
+
+    }).onCancel(() => {
+      // console.log('Cancel')
+    });
   } else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Submitted'
-    })
+    $q.dialog({
+      title: '错误',
+      message: '修改密码失败.',
+      ok: {
+        push: true
+      },
+    }).onOk(async () => {
+
+    }).onCancel(() => {
+      // console.log('Cancel')
+    });
   }
 }
 </script>
@@ -53,25 +89,25 @@ function onSubmit() {
           v-model="oldPassword"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
-          hint="Name and surname"
-          label="Your name *"
-          lazy-rules
+          type="password"
+          hint="旧密码"
+          label="请输入旧密码 *"
       />
       <q-input
           v-model="newPassword"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
-          hint="Name and surname"
-          label="Your name *"
-          lazy-rules
+          type="password"
+          hint="新密码"
+          label="请输入新密码 *"
       />
       <q-input
           v-model="newPassword2"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
-          hint="Name and surname"
-          label="Your name *"
-          lazy-rules
+          type="password"
+          hint="新密码"
+          label="请重复新密码 *"
       />
 
       <div>

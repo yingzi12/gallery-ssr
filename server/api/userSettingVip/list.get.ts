@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/admin/userSettingVip/list?${tansParams(query)}`, {
+    const response = await fetch(config.public.baseUrl+`/userSettingVip/list?${tansParams(query)}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`

@@ -62,6 +62,8 @@ async function getDetail() {
   });
   const data = response.data;
   if (data.code == 200) {
+    console.log("systemUser/info")
+    console.log(data)
     nickname.value=data.data.nickname;
     intro.value = data.data.intro;
     imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
@@ -117,20 +119,18 @@ async function closeAttention() {
       </q-card-section>
       <q-separator dark/>
       <q-card-actions>
-        <q-btn color="red-8" flat icon="favorite" round>{{countAttention }}
-        </q-btn>
-        <q-btn color="red-8" flat icon="thumb_up" round>{{  countLike }}
-        </q-btn>
-        <q-btn color="red-8" flat icon="visibility" round>{{ countSee }}
-        </q-btn>
+        <q-btn color="red-8" flat icon="favorite" round>{{ countAttention }}</q-btn>
+        <q-btn color="red-8" flat icon="thumb_up" round>{{  countLike }}</q-btn>
+        <q-btn color="red-8" flat icon="visibility" round>{{ countSee }}</q-btn>
       </q-card-actions>
       <q-separator dark/>
 
       <q-card-actions>
-<!--        <q-btn color="secondary" flat>关注</q-btn>-->
         <q-btn v-if="isAttention == 2" icon="favorite_border" @click="onAttention()">关注</q-btn>
         <q-btn v-if="isAttention == 1"  icon="favorite"  @click="closeAttention()">取消关注</q-btn>
-        <q-btn color="secondary" flat><a :href=`/userVip?userId=${userId}`>VIP</a></q-btn>
+<!--        <q-btn color="secondary" flat> <a :href=`/userVip?userId=${userId}`>VIP</a> </q-btn>-->
+        <q-btn color="secondary" flat> <a :href="'/userVip?userId=' + userId">VIP</a> </q-btn>
+
       </q-card-actions>
     </q-card>
 
@@ -147,12 +147,10 @@ async function closeAttention() {
         <q-card bordered class="q-ma-sm" flat>
           <img :src="album.imgUrl">
           <q-card-section>
-            <div class="text-h6"><a :href='"/detail?aid="+album.id'>{{ album.title }}</a></div>
+<!--            <div class="text-h6"><a :href=`/userAlbumDetail?aid=${album.id}`>{{ album.title }}</a></div>-->
+            <div class="text-h6"><a :href="'/userAlbumDetail?aid=' + album.id">{{ album.title }}</a></div>
             <div class="text-subtitle2">{{ album.createTime }}</div>
           </q-card-section>
-          <!--            <q-card-section class="q-pt-none">-->
-          <!--              {{ lorem }}-->
-          <!--            </q-card-section>-->
         </q-card>
 
       </q-intersection>

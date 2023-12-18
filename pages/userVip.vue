@@ -28,7 +28,7 @@ const queryData = reactive({
   form: {},
   queryParams: {
     pageNum: 1,
-    title: '',
+    userId: userId.value,
   },
   rules: {}
 });
@@ -48,6 +48,8 @@ async function getList(page: number) {
   current.value = page
   // queryParams.value.title = title.value;
   queryParams.value.pageNum = page;
+  queryParams.value.userId = userId.value;
+  //server/api/userSettingVip/list.get.ts
   const response = await axios.get('/api/userSettingVip/list?' + tansParams(queryParams.value))
   const data = response.data;
   console.log(data.code)
@@ -77,12 +79,16 @@ async function getDetail() {
   });
   const data = response.data;
   if (data.code == 200) {
-    nickname.value=data.data.nickname;
-    intro.value = data.data.intro;
-    imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
-    countSee.value = data.data.countSee;
-    countLike.value = data.data.countLike;
-    countAttention.value = data.data.countAttention;
+    console.log("systemUser/info")
+    console.log(data.data)
+    const userData=data.data;
+    console.log(userData.nickname)
+    nickname.value = userData.nickname;
+    intro.value = userData.intro;
+    imgUrl.value = userData.imgUrl ==null ? "/favicon.png": userData.imgUrl ;
+    countSee.value = userData.countSee;
+    countLike.value = userData.countLike;
+    countAttention.value = userData.countAttention;
   }
 }
 
@@ -136,11 +142,11 @@ getDetail();
               <div class="text-subtitle2">
                 <p id="cache47" style="font-size: 36px;">
                   <span id="cache48">{{ vip.price }}</span>
-                  <span id="cache38" v-if="vip.timeType != 5" class="strikethrough">{{ vip.timeLong }}</span>
-                  <span id="cache49" v-if="vip.timeType == 1" style="font-size: 20px;">/天</span>
-                  <span id="cache49" v-if="vip.timeType == 2" style="font-size: 20px;">/周</span>
-                  <span id="cache49" v-if="vip.timeType == 3" style="font-size: 20px;">/月</span>
-                  <span id="cache49" v-if="vip.timeType == 4" style="font-size: 20px;">/年</span>
+<!--                  <span id="cache38" v-if="vip.timeType != 5" class="strikethrough">{{ vip.timeLong }}</span>-->
+                  <span id="cache49" v-if="vip.timeType == 1" style="font-size: 20px;">{{ vip.timeLong }}/天</span>
+                  <span id="cache49" v-if="vip.timeType == 2" style="font-size: 20px;">{{ vip.timeLong }}/周</span>
+                  <span id="cache49" v-if="vip.timeType == 3" style="font-size: 20px;">{{ vip.timeLong }}/月</span>
+                  <span id="cache49" v-if="vip.timeType == 4" style="font-size: 20px;">{{ vip.timeLong }}/年</span>
                   <span id="cache49" v-if="vip.timeType == 5" style="font-size: 20px;">永久</span>
                 </p>
               </div>
@@ -149,7 +155,7 @@ getDetail();
 
             <q-card-section class="card-section" style="height: 176px">
 <!--              <div v-for="feature in vip.features" :key="feature" class="q-mb-sm">-->
-                <pre id="myPre" style="color:#999999;"> {{ vip.features }}</pre>
+                <pre id="myPre" style="color:#999999;"> {{ vip.introduce }}</pre>
 
 <!--              </div>-->
             </q-card-section>

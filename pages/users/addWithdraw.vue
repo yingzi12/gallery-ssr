@@ -74,11 +74,16 @@ async function onSubmit() {
     router.push('/users/withdraw'); // Redirect to login page
 
   } else {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Update Error'
+    $q.dialog({
+      title: '错误',
+      message: '金额错误.',
+      ok: {
+        push: true
+      },
+    }).onOk(async () => {
+
+    }).onCancel(() => {
+      // console.log('Cancel')
     });
   }
 }

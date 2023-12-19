@@ -10,6 +10,7 @@ const $q = useQuasar();
 
 const router = useRouter();
 const userStore = useUserStore();
+console.log(userStore.id)
 const vipList = ref([]);
 const total = ref(0);
 const queryData = reactive({
@@ -98,7 +99,7 @@ onMounted(() => {
       <router-link to="/users/addVip">
         <q-btn color="primary" label="添加"/>
       </router-link>
-      <router-link to="/userVip">
+      <router-link :to='"/userVip?userId="+userStore.id'>
         <q-btn color="primary" label="VIP页面查看"/>
       </router-link>
     </div>

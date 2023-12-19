@@ -53,7 +53,11 @@ getList(1)
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ attention.nickname }}</q-item-label>
+          <q-item-label>
+            <a :href='"/userDetail?userId="+attention.id'>
+            {{ attention.nickname }}
+            </a>
+          </q-item-label>
           <q-item-label caption>{{ attention.intro }}</q-item-label>
         </q-item-section>
 

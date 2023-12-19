@@ -42,11 +42,11 @@ async function getList(page: number) {
 
 getList(1)
 
-function imageUrl(album) {
-  if (album.sourceUrl != null && album.sourceUrl.startsWith('/image')) {
-    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
   }
-  return album.sourceWeb + album.imgUrl;
+  return `/empty.png`;
 }
 
 </script>
@@ -95,7 +95,7 @@ function imageUrl(album) {
           transition="scale"
       >
         <q-card bordered class="q-ma-sm" flat>
-          <img :src="imageUrl(album)">
+          <img :src="getImageUrl(album.imgUrl)">
           <q-card-section>
             <div class="text-h6"><a :href='"/userAlbumDetail?aid="+album.id+"&userId="+album.userId'>{{ album.title }}</a></div>
             <div class="text-subtitle2">{{ album.createTime }}</div>

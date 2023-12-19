@@ -5,6 +5,8 @@ export const useUserStore = defineStore('userStore', {
         id: null,
         user: null,
         token: null,
+        invite: null,
+
     }),
     actions: {
         setUser(id,userData, token) {
@@ -22,6 +24,14 @@ export const useUserStore = defineStore('userStore', {
             // 设置用户信息到另一个 cookie
             const userCookie = useCookie('userInfo', { expires: inOneHour });
             userCookie.value = userData;
+        },
+        setInvite(invite) {
+            const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
+            console.log("-------------setUser---------------")
+            this.invite = invite.value;
+            // 设置用户信息到另一个 cookie
+            const inviteCookie = useCookie('invite', { expires: inOneHour });
+            inviteCookie.value = invite.value;
         },
         clearUser() {
             console.log("-------------clearUser---------------")
@@ -79,13 +89,8 @@ export const useUserStore = defineStore('userStore', {
                         'Content-Type': 'application/json',
                     },
                 });
-                console.log(response.data)
                 const data = await response.data;
-                console.log(data.token)
                 if (data && data.token) {
-                    console.log("login");
-                    console.log(data.user)
-                    console.log(data.token)
                     this.setUser(data.user.id,data.user, data.token);
                 } else {
                     throw new Error(data.message || 'Login failed');

@@ -26,28 +26,52 @@ const imageLockList = ref([]);
 const videoLockList = ref([]);
 const isCollection = ref(2)
 
-const disableInfiniteScroll = ref(false);
+//下拉设置
+const disableInfiniteScroll = ref(true); // 初始设置为 true
+// 防抖函数定义
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
+
+
 const isRefreshing = ref(false);
 const onLoad = async (index: number, done: () => void) => {
-  // 如果isSee为false，立即结束加载过程
-  if (!isSee.value) {
+  console.log(`index:${index} isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value} 1`)
+  if (!isSee.value || disableInfiniteScroll.value) {
     done();
     return;
   }
   if (isSee.value) {
+    console.log(`index:${index} isSee:${isSee.value} 2`)
     // console.log("-----------onLoad--------------"+index.toString())
     imageLockList.value = []
     try {
       isRefreshing.value = true
+      console.log(`index:${index} isSee:${isSee.value} 3`)
       const response = await axios.get(`/api/userImage/list?aid=${aid.value}&isFree=2&pageNum=` + (index + 1), {
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${userStore.token}`
         }
       })
+      console.log(`index:${index} isSee:${isSee.value} 4`)
       // console.log("-----------userImage--------------")
       const data = response.data;
-      if (data && data.code === 200) {
+      if ( data.code === 200) {
         const imgList = data.data;
+        console.log(`index:${index} isSee:${imgList.length} 5`)
         imgTotal.value = data.total
         if (imgList.length == 0) {
           disableInfiniteScroll.value = true
@@ -69,8 +93,8 @@ const onLoad = async (index: number, done: () => void) => {
     }
   }
 }
-
-// onLoad(0, () => {});
+// 使用防抖包装 onLoad
+const debouncedOnLoad = debounce(onLoad, 300);
 const album = ref({});
 const title = ref("图集网")
 
@@ -98,12 +122,14 @@ async function getInfo() {
     }
   })
   const data = response.data;
-  // console.log(data)
   if (data.code === 200) {
-    imageList.value.push(...data.data.imageList);
-    videoList.value.push(...data.data.videoList);
-    isSee.value = data.data.isSee;
-    if (!isSee.value) {
+    album.value = data.data;
+    isCollection.value=album.value.isCollection
+    title.value = "图集网-" + album.value.title
+    ortTile.value = album.value.title
+    orgDec.value = album.value.description
+    orgImgae.value = album.value.sourceWeb + album.value.imgUrl
+    if (!data.data.isSee) {
       imageCount.value = data.data.imageCount;
       for (let i = 0; i < imageCount.value; i++) {
         imageLockList.value.push({'imgUrl': '/lock_image.png'})
@@ -113,24 +139,13 @@ async function getInfo() {
         videoLockList.value.push({'imgUrl': '/lock_video.png'})
       }
     }
-    album.value = data.data;
-    isCollection.value=album.value.isCollection
-    title.value = "图集网-" + album.value.title
-    ortTile.value = album.value.title
-    orgDec.value = album.value.description
-    orgImgae.value = album.value.sourceWeb + album.value.imgUrl
-  }
-}
-
-async function getCollection() {
-  // 滚动到顶部
-  const response = await axios.get(`/api/userCollection/getInfo?aid=${aid.value}&ctype=2&title=${ortTile.value}`)
-  const data = response.data;
-  if (data.code == 200) {
-    if(data.data){
-      isCollection.value=1;
-    }else {
-      isCollection.value=2;
+    const imgList = album.value.imageList
+    const vieList = album.value.videoList
+    imageList.value.push(...imgList);
+    videoList.value.push(...vieList);
+    if(data.data.isSee){
+      disableInfiniteScroll.value = false;
+      isSee.value = data.data.isSee;
     }
   }
 }
@@ -176,16 +191,6 @@ async function getVideoList() {
     }
   }
 }
-
-async function handleImageError() {
-  const response = await axios.get("/api/userAlbum/error?id=" + aid.value, {
-    headers: {
-      'Authorization': `Bearer ${userStore.token}`
-    }
-  })
-  alert("提交成功,等待管理员处理中.")
-}
-
 const randomList = ref([]);
 
 async function getRandom() {
@@ -203,18 +208,6 @@ async function getRandom() {
 getRandom();
 getInfo();
 
-// onLoad(1);
-function imageUrlDetail(image) {
-  return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
-}
-
-function imageUrl(album) {
-  if (album.sourceUrl != null && album.sourceUrl.startsWith('/image')) {
-    return `https://image.51x.uk/xinshijie${album.sourceUrl}`;
-  }
-  return album.sourceWeb + album.imgUrl;
-}
-
 const paypalDialog = ref(false);
 
 function openPayPalDialog (){
@@ -225,12 +218,24 @@ function openPayPalDialog (){
 // 监听isSee的值
 watch(isSee, (newValue, oldValue) => {
   if (newValue === true) {
+    console.log(` onLoad  isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value}  1`)
     onLoad(0, () => {
     });
     getVideoList();
   }
 }, {immediate: true}); // immediate: true 确保在挂载时立即触发一次
+// 在组件挂载后启用无限滚动
+// onMounted(() => {
+//   disableInfiniteScroll.value = true;
+// });
 const  stars=ref(3);
+function getImageUrl(imgUrl) {
+  if (imgUrl != null && imgUrl !== undefined && imgUrl !== '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`;
+  }
+  return `/empty.png`; // Default image URL when imgUrl is null, undefined, or empty
+}
+
 </script>
 <template>
   <q-page>
@@ -238,10 +243,10 @@ const  stars=ref(3);
       <div>
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
-          <q-card-section style="width: 220px;height: 376px">
+          <q-card-section style="width: 235px;height: 352px">
           <q-img fit="fill"
               class="col headImage"
-              src="https://cdn.quasar.dev/img/mountains.jpg"
+              :src="getImageUrl(album.imgUrl)"
           />
           </q-card-section>
           <q-separator vertical />
@@ -309,7 +314,7 @@ const  stars=ref(3);
                   transition="scale"
               >
                 <q-card bordered class="q-ma-sm" flat>
-                  <img :src="videoLock.imgUrl">
+                  <img :src="getImageUrl(videoLock.imgUrl)">
                 </q-card>
               </q-intersection>
             </div>
@@ -319,9 +324,9 @@ const  stars=ref(3);
           <q-th>图片列表（{{ imgTotal }}）</q-th>
 
           <!--    内容页-->
-          <q-infinite-scroll :disable="disableInfiniteScroll" :offset="250" @load="onLoad">
+          <q-infinite-scroll :disable="disableInfiniteScroll" :offset="250" @load="debouncedOnLoad">
             <div v-for="(image, index) in imageList" :key="index" class="caption">
-              <img :src="imageUrlDetail(image)" class="responsive-image"/>
+              <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>
             </div>
 
             <template v-slot:loading>
@@ -354,7 +359,7 @@ const  stars=ref(3);
                 transition="scale"
             >
               <q-card bordered class="q-ma-sm" flat>
-                <img :src="imageUrl(album)">
+                <img :src="getImageUrl(album.imgUrl)">
                 <q-card-section>
                   <div class="text-h6">
                     <a :href='"/detail?aid="+album.id'>
@@ -459,6 +464,6 @@ const  stars=ref(3);
   width: 100%
   max-width: 750px
 .headImage
-  max-width: 220px
-  height: 376px
+  max-width: 200px
+  height: 302px
 </style>

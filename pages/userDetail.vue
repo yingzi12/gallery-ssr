@@ -62,9 +62,8 @@ async function getDetail() {
   });
   const data = response.data;
   if (data.code == 200) {
-    console.log("systemUser/info")
-    console.log(data)
     nickname.value=data.data.nickname;
+    isAttention.value=data.data.isAttention
     intro.value = data.data.intro;
     imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
     countSee.value = data.data.countSee;
@@ -101,18 +100,25 @@ async function closeAttention() {
     isAttention.value=2;
   }
 }
+function getImageUrl(imgUrl) {
+  if (imgUrl != null && imgUrl !== undefined && imgUrl !== '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`;
+  }
+  return `/empty.png`; // Default image URL when imgUrl is null, undefined, or empty
+}
 </script>
 
 <template>
   <div class="caption">
     <q-card class="my-card">
-      <div>
-      <q-avatar font-size="52px" size="100px">
-        <img :src="imgUrl">
-      </q-avatar>
+      <div class="row justify-center">
+        <q-avatar font-size="52px" size="100px" class="q-mb-md">
+          <img :src="getImageUrl(imgUrl)">
+        </q-avatar>
       </div>
-      <q-card-section>
-        <div class="text-h6">{{nickname}}</div>
+      <q-card-section class="text-center">
+        <div class="text-h6"><a :href='"/userDetail?userId="+userId'>{{ nickname }}</a></div>
+        <div class="text-subtitle2"><a :href='"/userDetail?userId="+userId'>{{ intro }}</a></div>
       </q-card-section>
       <q-card-section class="q-pt-none">
         {{ intro }}
@@ -145,7 +151,7 @@ async function closeAttention() {
           transition="scale"
       >
         <q-card bordered class="q-ma-sm" flat>
-          <img :src="album.imgUrl">
+          <img :src="getImageUrl(album.imgUrl)">
           <q-card-section>
 <!--            <div class="text-h6"><a :href=`/userAlbumDetail?aid=${album.id}`>{{ album.title }}</a></div>-->
             <div class="text-h6"><a :href="'/userAlbumDetail?aid=' + album.id">{{ album.title }}</a></div>

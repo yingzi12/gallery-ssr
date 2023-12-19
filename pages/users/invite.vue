@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-const text = ref('https://www.aiavr.uk/index?invite=111111111111111213123231');
+import {useUserStore} from "~/stores/useUserStore";
+
+const userStore = useUserStore();
+
+const inviteUrl = ref(`https://www.aiavr.uk/index?invite=${userStore.user.name}`);
 const textToCopy = ref(null);
 
 const copyToClipboard = async () => {
@@ -26,7 +30,7 @@ const copyToClipboard = async () => {
             <h5>被邀请者在网站消费你都将获得奖励，邀请人越多，奖励越高！</h5>
           </div>
           <div>
-            <input ref="textToCopy" v-model="text" type="text"/>
+            <input ref="textToCopy" v-model="inviteUrl" type="text"/>
             <button @click="copyToClipboard">复制</button>
           </div>
         </div>

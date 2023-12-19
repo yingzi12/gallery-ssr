@@ -39,6 +39,7 @@ function onReset() {
   withdrawName.value = null
   withdrawType.value = 1
   amount.value = 0.0
+  amountReceived.value=0.0
   accept.value = false
 }
 function updateAmount(amou:number){
@@ -55,6 +56,7 @@ async function onSubmit() {
     withdrawName: withdrawName.value,
     withdrawType: withdrawType.value,
     amount: amount.value,
+    amountReceived: amountReceived.value,
   }),{
     headers: {
       'Content-Type': 'application/json',

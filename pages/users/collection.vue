@@ -59,6 +59,13 @@ getListSystem(1);
 getListUser(1);
 
 const tab = ref('mails')
+
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
+  }
+  return `/empty.png`;
+}
 </script>
 
 <template>
@@ -82,11 +89,15 @@ const tab = ref('mails')
                 <div v-for="(collectionSystem,index) in collectionSystemList ">
                 <q-item>
                   <q-item-section class="q-ml-none" thumbnail top>
-                    <img :src="collectionSystem.imgUrl">
+                    <img :src="getImageUrl(collectionSystem.imgUrl)">
                   </q-item-section>
 
                   <q-item-section>
-                    <q-item-label>{{ collectionSystem.title }}</q-item-label>
+                    <q-item-label>
+                      <a :href='"/detail?aid="+collectionSystem.aid'>
+                      {{ collectionSystem.title }}
+                    </a>
+                    </q-item-label>
                     <q-item-label caption>{{ collectionSystem.intro }}
                     </q-item-label>
                   </q-item-section>
@@ -111,11 +122,15 @@ const tab = ref('mails')
                 <div v-for="(collectionUser,index) in collectionUserList ">
                   <q-item>
                     <q-item-section class="q-ml-none" thumbnail top>
-                      <img :src="collectionUser.imgUrl">
+                      <img :src="getImageUrl(collectionUser.imgUrl)">
                     </q-item-section>
 
                     <q-item-section>
-                      <q-item-label>{{ collectionUser.title }}</q-item-label>
+                      <q-item-label>
+                        <a :href='"/userAlbumDetail?aid="+collectionUser.aid'>
+                        {{ collectionUser.title }}
+                        </a>
+                      </q-item-label>
                       <q-item-label caption>{{ collectionUser.intro }}
                       </q-item-label>
                     </q-item-section>

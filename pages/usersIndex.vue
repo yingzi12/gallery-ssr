@@ -40,6 +40,13 @@ async function getList(page: number) {
 }
 
 getList(1)
+
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
+  }
+  return `/empty.png`;
+}
 </script>
 <template>
   <q-tabs shrink stretch>
@@ -56,21 +63,18 @@ getList(1)
           transition="scale"
       >
         <q-card bordered class="q-ma-sm" flat>
-          <div>
-          <q-avatar font-size="52px" size="100px">
-            <img :src="user.imgUrl">
-          </q-avatar>
+          <div class="row justify-center">
+            <q-avatar font-size="52px" size="100px" class="q-mb-md">
+              <img :src="getImageUrl(user.imgUrl)">
+            </q-avatar>
           </div>
-          <q-card-section>
+          <q-card-section class="text-center">
             <div class="text-h6"><a :href='"/userDetail?userId="+user.id'>{{ user.nickname }}</a></div>
+            <div class="text-subtitle2"><a :href='"/userDetail?userId="+user.id'>{{ user.intro }}</a></div>
           </q-card-section>
           <q-separator dark/>
-
-          <q-card-actions>
-            <q-btn flat>Action 1</q-btn>
-            <q-btn flat>Action 2</q-btn>
-          </q-card-actions>
         </q-card>
+
 
       </q-intersection>
     </div>

@@ -94,7 +94,12 @@ async function getDetail() {
 
 getDetail();
 
-
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
+  }
+  return `/empty.png`;
+}
 
 </script>
 
@@ -124,10 +129,10 @@ getDetail();
       </q-card-actions>
       <q-separator dark/>
 
-      <q-card-actions>
-        <q-btn color="secondary" flat>关注</q-btn>
-        <q-btn color="secondary" flat><a href="/userVip">VIP</a></q-btn>
-      </q-card-actions>
+<!--      <q-card-actions>-->
+<!--        <q-btn color="secondary" flat>关注</q-btn>-->
+<!--        <q-btn color="secondary" flat><a href="/userVip">VIP</a></q-btn>-->
+<!--      </q-card-actions>-->
     </q-card>
 
   </div>

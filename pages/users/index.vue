@@ -90,22 +90,18 @@ getDetail();
 
       <q-separator/>
 
-      <q-card-section v-if="userStore.user" horizontal>
-        {{ userStore.user.intro }}
+      <q-card-section  horizontal>
+        <div class="text-body2" style="padding: 10px">
+          {{ intro }}
+        </div>
       </q-card-section>
+
       <q-separator/>
 
       <q-card-actions>
-        <q-btn color="red-8" flat icon="favorite" round>{{
-            userStore.user != null ? userStore.user.countAttention : 0
-          }}
-        </q-btn>
-        <q-btn color="red-8" flat icon="thumb_up" round>{{ userStore.user != null ? userStore.user.countLike : 0 }}
-        </q-btn>
-        <q-btn color="red-8" flat icon="visibility" round>{{
-            userStore.user != null ? userStore.user.countSee : 0
-          }}
-        </q-btn>
+        <q-btn color="red-8" flat icon="favorite" round>{{countAttention }}</q-btn>
+        <q-btn color="red-8" flat icon="thumb_up" round>{{countLike }}</q-btn>
+        <q-btn color="red-8" flat icon="visibility" round>{{countSee }}</q-btn>
       </q-card-actions>
     </q-card>
 

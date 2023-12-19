@@ -58,8 +58,8 @@ getList(1)
 
 <template>
   <div class="q-pa-md">
-    <div class="text-h4 q-mb-md">可提现金额 ：{{income-withdraw}} 元</div>
-    <div class="text-h4 q-mb-md">已提现金额 ：{{withdraw}} 元</div>
+    <div class="text-h4 q-mb-md">可提现金额 ：{{ income - withdraw}} 元</div>
+    <div class="text-h4 q-mb-md">已提现金额 ：{{ withdraw }} 元</div>
   </div>
 
   <div class="q-pa-md q-gutter-md">

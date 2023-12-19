@@ -36,6 +36,13 @@ async function getList(page: number) {
   }
 }
 getList(1)
+
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
+  }
+  return `/empty.png`;
+}
 </script>
 
 <template>
@@ -45,12 +52,17 @@ getList(1)
       <div v-for="(album,index) in sellList">
       <q-item>
         <q-item-section class="q-ml-none" thumbnail top>
-          <img :src="album.image">
+          <img :src="getImageUrl(album.image)">
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ album.title }}</q-item-label>
-          <q-item-label caption>{{ album.intro }}</q-item-label>
+          <q-item-label>
+            <a :href='"/userAlbumDetail?aid="+album.id'>
+            {{ album.title }}
+            </a>
+          </q-item-label>
+          <q-item-label caption>{{ album.intro }}
+          </q-item-label>
         </q-item-section>
 
         <!--        <q-item-section side top>-->

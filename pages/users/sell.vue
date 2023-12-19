@@ -37,6 +37,7 @@ async function getList(page: number) {
 }
 getList(1)
 
+
 </script>
 
 <template>
@@ -47,8 +48,8 @@ getList(1)
       <q-item>
         <q-item-section>
           <q-item-label>{{ sell.id }}</q-item-label>
-          <q-item-label v-if=" sell.kind ==2" >购买vip</q-item-label>
-          <q-item-label v-if=" sell.kind ==4" >购买图集</q-item-label>
+          <q-item-label v-if=" sell.kind ==2" >VIP</q-item-label>
+          <q-item-label v-if=" sell.kind ==4" >图集</q-item-label>
           <q-item-label caption lines="2">{{ sell.productName }}</q-item-label>
         </q-item-section>
 

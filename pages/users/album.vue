@@ -98,6 +98,13 @@ function updateStatus(album: any, statusChoise: number) {
     // console.log('Cancel')
   });
 }
+
+function getImageUrl(imgUrl:string) {
+  if (imgUrl != null && imgUrl != undefined && imgUrl != '') {
+    return `https://image.51x.uk/xinshijie${imgUrl}`; // Replace with your default image URL
+  }
+  return `/empty.png`;
+}
 </script>
 
 
@@ -113,7 +120,7 @@ function updateStatus(album: any, statusChoise: number) {
         <q-item>
           <q-item-section>
             <q-img
-                :src="album.imgUrl"
+                :src="getImageUrl(album.imgUrl)"
                 spinner-color="white"
                 style="height: 140px; max-width: 150px"
             />

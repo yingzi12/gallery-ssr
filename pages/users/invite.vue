@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
 
-const userStore = useUserStore();
+ const userInfoCookie = useCookie('userInfo');
+ const user = userInfoCookie.value;
 
-const inviteUrl = ref(`https://www.aiavr.uk/index?invite=${userStore.user.name}`);
+const inviteUrl = ref(`https://www.aiavr.uk/index?invite=${user.name}`);
 const textToCopy = ref(null);
 
 const copyToClipboard = async () => {

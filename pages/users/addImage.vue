@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 import {useRoute} from "vue-router";
 import {useQuasar} from "quasar";
 
@@ -8,7 +9,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig();
-const userStore = useUserStore();
+
 
 const $q = useQuasar();
 const route = useRoute();
@@ -35,7 +36,7 @@ async function getList(page: number) {
   try {
     const response = await axios.get('/api/admin/userImage/list?' + tansParams(queryParams.value), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -63,7 +64,7 @@ async function deleteImage(id: number) {
     const response = await axios.get('/api/admin/userImage/remove?id=' + id.toString(), {
       method: 'get',
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -88,7 +89,7 @@ async function updateIsFree(image: any, isFree: number) {
   }).onOk(async () => {
     const response = await axios.get('/api/admin/userImage/updateIsFree?id=' + image.id.toString() + "&isFree=" + isFree.toString(), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     const data = response.data;
@@ -121,7 +122,7 @@ getList(1);
     <div class="q-gutter-sm row items-start">
       <q-uploader
           :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `1`}]"
-          :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
+          :headers="[{name: 'Authorization', value: `Bearer ${token}`}]"
           :url="updateUrl"
           :with-credentials="false"
           accept=".jpg, image/*"
@@ -137,7 +138,7 @@ getList(1);
     <div class="q-gutter-sm row items-start">
       <q-uploader
           :form-fields="[{name: 'aid', value:  `${aid}`},{name: 'isFree', value:  `2`}]"
-          :headers="[{name: 'Authorization', value: `Bearer ${userStore.token}`}]"
+          :headers="[{name: 'Authorization', value: `Bearer ${token}`}]"
           :url="updateUrl"
           :with-credentials="false"
           accept=".jpg, image/*"

@@ -2,9 +2,10 @@
 import {reactive, ref, toRefs} from 'vue'
 import {tansParams} from "~/server/utils/urlUtils";
 import {useRoute} from "vue-router";
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 const route = useRoute();
-const userStore = useUserStore();
+
 
 
 const current = ref(1)

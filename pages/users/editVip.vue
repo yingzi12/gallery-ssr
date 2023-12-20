@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 import {ref} from "vue";
 import {useRoute} from "vue-router";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
+
 const $q = useQuasar()
 const route = useRoute();
 

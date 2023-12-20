@@ -1,11 +1,14 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
+const userCookie = useCookie('user');
+const user = userCookie.value;
 import {useQuasar} from "quasar";
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
+
 const selectedImage = ref<File | null>(null);
-const previewImage = ref((userStore.user == null || userStore.user.imgUrl == null) ? "/favicon.png" : userStore.user.imgUrl);
+const previewImage = ref((user == null || user.imgUrl == null) ? "/favicon.png" : user.imgUrl);
 const config = useRuntimeConfig();
 const handleImageUpload = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
@@ -38,11 +41,11 @@ const uploadImage = async () => {
         method: 'POST',
         body: formData,
         headers: new Headers({
-          'Authorization': `Bearer ${userStore.token}`
+          'Authorization': `Bearer ${token}`
         })
       });
 
-      const data = response.data;
+      const data = response.json();
       // console.log(data)
       // console.log(data.data)
       // console.log(data.code)

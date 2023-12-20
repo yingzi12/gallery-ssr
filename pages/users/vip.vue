@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import {useQuasar} from "quasar";
-import {useUserStore} from "~/stores/useUserStore";
+
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
+const idCookie = useCookie('id');
+const id = idCookie.value;
 
 definePageMeta({
   key: route => route.fullPath
@@ -9,10 +13,11 @@ definePageMeta({
 const $q = useQuasar();
 
 const router = useRouter();
-const userStore = useUserStore();
-console.log(userStore.id)
+
 const vipList = ref([]);
 const total = ref(0);
+const maxPage = ref(0);
+
 const queryData = reactive({
   form: {},
   queryParams: {
@@ -33,12 +38,13 @@ async function getList(page: number) {
     total.value = response.data.total;
     vipList.value = response.data.data;
     if (total.value === 0) {
-      total.value = vipList.value.length;
+      total.value = response.data.total;
+      maxPage.value=  total.value/20+1;
     }
   } catch (error) {
     console.error('获取数据失败：', error);
   }
-  console.log("token:" + userStore.token);
+  console.log("token:" + token);
   queryParams.value.pageNum = page;
 }
 
@@ -72,7 +78,7 @@ function updateStatus(vip: any, statusChoise: number) {
     const response = await axios.get(`/api/admin/userSettingVip/updateStatus?id=${vip.id}&status=${statusChoise}`, {
       method: 'get',
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -99,7 +105,7 @@ onMounted(() => {
       <router-link to="/users/addVip">
         <q-btn color="primary" label="添加"/>
       </router-link>
-      <router-link :to='"/userVip?userId="+userStore.id'>
+      <router-link :to='"/userVip?userId="+id'>
         <q-btn color="primary" label="VIP页面查看"/>
       </router-link>
     </div>

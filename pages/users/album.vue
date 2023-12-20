@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 import {useQuasar} from "quasar";
 
 const router = useRouter();
-const userStore = useUserStore();
+
 const albumList = ref([]);
-const total = ref(0);
+ const total = ref(0);
+ const maxPage = ref(0);
+
+ const current=ref(1)
 const $q = useQuasar();
 
 const queryData = reactive({
@@ -28,12 +32,14 @@ async function getList(page: number) {
     total.value = response.data.total;
     albumList.value = response.data.data;
     if (total.value === 0) {
-      total.value = albumList.value.length;
+      // total.value = albumList.value.length;
+      total.value = response.data.total;
+      maxPage.value=  total.value/20+1;
     }
   } catch (error) {
     console.error('获取数据失败：', error);
   }
-  console.log("token:" + userStore.token);
+  console.log("token:" + token);
   queryParams.value.pageNum = page;
 }
 
@@ -83,7 +89,7 @@ function updateStatus(album: any, statusChoise: number) {
     const response = await axios.get(`/api/admin/userAlbum/updateStatus?id=${album.id}&status=${statusChoise}`, {
       method: 'get',
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -178,7 +184,18 @@ function getImageUrl(imgUrl:string) {
         <q-separator spaced/>
       </div>
     </q-list>
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+          v-model="current"
+          :max="maxPage"
+          direction-links
+          @update:modelValue="getList(current)"
+
+      />
+    </div>
+
   </div>
+
 </template>
 
 <style scoped>

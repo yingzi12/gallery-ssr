@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import {useQuasar} from 'quasar';
-import {useUserStore} from '@/stores/useUserStore';
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
-const userStore = useUserStore();
+
 const username = ref('');
 const password = ref('');
 const uuid = ref('');
@@ -14,7 +13,6 @@ const code = ref('');
 const captcha = ref('');
 const accept = ref(false);
 const captchaImage = ref('');
-
 async function refreshCaptcha() {
   try {
     const response = await axios("/api/users/captcha");
@@ -47,27 +45,39 @@ async function onSubmit() {
   }
 
   try {
-    await userStore.login({
+    const response = await axios.post('/api/users/login', JSON.stringify({
       username: username.value,
       password: password.value,
       uuid: uuid.value,
       code: captcha.value,
       captcha: captcha.value,
+    }), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    if (userStore.token) {
-      // 登录成功，重定向到主页或其他页面
+    const data = response.data;
+    console.log("login")
+    console.log(data)
+    if (data.code == 200) {
+      const tokenCookie = useCookie('token')
+      tokenCookie.value=data.token
+      const idCookie = useCookie('id')
+      idCookie.value=data.user.id
+      const userInfoCookie = useCookie('userInfo')
+      userInfoCookie.value=data.user
       router.push('/users/'); // 或者其他页面
     } else {
-      // 登录失败，但没有抛出错误
       $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'error',
-        message: 'Login failed'
-      });
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: data.message
+          });
+      // throw new Error(data.message || 'Login failed');
     }
   } catch (error) {
-    refreshCaptcha();
+    await refreshCaptcha();
     // 处理登录错误
     $q.notify({
       color: 'red-5',
@@ -79,14 +89,15 @@ async function onSubmit() {
 }
 
 function isLogin() {
-  if (userStore.user) {
+  const tokenCookie = useCookie('token');
+  const token = tokenCookie.value;
+  if (token) {
     // 如果用户未登录，则重定向到登录页面
     router.push('/users'); // 假设登录页面的路由为 '/login'
   }
 }
 
 onMounted(() => {
-  userStore.restoreUserFromCookie();
   isLogin();
   // 当组件挂载时，刷新验证码
   refreshCaptcha();

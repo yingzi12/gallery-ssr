@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import {useQuasar} from 'quasar';
 import {useRouter} from 'vue-router';
-import {useUserStore} from "~/stores/useUserStore";
-
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
+const idCookie = useCookie('id');
+const id = idCookie.value;
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const $q = useQuasar();
-const userStore = useUserStore();
 
-const id = ref(userStore.id);
+
 const name = ref(null);
 const nickname = ref(null);
 const email = ref(null);
@@ -29,7 +30,7 @@ async function getDetail() {
   const response = await axios.get(`/api/admin/users/info`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
@@ -108,10 +109,7 @@ const onSubmit = async () => {
     // 处理错误...
   }
 };
-onMounted(() => {
-  userStore.restoreUserFromCookie();
-  // 当组件挂载时检查用户的登录状态
-})
+
 </script>
 
 <template>

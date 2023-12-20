@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {useQuasar} from 'quasar';
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
+
 const config = useRuntimeConfig();
 const $q = useQuasar();
 
@@ -51,7 +52,7 @@ async function onSubmit() {
   }), {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
@@ -94,7 +95,7 @@ async function handleImageUpload(event: Event) {
         body: formData,
         credentials: 'include', // 确保携带 cookie
         headers: new Headers({
-          'Authorization': `Bearer ${userStore.token}`
+          'Authorization': `Bearer ${token}`
         })
       });
 

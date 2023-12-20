@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 
-const userStore = useUserStore();
+
 
 definePageMeta({
   key: route => route.fullPath
@@ -23,7 +24,7 @@ async function getList(page: number) {
   try {
     const response = await axios.get('/api/admin/payment/listBuy?' + tansParams(queryParams.value), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {

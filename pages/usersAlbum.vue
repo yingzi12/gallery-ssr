@@ -7,6 +7,7 @@ const slide = ref('first')
 const title = ref('')
 const albumList = ref([]);
 const total = ref(0);
+
 const queryData = reactive({
   form: {},
   queryParams: {
@@ -86,6 +87,7 @@ function getImageUrl(imgUrl:string) {
         </div>
       </q-carousel-slide>
     </q-carousel>
+
     <div class="row justify-center q-gutter-sm">
       <q-intersection
           v-for="(album ,index) in albumList"

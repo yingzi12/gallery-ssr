@@ -8,7 +8,7 @@ const config = useRuntimeConfig();
 definePageMeta({
   key: route => route.fullPath
 })
-const userStore = useUserStore();
+
 const route = useRoute();
 const aid = ref(route.query.aid);
 const videoList = ref([]);
@@ -17,7 +17,7 @@ const total = ref(0);
 async function getList(page: number) {
   const response = await axios.get(`/api/admin/userVideo/list?aid=${aid.value}&pageNum=${1}`, {
     headers: {
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data =  response.data;
@@ -42,7 +42,7 @@ async function deleteVideo(video: any, index: number) {
     const response = await axios.get('/api/admin/userVideo/remove?id=' + video.id.toString(), {
       method: 'get',
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       },
     });
     const data = response.data;
@@ -68,7 +68,7 @@ async function updateIsFree(id: number, isFree: number) {
   }).onOk(async () => {
     const response = await axios.get('/api/admin/userVideo/updateIsFree?id=' + id.toString() + "&isFree=" + isFree.toString(), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       },
     });
     const data = response.data;
@@ -83,7 +83,6 @@ async function updateIsFree(id: number, isFree: number) {
 }
 
 onMounted(() => {
-  userStore.restoreUserFromCookie();
   getList(1);
 });
 watch(() => route.query.aid, (newAid) => {
@@ -155,7 +154,7 @@ async function uploadVideoFile() {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userStore.token}`
+          'Authorization': `Bearer ${token}`
         },
       });
       const data = response.data;
@@ -169,7 +168,7 @@ async function uploadVideoFile() {
         // 生成唯一标识符：文件名-时间戳
         const identifier = `${selectedFile.value.name}`;
         // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
-        await uploaderVideo.uploadFile(selectedFile.value, identifier, userStore.token, day, aid.value, isFree, md5);
+        await uploaderVideo.uploadFile(selectedFile.value, identifier, token, day, aid.value, isFree, md5);
         console.log('Upload complete');
       }
       uploadVideoProgress.value = 100; // 更新进度条到100
@@ -216,7 +215,7 @@ async function addVideoRecord(md5: string, url: string, isFree: number) {
         , {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userStore.token}`
+            'Authorization': `Bearer ${token}`
           },
         });
     const data = response.data;
@@ -245,7 +244,7 @@ async function uploadPreviewVideoFile() {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userStore.token}`
+          'Authorization': `Bearer ${token}`
         },
       });
       const data = response.data;
@@ -257,7 +256,7 @@ async function uploadPreviewVideoFile() {
         console.log('Upload update complete');
       } else {
         const identifier = `${selectedPreviewFile.value.name}`;
-        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, userStore.token, day, aid.value, isFree, md5);
+        await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, token, day, aid.value, isFree, md5);
       }
       uploadPreviewProgress.value = 100;
       selectedPreviewFile.value = null;

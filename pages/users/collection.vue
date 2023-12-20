@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 //收藏
-import {useUserStore} from "~/stores/useUserStore";
-const userStore = useUserStore();
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
+
 definePageMeta({
   key: route => route.fullPath
 })
@@ -25,7 +26,7 @@ async function getListSystem(page: number) {
     //server/api/admin/userCollection/list.get.ts
     const response = await axios.get('/api/admin/userCollection/listSystem?' + tansParams(queryParams.value), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -43,7 +44,7 @@ async function getListUser(page: number) {
     //server/api/admin/userCollection/list.get.ts
     const response = await axios.get('/api/admin/userCollection/listUser?' + tansParams(queryParams.value), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -94,7 +95,7 @@ function getImageUrl(imgUrl:string) {
 
                   <q-item-section>
                     <q-item-label>
-                      <a :href='"/detail?aid="+collectionSystem.aid'>
+                      <a :href='"/detail?aid="+collectionSystem.id'>
                       {{ collectionSystem.title }}
                     </a>
                     </q-item-label>
@@ -127,7 +128,7 @@ function getImageUrl(imgUrl:string) {
 
                     <q-item-section>
                       <q-item-label>
-                        <a :href='"/userAlbumDetail?aid="+collectionUser.aid'>
+                        <a :href='"/userAlbumDetail?aid="+collectionUser.id'>
                         {{ collectionUser.title }}
                         </a>
                       </q-item-label>

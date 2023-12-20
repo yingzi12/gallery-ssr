@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
+
 const $q = useQuasar()
 
 const title = ref(null)
@@ -37,21 +38,21 @@ const timeTypeList = [
     value: 5
   }
 ]
-if (accept.value !== true) {
-  $q.notify({
-    color: 'red-5',
-    textColor: 'white',
-    icon: 'warning',
-    message: 'You need to accept the license and terms first'
-  })
-} else {
-  $q.notify({
-    color: 'green-4',
-    textColor: 'white',
-    icon: 'cloud_done',
-    message: 'Submitted'
-  })
-}
+// if (accept.value !== true) {
+//   $q.notify({
+//     color: 'red-5',
+//     textColor: 'white',
+//     icon: 'warning',
+//     message: 'You need to accept the license and terms first'
+//   })
+// } else {
+//   $q.notify({
+//     color: 'green-4',
+//     textColor: 'white',
+//     icon: 'cloud_done',
+//     message: 'Submitted'
+//   })
+// }
 
 function onReset() {
   title.value = null
@@ -74,7 +75,7 @@ async function onSubmit() {
   }),{
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     }
   });
   const data = response.data;

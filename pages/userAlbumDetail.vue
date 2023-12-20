@@ -1,17 +1,19 @@
 <script lang="ts" setup>
 import {useRoute} from "vue-router";
-import {useUserStore} from "~/stores/useUserStore";
+
 import PayaplCard from "~/pages/payaplCard.vue";
-// import PayaplCard from './payaplCard.vue';
-const amount=ref(1.0);
-// const title=ref("这是图集名称");
+import {useQuasar} from "quasar";
+const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
+const amount=ref(0.0);
 const intro=ref("这是简介，这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介");
 
-const userStore = useUserStore();
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 
 // 接收url里的参数
 const route = useRoute();
 const aid = ref(route.query.aid);
+const $q = useQuasar();
 
 const imgTotal = ref(0);
 const videoTotal = ref(0);
@@ -48,30 +50,25 @@ function debounce(func, wait, immediate) {
 
 const isRefreshing = ref(false);
 const onLoad = async (index: number, done: () => void) => {
-  console.log(`index:${index} isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value} 1`)
   if (!isSee.value || disableInfiniteScroll.value) {
     done();
     return;
   }
   if (isSee.value) {
-    console.log(`index:${index} isSee:${isSee.value} 2`)
     // console.log("-----------onLoad--------------"+index.toString())
     imageLockList.value = []
     try {
       isRefreshing.value = true
-      console.log(`index:${index} isSee:${isSee.value} 3`)
       const response = await axios.get(`/api/userImage/list?aid=${aid.value}&isFree=2&pageNum=` + (index + 1), {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userStore.token}`
+          'Authorization': `Bearer ${token}`
         }
       })
-      console.log(`index:${index} isSee:${isSee.value} 4`)
       // console.log("-----------userImage--------------")
       const data = response.data;
       if ( data.code === 200) {
         const imgList = data.data;
-        console.log(`index:${index} isSee:${imgList.length} 5`)
         imgTotal.value = data.total
         if (imgList.length == 0) {
           disableInfiniteScroll.value = true
@@ -118,13 +115,14 @@ async function getInfo() {
   // 滚动到顶部
   const response = await axios.get("/api/userAlbum/info?id=" + aid.value, {
     headers: {
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     }
   })
   const data = response.data;
   if (data.code === 200) {
     album.value = data.data;
     isCollection.value=album.value.isCollection
+    amount.value=album.value.amount
     title.value = "图集网-" + album.value.title
     ortTile.value = album.value.title
     orgDec.value = album.value.description
@@ -182,7 +180,7 @@ async function getVideoList() {
     // 滚动到顶部
     const response = await axios.get(`/api/userVideo/list?aid=${aid.value}&isFree=2`, {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     })
     const data = response.data;
@@ -196,7 +194,7 @@ const randomList = ref([]);
 async function getRandom() {
   const response = await axios.get('/api/userAlbum/random', {
     headers: {
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     }
   })
   const data = response.data;
@@ -212,9 +210,26 @@ const paypalDialog = ref(false);
 
 function openPayPalDialog (){
   console.log("------------openPayPalDialog---------------------------")
-  paypalDialog.value = true;
+  if(token !== null && token !== '' && token !== undefined ) {
+    paypalDialog.value = true;
+  }else {
+    $q.dialog({
+      title: '通知',
+      message: '请先登录，点击ok跳转登录.',
+      ok: {
+        push: true
+      },
+      cancel: {
+        push: true
+      },
+    }).onOk(async () => {
+      router.push('/login'); // Redirect to login page
+    }).onCancel(async () => {
+      // router.push('/users/album'); // Redirect to login page
+    });
+  }
 };
-// console.log(userStore.token)
+// console.log(token)
 // 监听isSee的值
 watch(isSee, (newValue, oldValue) => {
   if (newValue === true) {
@@ -277,7 +292,7 @@ function getImageUrl(imgUrl) {
               <div>标签: {{ album.tags }}</div>
               <div>创建时间：{{ album.createTime }}</div>
               <div class="q-pa-md q-gutter-sm">
-                <q-btn v-if="album.charge != 1" @click="openPayPalDialog()">购买 </q-btn>
+                <q-btn v-if="album.charge != 1 && amount > 0.1" @click="openPayPalDialog()">购买 </q-btn>
                 <q-btn v-if="isCollection == 2" icon="favorite_border" @click="onCollection()">收藏</q-btn>
                 <q-btn v-if="isCollection == 1"  icon="favorite"  @click="closeCollection()">取消收藏</q-btn>
               </div>
@@ -413,7 +428,7 @@ function getImageUrl(imgUrl) {
   </q-page>
 
   <q-dialog v-model="paypalDialog">
-    <PayaplCard :amount="album.amount" :productId="album.id" :kind="4" :intro="album.intro" :productName="album.title"/>
+    <PayaplCard :amount="album.amount" :productId="album.id" :kind="4" :intro="album.intro" :productName="album.title" :url='"/userAlbumDetail?aid="+aid'/>
   </q-dialog>
 </template>
 

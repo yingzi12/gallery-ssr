@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import {useUserStore} from '@/stores/useUserStore';
-
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
-const userStore = useUserStore();
 const drawer = ref(false);
 const link = ref('detail')
 const users = ref(null)
 const previewImage = ref("/favicon.png")
-// console.log(userStore.token)
 
-const id = ref(userStore.id);
+const tokenCookie = useCookie('token');
+console.log("tokenCookie")
+console.log(tokenCookie)
+const token = tokenCookie.value;
+const idCookie = useCookie('id');
+const id = idCookie.value;
+const userCookie = useCookie('userInfo');
+const userInfo = userCookie.value;
+
 const name = ref(null);
 const nickname = ref(null);
 const email = ref(null);
@@ -29,11 +33,10 @@ async function getDetail() {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
-  // console.log(data.code)
   if (data.code == 200) {
     name.value = data.data.name;
     nickname.value = data.data.nickname;
@@ -52,15 +55,28 @@ async function getDetail() {
 getDetail();
 
 const logout = async () => {
-  userStore.logout();
+  console.log("------logout------------")
+  const tokenCookie = useCookie('token');
+  tokenCookie.value=null;
+  const idCookie = useCookie('id');
+  idCookie.value=null;
+  const userCookie = useCookie('userInfo');
+  userCookie.value=null;
+  const response = await axios.get(`/api/admin/users/logout`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  });
   router.push('/login'); // 假设登录页面的路由为 '/login'
 };
 
 onMounted(() => {
   // 当组件挂载时检查用户的登录状态
-  previewImage.value = (userStore.user == null || userStore.user.imgUrl == null) ? "/favicon.png" : userStore.user.imgUrl;
-  users.value = userStore.user;
-  userStore.refreshCookieExpiration();
+  previewImage.value = (userInfo == null || userInfo.imgUrl == null) ? "/favicon.png" : userInfo.imgUrl;
+  users.value = userInfo;
+  // userStore.refreshCookieExpiration();
 });
 </script>
 

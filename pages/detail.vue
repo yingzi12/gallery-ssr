@@ -78,6 +78,7 @@ async function getInfo() {
   const data = response.data;
   if (data.code == 200) {
     album.value = data.data;
+    isCollection.value=album.value.isCollection
     title.value = "图集网-" + album.value.title
     ortTile.value = album.value.title
     orgDec.value = album.value.description
@@ -85,19 +86,19 @@ async function getInfo() {
 
   }
 }
-async function getCollection() {
-  // 滚动到顶部
-  const response = await axios.get(`/api/userCollection/getInfo?aid=${album.id}&ctype=1&title=${album.title}`)
-  const data = response.data;
-  if (data.code == 200) {
-    if(data.data){
-      isCollection.value=1;
-    }else {
-      isCollection.value=2;
-    }
-  }
-}
-getCollection();
+// async function getCollection() {
+//   // 滚动到顶部
+//   const response = await axios.get(`/api/userCollection/getInfo?aid=${album.id}&ctype=1&title=${album.title}`)
+//   const data = response.data;
+//   if (data.code == 200) {
+//     if(data.data){
+//       isCollection.value=1;
+//     }else {
+//       isCollection.value=2;
+//     }
+//   }
+// }
+// getCollection();
 async function onCollection(album:any) {
   // 滚动到顶部
   const response = await axios.get(`/api/admin/userCollection/on?aid=${album.id}&ctype=1&title=${album.title}`)

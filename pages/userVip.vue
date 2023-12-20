@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+
 import {useRoute} from "vue-router";
 import PayaplCard from "~/pages/payaplCard.vue";
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 const route = useRoute();
 
-const userStore = useUserStore();
+
 const userId = ref(route.query.userId);
 const current = ref(1)
 const slide = ref('first')
@@ -22,7 +24,6 @@ const productIntro = ref(null);
 
 const vipList = ref([]);
 const total = ref(0);
-const isAttention = ref(2)
 
 const queryData = reactive({
   form: {},
@@ -74,7 +75,7 @@ async function getDetail() {
   const response = await axios.get(`/api/systemUser/info?userId=${userId.value}`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
@@ -136,7 +137,11 @@ function getImageUrl(imgUrl:string) {
     </q-card>
 
   </div>
-
+  <div v-if="vipList.length ==0">
+     <div class="flex-center">
+       <p class="text-h1 content-center bg-yellow">用户未设置VIP</p>
+     </div>
+  </div>
   <div>
     <div class="flex flex-center q-gutter-md" style="padding: 20px">
       <div v-for="(vip,index) in vipList" :key="vip.id" class="row justify-center">
@@ -219,7 +224,7 @@ function getImageUrl(imgUrl:string) {
     <div class="col-2"></div>
   </div>
   <q-dialog v-model="paypalDialog">
-    <PayaplCard :amount="productAmount" :productId="productId" :kind="2" :intro="productIntro" :productName="productName"/>
+    <PayaplCard :amount="productAmount" :productId="productId" :kind="2" :intro="productIntro" :productName="productName" :url='"/userVip?userId="+userId'/>
   </q-dialog>
 </template>
 

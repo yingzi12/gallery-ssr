@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 
 const $q = useQuasar()
-const userStore = useUserStore();
+
 
 const oldPassword = ref(null)
 const newPassword = ref(null)
@@ -45,7 +46,7 @@ async function onSubmit() {
   }),{
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     }
   });
   const data = response.data;

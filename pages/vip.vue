@@ -1,10 +1,29 @@
 <script lang="ts" setup>
+import PayaplCard from "~/pages/payaplCard.vue";
+
+
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
+const current = ref(1)
+const slide = ref('first')
+// const nickname = ref('')
+const intro = ref('')
+const imgUrl = ref("/favicon.png");
+const countSee = ref(0);
+// const countLike = ref(0);
+// const countAttention = ref(0);
+
+const productName = ref(null);
+const productId = ref(null);
+const productAmount = ref(null);
+const productIntro = ref(null);
+
 const vips = ref([
   {
     id: 1,
     name: 'monthly', // 对应于 messages 中的键
     sourcePrice: "",
-    price: '2.99$',
+    price: '2.99',
     date: 'month', // 对应于 messages 中的键
     features: ['download', 'exclusiveLogo', 'videos']
   },
@@ -12,7 +31,7 @@ const vips = ref([
     id: 3,
     name: 'halfYear',
     sourcePrice: "16.9$",
-    price: '14.9$',
+    price: '14.90',
     date: 'halfYear',
     features: ['download', 'exclusiveLogo', 'discount98', 'videos']
   },
@@ -20,7 +39,7 @@ const vips = ref([
     id: 4,
     name: 'yearly',
     sourcePrice: "32.9$",
-    price: '28.9$',
+    price: '28.90',
     date: 'year',
     features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount95', 'videos']
   },
@@ -28,13 +47,22 @@ const vips = ref([
     id: 5,
     name: 'lifetime',
     sourcePrice: "99.9$",
-    price: '49.9$',
+    price: '49.90',
     date: 'lifetime',
     features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount90', 'exclusiveServices', 'videos']
   }
 ]);
-const buyvip = (id: number) => {
-  // 处理购买逻辑
+const url="/vip"
+const paypalDialog = ref(false);
+
+function openPayPalDialog (vip:any){
+  console.log("------------openPayPalDialog---------------------------")
+  paypalDialog.value = true;
+  productId.value=vip.id;
+  productName.value=vip.name;
+  productIntro.value=vip.name;
+  productAmount.value=vip.price;
+
 };
 </script>
 
@@ -64,7 +92,7 @@ const buyvip = (id: number) => {
             </q-card-section>
 
             <q-card-actions align="right" style="padding: 10px">
-              <q-btn color="primary" icon="shopping_cart" label="购买" @click="buyvip(vip.id)"/>
+              <q-btn color="primary" icon="shopping_cart" label="购买" @click="openPayPalDialog(vip)"/>
             </q-card-actions>
           </q-card>
         </div>
@@ -103,7 +131,9 @@ const buyvip = (id: number) => {
     </div>
     <div class="col-2"></div>
   </div>
-
+  <q-dialog v-model="paypalDialog">
+    <PayaplCard :amount="productAmount" :productId="productId" :kind="1" :intro="productIntro" :productName="productName" :url="url"/>
+  </q-dialog>
 </template>
 
 <style scoped>

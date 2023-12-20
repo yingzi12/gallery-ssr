@@ -3,7 +3,7 @@
 import Big from "big.js/big.mjs";
 
 const $q = useQuasar()
-const userStore = useUserStore();
+
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
 const email = ref(null)
@@ -60,7 +60,7 @@ async function onSubmit() {
   }),{
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     }
   });
   const data = response.data;

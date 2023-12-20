@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {useRoute} from "vue-router";
-import {useUserStore} from "~/stores/useUserStore";
+
 const route = useRoute();
-const userStore = useUserStore();
+
 useHead({
   title: "图集网",
   meta: [
@@ -11,14 +11,13 @@ useHead({
 
   ],
 })
-
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 const invite = ref(route.query.invite);
-console.log("invite1")
-console.log(invite.value)
+
 if(invite.value) {
-  console.log("invite2")
-  console.log(invite)
-  userStore.setInvite(invite)
+  const inviteCookie = useCookie('invite');
+  inviteCookie.value=invite.value
 }
 const current = ref(1)
 const slide = ref(0)

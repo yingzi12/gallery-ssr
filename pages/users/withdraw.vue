@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 //关注
-import {useUserStore} from "~/stores/useUserStore";
+ const tokenCookie = useCookie('token');
+    const token = tokenCookie.value;
 
-const userStore = useUserStore();
+
 
 definePageMeta({
   key: route => route.fullPath
@@ -26,7 +27,7 @@ async function getList(page: number) {
   try {
     const response = await axios.get('/api/admin/userWithdraw/list?' + tansParams(queryParams.value), {
       headers: {
-        'Authorization': `Bearer ${userStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     });
     if (response.data.code == 200) {
@@ -42,7 +43,7 @@ async function getDetail() {
   const response = await axios.get(`/api/admin/users/info`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
@@ -68,7 +69,7 @@ getList(1)
     </router-link>
 
     <q-list bordered class="rounded-borders" style="max-width: 600px">
-      <q-item-label header>Google Inbox style</q-item-label>
+      <q-item-label header>提现记录（{{total}}）</q-item-label>
       <div v-for="(withdraw,index) in withdrawList">
       <q-item>
         <q-item-section>

@@ -1,8 +1,10 @@
 <template>
   <q-card class="my-card">
     <q-card-section class="bg-primary text-white">
-      <div class="text-h6">{{ props.productName }}</div>
-      <div class="text-subtitle2">by John Doe</div>
+      <div class="text-h6" v-if="props.kind != 1">{{ props.productName }}</div>
+      <div class="text-h6" v-if="props.kind==1">{{   $t(`vip.${props.productName}`) }}</div>
+
+      <div class="text-subtitle2">{{ $t(`vip.cancellation`) }}</div>
     </q-card-section>
     <q-card-section>
       {{ props.intro }}
@@ -59,6 +61,10 @@ const props = defineProps({
   intro: {
     type: String
   },
+  url: {
+    type: String,
+    default:"/index"
+  },
 });
 
 
@@ -66,15 +72,10 @@ const clientId = 'AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTp
 // const clientToken = ref(null); // 替换为您的 PayPal Client Token
 
 onMounted(async () => {
-  console.log("------------1-------------")
   // await getToken();  // 确保先获取 token
   await loadPayPalSDK();  // 等待 SDK 加载
-  console.log("------------2-------------")
   loadStyleSheet();
-  console.log("------------3-------------")
   initializePayPalButton();  // 初始化 PayPal 按钮
-  console.log("------------4-------------")
-
 });
 
 function loadPayPalSDK() {
@@ -89,24 +90,18 @@ function loadPayPalSDK() {
   });
 }
 function initializePayPalButton() {
-  console.log("------------initializePayPalButton-------------")
   if (window.paypal) {
     window.paypal.Buttons({
       createOrder: createOrderCallback,
       onApprove: (data) => onApproveCallback(data.orderID),
     }).render("#paypal-button-container");
-    console.log("------------paypal-button-container-------------")
     const cardField = window.paypal.CardFields({
       createOrder: createOrderCallback,
       onApprove: onApproveCallback,
     });
-    console.log("------------cardField-------------")
-    console.log(cardField)
-    console.log(cardField.isEligible())
 
 // Render each field after checking for eligibility
     if (cardField.isEligible()) {
-      console.log("------------cardField.isEligible()---1----------")
 
       const nameField = cardField.NameField();
       nameField.render("#card-name-field-container");
@@ -119,7 +114,6 @@ function initializePayPalButton() {
 
       const expiryField = cardField.ExpiryField();
       expiryField.render("#card-expiry-field-container");
-      console.log("------------cardField.isEligible()- 2------------")
 
       // Add click listener to submit button and call the submit function on the CardField component
       document
@@ -131,9 +125,7 @@ function initializePayPalButton() {
               );
             });
           });
-      console.log("------------cardField.isEligible()- 3-----------")
     } else {
-      console.log("------------cardField.isEligible()-false ------------")
       // Hides card fields if the merchant isn't eligible
       document.querySelector("#card-form").style = "display: none";
     }
@@ -141,7 +133,6 @@ function initializePayPalButton() {
 }
 
 function loadStyleSheet() {
-  console.log("------------loadStyleSheet-------------")
 
   const link = document.createElement('link');
   link.rel = 'stylesheet';
@@ -151,7 +142,6 @@ function loadStyleSheet() {
 }
 //Close 3Ds Dialog
 async function createOrderCallback() {
-  console.log("------------createOrderCallback-------------")
 
   try {//server/api/admin/paypal/orders.post.ts
     const response = await axios.post("/api/admin/paypal/orders", JSON.stringify({
@@ -166,10 +156,31 @@ async function createOrderCallback() {
       },
     });
 
-    const data = await response.data;
-    console.log(data.data)
-    if (data.data.id) {
-      return data.data.id;
+    const orderData = await response.data;
+    const message=orderData.message;
+
+    console.log(orderData);
+
+    console.log(message);
+    if(orderData.code!=200) {
+      $q.dialog({
+        title: '通知',
+        message: '支付失败.',
+        ok: {
+          push: true
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+      }).onOk(async () => {
+
+      }).onCancel(() => {
+        // console.log('Cancel')
+      });
+    }
+    if (orderData.data.id) {
+      return orderData.data.id;
     } else {
       const errorDetail = orderData?.details?.[0];
       const errorMessage = errorDetail
@@ -185,8 +196,6 @@ async function createOrderCallback() {
 }
 
 async function onApproveCallback(data, actions) {
-  console.log("------------onApproveCallback-------------")
-  console.log(data)
   try {
     //server/api/paypal/ordersCapture.get.ts
     const response = await axios.get(`/api/admin/paypal/ordersCapture?orderId=${data}`, {
@@ -195,14 +204,16 @@ async function onApproveCallback(data, actions) {
       },
     });
 
-    const orderData = await response.json();
+    const orderData = await response.data;
     // Three cases to handle:
     //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
     //   (2) Other non-recoverable errors -> Show a failure message
     //   (3) Successful transaction -> Show confirmation or thank you message
     const message=orderData.message;
+    console.log(orderData);
+
     console.log(message);
-    if(orderData.data.code==200) {
+    if(orderData.code==200) {
       $q.dialog({
         title: '通知',
         message: '支付完成.',

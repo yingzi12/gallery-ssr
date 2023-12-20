@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/useUserStore";
+
 import {useRoute} from "vue-router";
 const route = useRoute();
 
-const userStore = useUserStore();
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 const userId = ref(route.query.userId);
 const current = ref(1)
 const slide = ref('first')
-const nickname = ref('')
+const nickname = ref(null)
 const intro = ref('')
 const imgUrl = ref("/favicon.png");
 const countSee = ref(0);
@@ -23,6 +24,7 @@ const queryData = reactive({
   queryParams: {
     pageNum: 1,
     title: '',
+    userId: userId.value,
   },
   rules: {}
 });
@@ -40,7 +42,6 @@ const {queryParams, form, rules} = toRefs(queryData);
 async function getList(page: number) {
   // 滚动到顶部
   current.value = page
-  // queryParams.value.title = title.value;
   queryParams.value.pageNum = page;
   const response = await axios.get('/api/userAlbum/list?' + tansParams(queryParams.value))
   const data = response.data;
@@ -57,18 +58,25 @@ async function getDetail() {
   const response = await axios.get(`/api/systemUser/info?userId=${userId.value}`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
+
   if (data.code == 200) {
-    nickname.value=data.data.nickname;
-    isAttention.value=data.data.isAttention
-    intro.value = data.data.intro;
-    imgUrl.value = data.data.imgUrl ==null ? "/favicon.png": data.data.imgUrl ;
-    countSee.value = data.data.countSee;
-    countLike.value = data.data.countLike;
-    countAttention.value = data.data.countAttention;
+    const userData = data.data;
+    console.log("userData")
+    console.log(userData)
+
+    nickname.value=userData.nickname;
+    console.log("nickname")
+    console.log(nickname.value)
+    isAttention.value=userData.isAttention
+    intro.value = userData.intro;
+    imgUrl.value = userData.imgUrl ==null ? "/favicon.png": userData.imgUrl ;
+    countSee.value = userData.countSee;
+    countLike.value = userData.countLike;
+    countAttention.value = userData.countAttention;
   }
 }
 
@@ -134,12 +142,16 @@ function getImageUrl(imgUrl) {
       <q-card-actions>
         <q-btn v-if="isAttention == 2" icon="favorite_border" @click="onAttention()">关注</q-btn>
         <q-btn v-if="isAttention == 1"  icon="favorite"  @click="closeAttention()">取消关注</q-btn>
-<!--        <q-btn color="secondary" flat> <a :href=`/userVip?userId=${userId}`>VIP</a> </q-btn>-->
         <q-btn color="secondary" flat> <a :href="'/userVip?userId=' + userId">VIP</a> </q-btn>
 
       </q-card-actions>
     </q-card>
 
+  </div>
+  <div v-if="albumList.length ==0">
+    <div class="caption">
+      <p class="text-h1 content-center bg-yellow">用户未创建图集</p>
+    </div>
   </div>
   <div class="q-pa-md">
     <div class="row justify-center q-gutter-sm">
@@ -231,4 +243,5 @@ function getImageUrl(imgUrl) {
   display: flex
   justify-content: center
   align-items: center
+
 </style>

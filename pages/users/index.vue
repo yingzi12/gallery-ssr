@@ -2,15 +2,17 @@
 definePageMeta({
   key: route => route.fullPath
 })
-import {useUserStore} from "~/stores/useUserStore";
-
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
+const idCookie = useCookie('id');
+const id = idCookie.value;
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 
-const userStore = useUserStore();
+
 const user = ref(null);
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 
-const id = ref(userStore.id);
+// const id = ref(userStore.id);
 const name = ref(null);
 const nickname = ref(null);
 const email = ref(null);
@@ -27,12 +29,11 @@ async function getDetail() {
   const response = await axios.get(`/api/admin/users/info`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${userStore.token}`
+      'Authorization': `Bearer ${token}`
     },
   });
   const data = response.data;
   if (data.code == 200) {
-    id.value=data.data.id;
     name.value = data.data.name;
     nickname.value = data.data.nickname;
     email.value = data.data.email;

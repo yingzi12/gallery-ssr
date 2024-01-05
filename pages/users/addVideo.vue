@@ -2,7 +2,8 @@
 import SparkMD5 from 'spark-md5';
 import {useRoute} from "vue-router";
 import {useQuasar} from "quasar";
-
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 const $q = useQuasar();
 const config = useRuntimeConfig();
 definePageMeta({
@@ -166,7 +167,7 @@ async function uploadVideoFile() {
         console.log('Upload update complete');
       } else {
         // 生成唯一标识符：文件名-时间戳
-        const identifier = `${selectedFile.value.name}`;
+        const identifier = `${md5}_${selectedFile.value.name}`;
         // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
         await uploaderVideo.uploadFile(selectedFile.value, identifier, token, day, aid.value, isFree, md5);
         console.log('Upload complete');

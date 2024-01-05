@@ -1,9 +1,6 @@
 <script lang="ts" setup>
  const tokenCookie = useCookie('token');
-    const token = tokenCookie.value;
-
-
-
+ const token = tokenCookie.value;
 definePageMeta({
   key: route => route.fullPath
 })

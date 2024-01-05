@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 //收藏
- const tokenCookie = useCookie('token');
-    const token = tokenCookie.value;
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 
 definePageMeta({
   key: route => route.fullPath

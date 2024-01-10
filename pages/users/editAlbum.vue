@@ -231,7 +231,7 @@ getDetail()
       />
 
       <div>
-        <q-select v-model="charge" :options="chargeList" emit-value hint="收费方式" label="收费方式"
+        <q-select v-model="charge" :options="chargeList" emit-value hint="付费方式" label="付费方式"
                   map-options
                   outlined
                   @update:modelValue="updateCharge"/>

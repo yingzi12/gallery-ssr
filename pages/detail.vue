@@ -86,18 +86,6 @@ async function getInfo() {
 
   }
 }
-// async function getCollection() {
-//   // 滚动到顶部
-//   const response = await axios.get(`/api/userCollection/getInfo?aid=${album.id}&ctype=1&title=${album.title}`)
-//   const data = response.data;
-//   if (data.code == 200) {
-//     if(data.data){
-//       isCollection.value=1;
-//     }else {
-//       isCollection.value=2;
-//     }
-//   }
-// }
 // getCollection();
 async function onCollection(album:any) {
   // 滚动到顶部
@@ -171,7 +159,7 @@ function imageUrl(album) {
               album.girl
             }}
           </div>
-          <div>照片:{{ album.photoNumber }}</div>
+          <div>照片:{{ album.numberPhotos }}</div>
           <div>浏览次数:{{ album.countSee }}</div>
           <div>类型: {{ album.tags }}</div>
           <div>创建时间：{{ album.createTime }}</div>

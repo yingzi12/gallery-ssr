@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import {useRoute} from "vue-router";
-
 import PayaplCard from "~/pages/payaplCard.vue";
 import {useQuasar} from "quasar";
 const router = useRouter(); // 使用 Vue Router 的 useRouter 函数
 const amount=ref(0.0);
-const intro=ref("这是简介，这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介");
+const intro=ref("");
 
 const tokenCookie = useCookie('token');
 const token = tokenCookie.value;
@@ -18,16 +17,48 @@ const $q = useQuasar();
 const imgTotal = ref(0);
 const videoTotal = ref(0);
 const isSee = ref(false);
-const imageCount = ref(0);
-const videoCount = ref(0);
-
 const imageList = ref([]);
 const videoList = ref([]);
 
-const imageLockList = ref([]);
-const videoLockList = ref([]);
 const isCollection = ref(2)
+const isRefreshing = ref(false);
+const onLoad = async (index: number, done: () => void) => {
+  if (!isSee.value || disableInfiniteScroll.value) {
+    done();
+    return;
+  }
 
+  try {
+    isRefreshing.value = true
+    const response = await axios.get(`/api/userImage/list?aid=${aid.value}&pageNum=` + (index + 1), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const data = response.data;
+    if (data.code === 200) {
+      const imgList = data.data;
+      imageList.value.push(...imgList);
+
+      // 判断是否还有更多数据需要加载
+      if (imgList.length === 0 || imageList.value.length >= imgTotal.value) {
+        disableInfiniteScroll.value = true;
+      }
+    } else {
+      disableInfiniteScroll.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+    disableInfiniteScroll.value = true;
+  } finally {
+    isRefreshing.value = false;
+    done();
+  }
+}
+
+// 使用防抖包装 onLoad 保持不变
+const debouncedOnLoad = debounce(onLoad, 300);
 //下拉设置
 const disableInfiniteScroll = ref(true); // 初始设置为 true
 // 防抖函数定义
@@ -45,53 +76,6 @@ function debounce(func, wait, immediate) {
     if (callNow) func.apply(context, args);
   };
 };
-
-
-
-const isRefreshing = ref(false);
-const onLoad = async (index: number, done: () => void) => {
-  if (!isSee.value || disableInfiniteScroll.value) {
-    done();
-    return;
-  }
-  if (isSee.value) {
-    // console.log("-----------onLoad--------------"+index.toString())
-    imageLockList.value = []
-    try {
-      isRefreshing.value = true
-      const response = await axios.get(`/api/userImage/list?aid=${aid.value}&isFree=2&pageNum=` + (index + 1), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      // console.log("-----------userImage--------------")
-      const data = response.data;
-      if ( data.code === 200) {
-        const imgList = data.data;
-        imgTotal.value = data.total
-        if (imgList.length == 0) {
-          disableInfiniteScroll.value = true
-        }
-        // console.log("-----------userImage--------------")
-        imageList.value.push(...imgList);
-        isRefreshing.value = false;
-      } else {
-        disableInfiniteScroll.value = true
-        isRefreshing.value = false;
-      }
-      done();
-    } catch (error) {
-      disableInfiniteScroll.value = true;
-      console.error(error);
-      done();
-    } finally {
-      isRefreshing.value = false;
-    }
-  }
-}
-// 使用防抖包装 onLoad
-const debouncedOnLoad = debounce(onLoad, 300);
 const album = ref({});
 const title = ref("图集网")
 
@@ -126,17 +110,9 @@ async function getInfo() {
     title.value = "图集网-" + album.value.title
     ortTile.value = album.value.title
     orgDec.value = album.value.description
-    orgImgae.value = album.value.sourceWeb + album.value.imgUrl
-    if (!data.data.isSee) {
-      imageCount.value = data.data.imageCount;
-      for (let i = 0; i < imageCount.value; i++) {
-        imageLockList.value.push({'imgUrl': '/lock_image.png'})
-      }
-      videoCount.value = data.data.videoCount;
-      for (let i = 0; i < videoCount.value; i++) {
-        videoLockList.value.push({'imgUrl': '/lock_video.png'})
-      }
-    }
+    orgImgae.value = album.value.imgUrl
+    imgTotal.value = album.value.numberPhotos
+    videoTotal.value = album.value.numberVideo
     const imgList = album.value.imageList
     const vieList = album.value.videoList
     imageList.value.push(...imgList);
@@ -147,6 +123,24 @@ async function getInfo() {
     }
   }
 }
+
+async function getList(page: number) {
+  // queryParams.value.aid = aid.value;
+  // queryParams.value.pageNum = page;
+  try {
+    const response = await axios.get('/api/userImage/list?aid='+aid.value+"&pageNum="+page+"&pageSize="+10 , {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (response.data.code == 200) {
+      imageList.value.push(...response.data.data);
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
+  }
+}
+
 async function onCollection() {
   if ( isCollection.value==1) {
     return; // 如果已经在处理收藏请求，则不执行任何操作
@@ -174,21 +168,6 @@ async function closeCollection() {
   }
 }
 
-async function getVideoList() {
-  if (isSee.value) {
-    videoLockList.value = []
-    // 滚动到顶部
-    const response = await axios.get(`/api/userVideo/list?aid=${aid.value}&isFree=2`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    const data = response.data;
-    if (data.code === 200) {
-      videoList.value.push(...data.data);
-    }
-  }
-}
 const randomList = ref([]);
 
 async function getRandom() {
@@ -236,13 +215,16 @@ watch(isSee, (newValue, oldValue) => {
     console.log(` onLoad  isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value}  1`)
     onLoad(0, () => {
     });
-    getVideoList();
+    // getVideoList();
   }
 }, {immediate: true}); // immediate: true 确保在挂载时立即触发一次
-// 在组件挂载后启用无限滚动
-// onMounted(() => {
-//   disableInfiniteScroll.value = true;
-// });
+const refreshImages = async () => {
+  // Logic to refresh images
+  // For example, reset your image list and call the API to fetch the first set of images
+  imageList.value = [];
+  await debouncedOnLoad(0, () => {});
+};
+
 const  stars=ref(3);
 function getImageUrl(imgUrl) {
   if (imgUrl != null && imgUrl !== undefined && imgUrl !== '') {
@@ -255,7 +237,7 @@ function getImageUrl(imgUrl) {
 <template>
   <q-page>
     <div class="q-pa-md">
-      <div>
+      <div class="my-card-container">
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section style="width: 235px;height: 352px">
@@ -314,7 +296,8 @@ function getImageUrl(imgUrl) {
                   transition="scale"
               >
                 <q-card bordered class="q-ma-sm" flat>
-                  <img :src="video.imgUrl">
+                  <img v-if="video.status != -1" :src="getImageUrl(video.imgUrl)">
+                  <img v-if="video.status == -1" :src="getImageUrl('/lock_video.png')">
 
                   <q-card-section>
                     <q-btn v-if="video.isFree == 2" color="primary" icon="visibility" square>预览</q-btn>
@@ -322,40 +305,26 @@ function getImageUrl(imgUrl) {
                   </q-card-section>
                 </q-card>
               </q-intersection>
-              <q-intersection
-                  v-for="(videoLock,index) in videoLockList"
-                  :key="index"
-                  class="example-item"
-                  transition="scale"
-              >
-                <q-card bordered class="q-ma-sm" flat>
-                  <img :src="getImageUrl(videoLock.imgUrl)">
-                </q-card>
-              </q-intersection>
+
             </div>
           </div>
         </div>
         <div>
           <q-th>图片列表（{{ imgTotal }}）</q-th>
-
           <!--    内容页-->
-          <q-infinite-scroll :disable="disableInfiniteScroll" :offset="250" @load="debouncedOnLoad">
-            <div v-for="(image, index) in imageList" :key="index" class="caption">
-              <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>
-            </div>
-
-            <template v-slot:loading>
-              <div class="row justify-center q-my-md">
-                <q-spinner-dots color="primary" size="40px"/>
+          <q-pull-to-refresh @refresh="refreshImages">
+            <q-infinite-scroll :disable="disableInfiniteScroll" :offset="250" @load="debouncedOnLoad">
+              <div v-for="(image, index) in imageList" :key="index" class="caption">
+                <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>
               </div>
-            </template>
-          </q-infinite-scroll>
-          <q-pull-to-refresh>
-            <div v-for="(imageLock, index) in imageLockList" :key="index" class="caption">
-              <img :src="imageLock.imgUrl" class="responsive-image"/>
-            </div>
-          </q-pull-to-refresh>
 
+              <template v-slot:loading>
+                <div class="row justify-center q-my-md">
+                  <q-spinner-dots color="primary" size="40px"/>
+                </div>
+              </template>
+            </q-infinite-scroll>
+          </q-pull-to-refresh>
         </div>
         <div style=" text-align: center;font-size: large">
           <a v-if="album.pre != null " :href='"/userAlbumDetail?aid="+album.pre.id'
@@ -383,9 +352,6 @@ function getImageUrl(imgUrl) {
                     <p class="text-caption" style="padding: 0px"> {{ album.createTime }} </p>
                   </div>
                 </q-card-section>
-                <!--            <q-card-section class="q-pt-none">-->
-                <!--              {{ lorem }}-->
-                <!--            </q-card-section>-->
               </q-card>
 
             </q-intersection>
@@ -434,6 +400,17 @@ function getImageUrl(imgUrl) {
 
 
 <style lang="sass" scoped>
+.my-card-container
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100%
+
+
+.my-card
+  width: 100%
+  max-width: 750px
+
 .responsive-image
   max-width: 980px
   height: auto
@@ -475,9 +452,7 @@ function getImageUrl(imgUrl) {
   margin: 0 auto
   padding: 20px
   text-align: center
-.my-card
-  width: 100%
-  max-width: 750px
+
 .headImage
   max-width: 200px
   height: 302px

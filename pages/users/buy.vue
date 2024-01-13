@@ -1,6 +1,6 @@
 <script lang="ts" setup>
- const tokenCookie = useCookie('token');
- const token = tokenCookie.value;
+const tokenCookie = useCookie('token');
+const token = tokenCookie.value;
 definePageMeta({
   key: route => route.fullPath
 })
@@ -48,29 +48,29 @@ function getImageUrl(imgUrl:string) {
     <q-list bordered padding>
       <q-item-label header>列表（{{total}}）</q-item-label>
       <div v-for="(album,index) in sellList">
-      <q-item>
-        <q-item-section class="q-ml-none" thumbnail top>
-          <img :src="getImageUrl(album.image)">
-        </q-item-section>
+        <q-item>
+          <q-item-section class="q-ml-none" thumbnail top>
+            <img :src="getImageUrl(album.image)">
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label>
-            <a :href='"/userAlbumDetail?aid="+album.id'>
-            {{ album.title }}
-            </a>
-          </q-item-label>
-          <q-item-label caption>{{ album.intro }}
-          </q-item-label>
-        </q-item-section>
+          <q-item-section>
+            <q-item-label>
+              <a :href='"/userAlbumDetail?aid="+album.id'>
+                {{ album.title }}
+              </a>
+            </q-item-label>
+            <q-item-label caption>{{ album.intro }}
+            </q-item-label>
+          </q-item-section>
 
-        <!--        <q-item-section side top>-->
-        <!--          <q-item-label caption></q-item-label>-->
-        <!--          <q-item-label caption>2023-11-11</q-item-label>-->
+          <!--        <q-item-section side top>-->
+          <!--          <q-item-label caption></q-item-label>-->
+          <!--          <q-item-label caption>2023-11-11</q-item-label>-->
 
-        <!--        </q-item-section>-->
-      </q-item>
+          <!--        </q-item-section>-->
+        </q-item>
 
-      <q-separator inset="item" spaced/>
+        <q-separator inset="item" spaced/>
       </div>
     </q-list>
     <div class="q-pa-lg flex flex-center">

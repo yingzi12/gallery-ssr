@@ -61,7 +61,7 @@ async function deleteImage(id: number) {
       color: 'negative'
     },
   }).onOk(async () => {
-    const response = await axios.get('/api/admin/userImage/remove?id=' + id.toString(), {
+    const response = await axios.get('/api/admin/userImage/remove?id=' + id.toString()+'&aid=' + aid.toString(), {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token}`

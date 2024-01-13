@@ -42,63 +42,63 @@ const copyToClipboard = async () => {
   <div class="q-pa-md" style="max-width: 350px">
     <q-list bordered padding>
       <q-item-label header>已邀请用户</q-item-label>
-      <q-item>
-        <q-item-section>
-          <q-item-label>用户1111</q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>2023-11-12 11:11:11</q-item-label>
-        </q-item-section>
-        <q-item-section side top>
-          <q-item-label caption>11.2</q-item-label>
-          <q-icon color="yellow" name="star"/>
-        </q-item-section>
-      </q-item>
+<!--      <q-item>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>用户1111</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>2023-11-12 11:11:11</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section side top>-->
+<!--          <q-item-label caption>11.2</q-item-label>-->
+<!--          <q-icon color="yellow" name="star"/>-->
+<!--        </q-item-section>-->
+<!--      </q-item>-->
 
-      <q-separator inset="item" spaced/>
+<!--      <q-separator inset="item" spaced/>-->
 
-      <q-item>
-        <q-item-section>
-          <q-item-label>用户1111</q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>2023-11-12 11:11:11</q-item-label>
-        </q-item-section>
-        <q-item-section side top>
-          <q-item-label caption>11.2</q-item-label>
-          <q-icon color="yellow" name="star"/>
-        </q-item-section>
-      </q-item>
+<!--      <q-item>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>用户1111</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>2023-11-12 11:11:11</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section side top>-->
+<!--          <q-item-label caption>11.2</q-item-label>-->
+<!--          <q-icon color="yellow" name="star"/>-->
+<!--        </q-item-section>-->
+<!--      </q-item>-->
 
-      <q-separator inset="item" spaced/>
+<!--      <q-separator inset="item" spaced/>-->
 
-      <q-item>
-        <q-item-section>
-          <q-item-label>用户1111</q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>2023-11-12 11:11:11</q-item-label>
-        </q-item-section>
-        <q-item-section side top>
-          <q-item-label caption>11.2</q-item-label>
-          <q-icon color="yellow" name="star"/>
-        </q-item-section>
-      </q-item>
+<!--      <q-item>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>用户1111</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>2023-11-12 11:11:11</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section side top>-->
+<!--          <q-item-label caption>11.2</q-item-label>-->
+<!--          <q-icon color="yellow" name="star"/>-->
+<!--        </q-item-section>-->
+<!--      </q-item>-->
 
-      <q-separator inset="item" spaced/>
+<!--      <q-separator inset="item" spaced/>-->
 
-      <q-item>
-        <q-item-section>
-          <q-item-label>用户1111</q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>2023-11-12 11:11:11</q-item-label>
-        </q-item-section>
-        <q-item-section side top>
-          <q-item-label caption>11.2</q-item-label>
-          <q-icon color="yellow" name="star"/>
-        </q-item-section>
-      </q-item>
+<!--      <q-item>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>用户1111</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section>-->
+<!--          <q-item-label>2023-11-12 11:11:11</q-item-label>-->
+<!--        </q-item-section>-->
+<!--        <q-item-section side top>-->
+<!--          <q-item-label caption>11.2</q-item-label>-->
+<!--          <q-icon color="yellow" name="star"/>-->
+<!--        </q-item-section>-->
+<!--      </q-item>-->
 
 
     </q-list>

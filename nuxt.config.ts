@@ -59,5 +59,5 @@ export default defineNuxtConfig({
   ],
   i18n: {
     /* module options */
-  },
+  }
 })

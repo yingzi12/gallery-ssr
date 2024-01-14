@@ -22,6 +22,7 @@ const vips = ref([
   {
     id: 1,
     name: 'monthly', // 对应于 messages 中的键
+    intro:"monthly",
     sourcePrice: "",
     price: '2.99',
     date: 'month', // 对应于 messages 中的键
@@ -30,6 +31,7 @@ const vips = ref([
   {
     id: 3,
     name: 'halfYear',
+    intro:"halfYear",
     sourcePrice: "16.9$",
     price: '14.90',
     date: 'halfYear',
@@ -38,6 +40,7 @@ const vips = ref([
   {
     id: 4,
     name: 'yearly',
+    intro:"yearly",
     sourcePrice: "32.9$",
     price: '28.90',
     date: 'year',
@@ -46,6 +49,7 @@ const vips = ref([
   {
     id: 5,
     name: 'lifetime',
+    intro:"lifetime",
     sourcePrice: "99.9$",
     price: '49.90',
     date: 'lifetime',
@@ -60,7 +64,7 @@ function openPayPalDialog (vip:any){
   paypalDialog.value = true;
   productId.value=vip.id;
   productName.value=vip.name;
-  productIntro.value=vip.name;
+  productIntro.value=vip.intro;
   productAmount.value=vip.price;
 
 };

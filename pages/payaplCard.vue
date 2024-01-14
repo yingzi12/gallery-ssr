@@ -22,13 +22,6 @@
     <q-card-actions justify-center>
       <div >
         <div id="paypal-button-container" class="paypal-button-container"></div>
-<!--        <div id="checkout-form">-->
-<!--          <div id="card-name-field-container"></div>-->
-<!--          <div id="card-number-field-container"></div>-->
-<!--          <div id="card-expiry-field-container"></div>-->
-<!--          <div id="card-cvv-field-container"></div>-->
-<!--          <button id="card-field-submit-button" type="button">Pay now with Card Fields</button>-->
-<!--        </div>-->
       </div>
     </q-card-actions>
   </q-card>
@@ -40,7 +33,10 @@
 import {defineProps, onMounted} from 'vue';
 import {useQuasar} from "quasar";
 const $q = useQuasar();
-
+const tokenCookie = useCookie('token');
+console.log("++++++++++++++++++++++++++++++++++ "+tokenCookie.value );
+const token=tokenCookie.value;
+console.log("===================================token:"+token );
 const props = defineProps({
   amount: {
     type: String,
@@ -65,6 +61,18 @@ const props = defineProps({
     type: String,
     default:"/index"
   },
+  change:{
+    type: String,
+    default:"pc"
+  },
+  returnUrl:{
+    type: String,
+    default:"pc"
+  },
+  cancelUrl:{
+    type: String,
+    default:"pc"
+  }
 });
 
 
@@ -144,6 +152,8 @@ function loadStyleSheet() {
 async function createOrderCallback() {
 
   try {//server/api/admin/paypal/orders.post.ts
+    console.log("--------createOrderCallback---------------------token.d+"+tokenCookie.value)
+    tokenCookie.value=token
     const response = await axios.post("/api/admin/paypal/orders", JSON.stringify({
       amount: discountAmount.value,
       kind: props.kind,
@@ -153,6 +163,8 @@ async function createOrderCallback() {
     }), {
       headers: {
         "Content-Type": "application/json",
+        "change":props.change,
+        "token": `Bearer ${token}`
       },
     });
 
@@ -198,9 +210,14 @@ async function createOrderCallback() {
 async function onApproveCallback(data, actions) {
   try {
     //server/api/paypal/ordersCapture.get.ts
+    console.log("--------onApproveCallback---------------------token.d+"+tokenCookie.value)
+    tokenCookie.value=token
     const response = await axios.get(`/api/admin/paypal/ordersCapture?orderId=${data}`, {
       headers: {
         "Content-Type": "application/json",
+        "change":props.change,
+        "token": `Bearer ${token}`
+
       },
     });
 
@@ -311,6 +328,8 @@ async function getAmount() {
   }),  {
     headers: {
       "Content-Type": "application/json",
+      "change":props.change,
+      "token": `Bearer ${token}`
     }
   })
   const data = response.data;

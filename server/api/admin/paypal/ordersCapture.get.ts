@@ -5,13 +5,16 @@ export default defineEventHandler(async (event) => {
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     const query = getQuery(event)
+    const change= headers.change ? headers.change:"pc";
+    console.log("--------------------change----------"+change)
 
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/admin/payments/ordersCapture?orderId=${query.orderId}`,{
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'change': `${change}`,
             },
         }
     );

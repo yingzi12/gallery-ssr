@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(config => {
             // 
             // userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
             // 重定向到登录页面
-            window.location.href = '/login';
+            // window.location.href = '/login';
             // console.log(`-----------login--------请求---${config.url}-----${token}----`)
         }
     }
@@ -68,7 +68,7 @@ axiosInstance.interceptors.response.use(response => {
         const userCookie = useCookie('userInfo');
         userCookie.value=null;
         //重定向到登录页面
-        // window.location.href = '/login';
+        window.location.href = '/login';
         console.log(`-----------处理响应数据--------请求---${response.config.url}-----${token}----`)
 
     }

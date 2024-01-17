@@ -315,7 +315,9 @@ function getImageUrl(imgUrl) {
           <q-pull-to-refresh @refresh="refreshImages">
             <q-infinite-scroll :disable="disableInfiniteScroll" :offset="250" @load="debouncedOnLoad">
               <div v-for="(image, index) in imageList" :key="index" class="caption">
-                <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>
+                <img v-if="image.status != -1" :src="getImageUrl(image.imgUrl)" class="responsive-image">
+                <img v-if="image.status == -1" :src="getImageUrl('/lock_image.jpg') " class="responsive-image">
+<!--                <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>-->
               </div>
 
               <template v-slot:loading>

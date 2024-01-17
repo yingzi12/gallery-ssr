@@ -34,7 +34,7 @@ class FileUploader {
     async uploadChunk(fileChunk: Blob, identifier: string, chunkNumber: number, totalChunks: number,token:string,day:string,aid:number,isFree:number,md5:string): Promise<void> {
         const exists = await this.checkChunkExists(identifier, chunkNumber,token,day);
         if (exists) {
-            console.log(`Chunk ${chunkNumber} already uploaded.`);
+            //console.log(`Chunk ${chunkNumber} already uploaded.`);
             this.onProgress(chunkNumber, totalChunks);
             return;
         }
@@ -89,11 +89,11 @@ export default FileUploader
 // // ...
 //
 // const uploader = new FileUploader('http://localhost:3000/api/upload', (chunkNumber, totalChunks) => {
-//     console.log(`Uploading chunk ${chunkNumber} of ${totalChunks}`);
+//     //console.log(`Uploading chunk ${chunkNumber} of ${totalChunks}`);
 // });
 //
 // const file = /* 获取文件对象 */;
 // const identifier = 'unique-file-id';
 // uploader.uploadFile(file, identifier)
-//     .then(() => console.log('Upload complete'))
+//     .then(() => //console.log('Upload complete'))
 //     .catch(error => console.error('Upload failed', error));

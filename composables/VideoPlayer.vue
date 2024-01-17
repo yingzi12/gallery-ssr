@@ -30,7 +30,7 @@ const props = defineProps({
 //
 //   options.headers = headers;
 //
-//   console.log("options", options);
+//   //console.log("options", options);
 //
 //   return options;
 // };
@@ -42,10 +42,10 @@ const volume = ref(1);
 onMounted(() => {
   videoPlayer.value = videojs(videoPlayer.value, props.options, () => {
     videoPlayer.value.log('onPlayerReady', this);
-    console.log("onMounted      ")
+    //console.log("onMounted      ")
 
     var vhs = videoPlayer.value.tech().vhs;
-    console.log(vhs);
+    //console.log(vhs);
 
     videoPlayer.value.tech().vhs.xhr.onRequest(playerRequestHook);
   });
@@ -60,10 +60,10 @@ onMounted(() => {
 //   player.tech().vhs.xhr.onRequest(playerXhrRequestHook);
 // });
 const playerRequestHook = (options: any) => {
-  // console.log("playerRequestHook      "+JSON.stringify(options))
-  // console.log("uri      "+options.uri)
+  // //console.log("playerRequestHook      "+JSON.stringify(options))
+  // //console.log("uri      "+options.uri)
   // options.beforeSend = (xhr) => {
-  //   console.log("  beforeSend       ")
+  //   //console.log("  beforeSend       ")
   // Referer不能修改，会报错
   //   xhr.setRequestHeader('Referer', "https://missav.com/");
   // };

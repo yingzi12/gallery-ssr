@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {reactive, ref, toRefs} from 'vue'
 import {tansParams} from "~/server/utils/urlUtils";
 
 const current = ref(1)

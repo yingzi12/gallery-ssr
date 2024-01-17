@@ -51,7 +51,7 @@ async function deleteVideo(video: any, index: number) {
       await getList(1);
     }
   }).onCancel(() => {
-    // console.log('Cancel')
+    // //console.log('Cancel')
   });
 }
 
@@ -73,12 +73,12 @@ async function updateIsFree(id: number, isFree: number) {
       },
     });
     const data = response.data;
-    console.log(data.code)
+    //console.log(data.code)
     if (data.code == 200) {
       await getList(1);
     }
   }).onCancel(() => {
-    // console.log('Cancel')
+    // //console.log('Cancel')
   })
   ;
 }
@@ -160,17 +160,17 @@ async function uploadVideoFile() {
       });
       const data = response.data;
       // const data= checkFileExistence(md5);
-      console.log(data);
+      //console.log(data);
       const isFree = 2;
       if (data != null && data.code == 200) {
         await addVideoRecord(md5, data.data.sourceUrl, isFree);
-        console.log('Upload update complete');
+        //console.log('Upload update complete');
       } else {
         // 生成唯一标识符：文件名-时间戳
         const identifier = `${md5}_${selectedFile.value.name}`;
         // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
         await uploaderVideo.uploadFile(selectedFile.value, identifier, token, day, aid.value, isFree, md5);
-        console.log('Upload complete');
+        //console.log('Upload complete');
       }
       uploadVideoProgress.value = 100; // 更新进度条到100
       selectedFile.value = null;
@@ -249,12 +249,12 @@ async function uploadPreviewVideoFile() {
         },
       });
       const data = response.data;
-      console.log("checkFileExistence");
-      console.log(data);
+      //console.log("checkFileExistence");
+      //console.log(data);
       const isFree = 1;
       if (data != null && data.code == 200) {
         await addVideoRecord(md5, data.data.sourceUrl, isFree);
-        console.log('Upload update complete');
+        //console.log('Upload update complete');
       } else {
         const identifier = `${selectedPreviewFile.value.name}`;
         await uploaderVideoPreview.uploadFile(selectedPreviewFile.value, identifier, token, day, aid.value, isFree, md5);

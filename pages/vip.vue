@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import PayaplCard from "~/pages/payaplCard.vue";
-
-
 const tokenCookie = useCookie('token');
 const token = tokenCookie.value;
 const current = ref(1)
@@ -60,7 +58,7 @@ const url="/vip"
 const paypalDialog = ref(false);
 
 function openPayPalDialog (vip:any){
-  console.log("------------openPayPalDialog---------------------------")
+  //console.log("------------openPayPalDialog---------------------------")
   paypalDialog.value = true;
   productId.value=vip.id;
   productName.value=vip.name;

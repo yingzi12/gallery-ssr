@@ -37,7 +37,7 @@ async function uploadVideoFile() {
       const identifier = `${selectedFile.value.name}`;
       // const identifier = 'unique-file-id'; // 根据需要生成或获取唯一标识符
       await uploaderVideo.uploadFile(selectedFile.value, identifier);
-      console.log('Upload complete');
+      //console.log('Upload complete');
     } catch (error) {
       console.error('Upload failed', error);
     }

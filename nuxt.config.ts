@@ -11,15 +11,9 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     'nuxt-quasar-ui',
-    'nuxt-simple-sitemap',
-    '@nuxtseo/module',
     '@pinia/nuxt'
   ],
   runtimeConfig: {
-    turso: {
-      dbUrl: "https://vedio-db-yingzi12.turso.io/",
-      dbAuthToken: "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOiIyMDIzLTEwLTMwVDA5OjUyOjU5Ljg5OTI0Njk3NVoiLCJpZCI6IjZlOWUxMjkzLTc3MDctMTFlZS04Y2I5LTFlZWY0NDFjZTM4ZiJ9.8KtwHuvcFMcU4NBsNkwV4Wn05RDh4J-GDz4BMQyAU3WrXEnUZqe-9mz7Ceqkog3Ydj4puKfCAHhtan9j3A53BA",
-    },
     // Public keys that are exposed to the client
     public: {
       baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk',
@@ -40,13 +34,6 @@ export default defineNuxtConfig({
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' } // 指向你的 favicon
     ],
-  },
-  nitro: {
-    prerender: {
-      crawlLinks: true,
-      // routes: ['/', 'sitemap.xml'],
-      ignore: ['/tak', '/konfiguration', '/checkout'],
-    },
   },
   site: {
     url: 'https://www.aiavr.uk',

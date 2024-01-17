@@ -63,5 +63,5 @@ export function getBase64FromImageUrl(url: string) {
 // 使用示例
 // const imageUrl = 'http://example.com/image.jpg';
 // getBase64FromImageUrl(imageUrl)
-//     .then(base64String => console.log(base64String))
+//     .then(base64String => //console.log(base64String))
 //     .catch(error => console.error('Error:', error));

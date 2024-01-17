@@ -71,7 +71,7 @@ async function deleteImage(id: number) {
       await getList(1);
     }
   }).onCancel(() => {
-    // console.log('Cancel')
+    // //console.log('Cancel')
   });
 }
 
@@ -98,7 +98,7 @@ async function updateIsFree(image: any, isFree: number) {
       // await getList(1);
     }
   }).onCancel(() => {
-    // console.log('Cancel')
+    // //console.log('Cancel')
   })
   ;
 }

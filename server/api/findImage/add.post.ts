@@ -3,7 +3,7 @@ import {tansParams} from "~/server/utils/urlUtils";
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const body = await readBody(event)
-    // console.log(body)
+    // //console.log(body)
 
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/findImage/add`,{

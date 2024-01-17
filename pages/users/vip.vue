@@ -44,7 +44,6 @@ async function getList(page: number) {
   } catch (error) {
     console.error('获取数据失败：', error);
   }
-  console.log("token:" + token);
   queryParams.value.pageNum = page;
 }
 
@@ -54,9 +53,6 @@ function editAlbum(id: number) {
 }
 
 function updateStatus(vip: any, statusChoise: number) {
-  console.log(vip)
-  console.log(statusChoise)
-  // const status=ref(1);
   const message = ref("");
   if (statusChoise == 1) {
     message.value = "发布";
@@ -90,7 +86,6 @@ function updateStatus(vip: any, statusChoise: number) {
     } else {
       vip.status = 1
     }
-    // console.log('Cancel')
   });
 }
 

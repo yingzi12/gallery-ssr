@@ -22,18 +22,6 @@ const props = defineProps({
     }),
   },
 });
-// //  全局拦截器
-// videojs.Vhs.xhr.beforeRequest = function (options: any) {
-//   let headers = options.headers || {};
-//   headers["referer"] = "https://missav.com/dm5/en/fc2-ppv-1045033";
-//   headers["token"] = "J2LqH1mnoXE0ZL5typ3VT3n4fe7RFYAO";
-//
-//   options.headers = headers;
-//
-//   console.log("options", options);
-//
-//   return options;
-// };
 
 const videoPlayer = ref(null);
 const isPlaying = ref(false);
@@ -42,10 +30,8 @@ const volume = ref(1);
 onMounted(() => {
   videoPlayer.value = videojs(videoPlayer.value, props.options, () => {
     videoPlayer.value.log('onPlayerReady', this);
-    console.log("onMounted      ")
 
     var vhs = videoPlayer.value.tech().vhs;
-    console.log(vhs);
 
     videoPlayer.value.tech().vhs.xhr.onRequest(playerRequestHook);
   });
@@ -60,10 +46,7 @@ onMounted(() => {
 //   player.tech().vhs.xhr.onRequest(playerXhrRequestHook);
 // });
 const playerRequestHook = (options: any) => {
-  // console.log("playerRequestHook      "+JSON.stringify(options))
-  // console.log("uri      "+options.uri)
   // options.beforeSend = (xhr) => {
-  //   console.log("  beforeSend       ")
   // Referer不能修改，会报错
   //   xhr.setRequestHeader('Referer', "https://missav.com/");
   // };

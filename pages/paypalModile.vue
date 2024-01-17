@@ -20,11 +20,9 @@ const isParamsLoaded = ref(false);  // 新的响应式状态变量
 
 onMounted(() => {
   const token = route.query.token;
-  console.log("--------------------------------------- tokentokentoken "+token );
   const tokenValue = Array.isArray(token) ? token[0] : token;
   if (typeof tokenValue === 'string') {
     tokenCookie.value = tokenValue;
-    console.log("tokenCookie.value tokenCookie.value tokenCookie.value "+tokenCookie.value );
     // 设置额外的 Cookie 选项，如过期时间等
   } else {
     // 处理 token 不存在的情况

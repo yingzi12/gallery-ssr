@@ -126,8 +126,6 @@ getInfo();
 
 // onLoad(1);
 function imageUrlDetail(image) {
-  // console.log(image.sourceUrl)
-  // console.log(image.sourceUrl.startsWith('/image'))
   if (image.sourceUrl != null && image.sourceUrl.startsWith('/image')) {
     return `https://image.51x.uk/xinshijie${image.sourceUrl}`;
   }

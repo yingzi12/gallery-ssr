@@ -34,7 +34,6 @@ async function getDetail() {
     },
   });
   const data = response.data;
-  console.log(data.code)
   if (data.code == 200) {
     name.value = data.data.name;
     nickname.value = data.data.nickname;

@@ -6,8 +6,6 @@ const users = ref(null)
 const previewImage = ref("/favicon.png")
 
 const tokenCookie = useCookie('token');
-console.log("tokenCookie")
-console.log(tokenCookie)
 const token = tokenCookie.value;
 const idCookie = useCookie('id');
 const id = idCookie.value;
@@ -55,7 +53,6 @@ async function getDetail() {
 getDetail();
 
 const logout = async () => {
-  console.log("------logout------------")
   const tokenCookie = useCookie('token');
   tokenCookie.value=null;
   const idCookie = useCookie('id');

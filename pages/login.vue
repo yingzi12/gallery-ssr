@@ -57,8 +57,6 @@ async function onSubmit() {
       },
     });
     const data = response.data;
-    console.log("login")
-    console.log(data)
     if (data.code == 200) {
       const tokenCookie = useCookie('token')
       tokenCookie.value=data.token

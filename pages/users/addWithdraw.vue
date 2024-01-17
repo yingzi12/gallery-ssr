@@ -83,7 +83,6 @@ async function onSubmit() {
     }).onOk(async () => {
 
     }).onCancel(() => {
-      // console.log('Cancel')
     });
   }
 }

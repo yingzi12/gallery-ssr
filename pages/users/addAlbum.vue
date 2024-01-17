@@ -56,7 +56,6 @@ async function onSubmit() {
     },
   });
   const data = response.data;
-  console.log(data)
   if (data.code == 200) {
     $q.dialog({
       title: '通知',
@@ -101,14 +100,12 @@ async function handleImageUpload(event: Event) {
 
       if (response.ok) {
         const data = response.data;
-        console.log(data.data)
         previewImage.value = "https://image.51x.uk" + data.data;
         imgUrl.value = "https://image.51x.uk" + data.data;
       } else {
         throw new Error('Image upload failed');
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
       notify('Error uploading image', 'red-5');
     }
   } else {

@@ -34,9 +34,7 @@ import {defineProps, onMounted} from 'vue';
 import {useQuasar} from "quasar";
 const $q = useQuasar();
 const tokenCookie = useCookie('token');
-console.log("++++++++++++++++++++++++++++++++++ "+tokenCookie.value );
 const token=tokenCookie.value;
-console.log("===================================token:"+token );
 const props = defineProps({
   amount: {
     type: String,
@@ -87,7 +85,6 @@ onMounted(async () => {
 });
 
 function loadPayPalSDK() {
-  console.log("------------loadPayPalSDK-------------")
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = `https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=${clientId}`;
@@ -152,7 +149,6 @@ function loadStyleSheet() {
 async function createOrderCallback() {
 
   try {//server/api/admin/paypal/orders.post.ts
-    console.log("--------createOrderCallback---------------------token.d+"+tokenCookie.value)
     tokenCookie.value=token
     const response = await axios.post("/api/admin/paypal/orders", JSON.stringify({
       amount: discountAmount.value,
@@ -170,10 +166,6 @@ async function createOrderCallback() {
 
     const orderData = await response.data;
     const message=orderData.message;
-
-    console.log(orderData);
-
-    console.log(message);
     if(orderData.code!=200) {
       $q.dialog({
         title: '通知',
@@ -188,7 +180,6 @@ async function createOrderCallback() {
       }).onOk(async () => {
 
       }).onCancel(() => {
-        // console.log('Cancel')
       });
     }
     if (orderData.data.id) {
@@ -209,27 +200,16 @@ async function createOrderCallback() {
 
 async function onApproveCallback(data, actions) {
   try {
-    //server/api/paypal/ordersCapture.get.ts
-    console.log("--------onApproveCallback---------------------token.d+"+tokenCookie.value)
     tokenCookie.value=token
     const response = await axios.get(`/api/admin/paypal/ordersCapture?orderId=${data}`, {
       headers: {
         "Content-Type": "application/json",
         "change":props.change,
         "token": `Bearer ${token}`
-
       },
     });
-
     const orderData = await response.data;
-    // Three cases to handle:
-    //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-    //   (2) Other non-recoverable errors -> Show a failure message
-    //   (3) Successful transaction -> Show confirmation or thank you message
     const message=orderData.message;
-    console.log(orderData);
-
-    console.log(message);
     if(orderData.code==200) {
       $q.dialog({
         title: '通知',
@@ -244,7 +224,6 @@ async function onApproveCallback(data, actions) {
       }).onOk(async () => {
 
       }).onCancel(() => {
-        // console.log('Cancel')
       });
     }else{
       $q.dialog({
@@ -260,7 +239,6 @@ async function onApproveCallback(data, actions) {
       }).onOk(async () => {
 
       }).onCancel(() => {
-        // console.log('Cancel')
       });
     }
 
@@ -295,11 +273,6 @@ async function onApproveCallback(data, actions) {
       // Or go to another URL:  actions.redirect('thank_you.html');
       resultMessage(
           `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
-      );
-      console.log(
-          "Capture result",
-          orderData,
-          JSON.stringify(orderData, null, 2),
       );
     }
   } catch (error) {

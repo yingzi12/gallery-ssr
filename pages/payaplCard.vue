@@ -297,10 +297,10 @@ async function onApproveCallback(data, actions) {
           `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
       );
       //console.log(
-          "Capture result",
-          orderData,
-          JSON.stringify(orderData, null, 2),
-      );
+      //     "Capture result",
+      //     orderData,
+      //     JSON.stringify(orderData, null, 2),
+      // );
     }
   } catch (error) {
     console.error(error);

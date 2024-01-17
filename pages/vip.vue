@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import PayaplCard from "~/pages/payaplCard.vue";
-
-
 const tokenCookie = useCookie('token');
 const token = tokenCookie.value;
 const current = ref(1)
 const slide = ref('first')
-// const nickname = ref('')
 const intro = ref('')
 const imgUrl = ref("/favicon.png");
 const countSee = ref(0);
-// const countLike = ref(0);
-// const countAttention = ref(0);
 
 const productName = ref(null);
 const productId = ref(null);

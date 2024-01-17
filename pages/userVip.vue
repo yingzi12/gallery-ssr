@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-
 import {useRoute} from "vue-router";
 import PayaplCard from "~/pages/payaplCard.vue";
 const tokenCookie = useCookie('token');
 const token = tokenCookie.value;
 const route = useRoute();
-
 
 const userId = ref(route.query.userId);
 const current = ref(1)

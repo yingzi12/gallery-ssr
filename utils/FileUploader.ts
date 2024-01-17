@@ -1,6 +1,5 @@
 // FileUploader.ts
 import ssrCache from "~/utils/cache";
-
 class FileUploader {
     private baseUrl: string;
     private onProgress: (chunkNumber: number, totalChunks: number) => void;
@@ -9,7 +8,6 @@ class FileUploader {
         this.baseUrl = baseUrl;
         this.onProgress = onProgress;
     }
-
     async checkChunkExists(identifier: string, chunkNumber: number,token:string,day:string): Promise<boolean> {
         try {
             var url=`${this.baseUrl}/admin/userVideo/check?identifier=${identifier}&chunkNumber=${chunkNumber}&day=${day}`;

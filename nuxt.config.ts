@@ -1,5 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-
 export default defineNuxtConfig({
   devtools: { enabled: true },
   dir: {
@@ -11,8 +9,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     'nuxt-quasar-ui',
-    'nuxt-simple-sitemap',
-    '@nuxtseo/module',
     '@pinia/nuxt'
   ],
   runtimeConfig: {

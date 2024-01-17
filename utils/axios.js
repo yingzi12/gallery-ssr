@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
+    baseURL: 'https://6d76bde4.gallery-ssr.pages.dev',
     withCredentials: true
 });
 

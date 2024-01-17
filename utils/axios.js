@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use(config => {
     
     const tokenCookie = useCookie('token');
     const token = tokenCookie.value;
-    console.log(`-------------------请求---${config.url}----token:-${token}---userStore:${tokenCookie}-`)
+    // console.log(`-------------------请求---${config.url}----token:-${token}---userStore:${tokenCookie}-`)
     // console.log(!token)
     if (config.url.startsWith('/api/admin')) {
         // router.push("/login")
@@ -41,11 +41,11 @@ axiosInstance.interceptors.request.use(config => {
 // 响应拦截器
 axiosInstance.interceptors.response.use(response => {
 
-    console.log("-------------------处理响应数据------------")
-    console.log(response.data.code === 401)
+    // console.log("-------------------处理响应数据------------")
+    // console.log(response.data.code === 401)
     const tokenCookie = useCookie('token');
     const token = tokenCookie.value;
-    console.log(`-----------处理响应数据--------请求---${response.config.url}---------`)
+    // console.log(`-----------处理响应数据--------请求---${response.config.url}---------`)
 
     // 检查错误响应并执行特定操作
     if (response.config.url.startsWith('/api/admin') && response.data.code === 401) {

@@ -1,7 +1,7 @@
 import { createClient } from "@libsql/client";
 
 export function useTurso() {
-  console.log("-----------useTurso-----------------")
+  //console.log("-----------useTurso-----------------")
 
   const tursoConfig = useRuntimeConfig().turso;
 

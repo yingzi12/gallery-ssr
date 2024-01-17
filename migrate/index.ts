@@ -32,7 +32,7 @@ async function main() {
   await client.execute(
     "create table if not exists frameworks (id integer primary key,name varchar (50) not null,language varchar (50) not null,url text not null,stars integer not null)"
   );
-  console.log("Migrated db!");
+  //console.log("Migrated db!");
 
   const statements = [
     "create table if not exists frameworks (id integer primary key,name varchar (50) not null,language varchar (50) not null,url text not null,stars integer not null)",
@@ -45,7 +45,7 @@ async function main() {
 
   await client.batch("write", statements);
 
-  console.log("Seeded db");
+  //console.log("Seeded db");
 }
 
 main().catch(console.log);

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         }
     );
     const dataJson = await response.json();
-    console.log("dataJson.data end")
+    //console.log("dataJson.data end")
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

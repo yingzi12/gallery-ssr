@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/userAlbum/list?${tansParams(query)}`);
     const dataJson = await response.json();
-    // console.log(dataJson.data)
+    // //console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

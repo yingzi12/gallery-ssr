@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
     const query = getQuery(event)
     const change= headers.change ? headers.change:"pc";
-    console.log("--------------------change----------"+change)
+    //console.log("--------------------change----------"+change)
 
     // Use the GET parameters to make a GET request to `/album/list`
     const response = await fetch(config.public.baseUrl+`/admin/payments/ordersCapture?orderId=${query.orderId}`,{

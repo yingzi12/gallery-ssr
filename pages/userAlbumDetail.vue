@@ -188,7 +188,7 @@ getInfo();
 const paypalDialog = ref(false);
 
 function openPayPalDialog (){
-  console.log("------------openPayPalDialog---------------------------")
+  //console.log("------------openPayPalDialog---------------------------")
   if(token !== null && token !== '' && token !== undefined ) {
     paypalDialog.value = true;
   }else {
@@ -208,11 +208,11 @@ function openPayPalDialog (){
     });
   }
 };
-// console.log(token)
+// //console.log(token)
 // 监听isSee的值
 watch(isSee, (newValue, oldValue) => {
   if (newValue === true) {
-    console.log(` onLoad  isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value}  1`)
+    //console.log(` onLoad  isSee:${isSee.value}  disableInfiniteScroll:${disableInfiniteScroll.value}  1`)
     onLoad(0, () => {
     });
     // getVideoList();

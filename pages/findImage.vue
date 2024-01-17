@@ -26,11 +26,11 @@ async function onSubmit() {
       title: '信息',
       message: '必须填写图集名称.'
     }).onOk(() => {
-      // console.log('OK')
+      // //console.log('OK')
     }).onCancel(() => {
-      // console.log('Cancel')
+      // //console.log('Cancel')
     }).onDismiss(() => {
-      // console.log('I am triggered on both OK and Cancel')
+      // //console.log('I am triggered on both OK and Cancel')
     })
     return;
   }

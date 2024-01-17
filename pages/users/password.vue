@@ -36,7 +36,7 @@ async function onSubmit() {
     }).onOk(async () => {
 
     }).onCancel(() => {
-      // console.log('Cancel')
+      // //console.log('Cancel')
     });
     return;
   }
@@ -60,7 +60,7 @@ async function onSubmit() {
     }).onOk(async () => {
 
     }).onCancel(() => {
-      // console.log('Cancel')
+      // //console.log('Cancel')
     });
   } else {
     $q.dialog({
@@ -72,7 +72,7 @@ async function onSubmit() {
     }).onOk(async () => {
 
     }).onCancel(() => {
-      // console.log('Cancel')
+      // //console.log('Cancel')
     });
   }
 }

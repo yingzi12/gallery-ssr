@@ -6,8 +6,8 @@ export default defineEventHandler(async (event) => {
     const change= headers.change ? headers.change:"pc";
     // 从请求头中获取 token
     const token = headers.authorization ? headers.authorization.split(' ')[1] : null;
-    console.log("----------------------token--------"+token)
-    console.log("--------------------change----------"+change)
+    //console.log("----------------------token--------"+token)
+    //console.log("--------------------change----------"+change)
 
     const body = await readBody(event)
 

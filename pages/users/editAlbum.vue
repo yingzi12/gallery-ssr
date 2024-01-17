@@ -86,7 +86,7 @@ async function getDetail() {
     },
   });
   const data = response.data;
-  console.log(data.code)
+  //console.log(data.code)
   if (data.code == 200) {
     title.value = data.data.title;
     intro.value = data.data.intro;
@@ -120,7 +120,7 @@ async function handleImageUpload(event: Event) {
 
       if (response.ok) {
         const data = response.data;
-        console.log(data.data)
+        //console.log(data.data)
         previewImage.value = "https://image.51x.uk" + data.data;
         imgUrl.value = "https://image.51x.uk" + data.data;
       } else {

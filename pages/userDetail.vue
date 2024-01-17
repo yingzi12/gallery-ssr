@@ -45,7 +45,7 @@ async function getList(page: number) {
   queryParams.value.pageNum = page;
   const response = await axios.get('/api/userAlbum/list?' + tansParams(queryParams.value))
   const data = response.data;
-  console.log(data.code)
+  //console.log(data.code)
   if (data.code == 200) {
     total.value = data.total
     albumList.value = data.data
@@ -65,12 +65,12 @@ async function getDetail() {
 
   if (data.code == 200) {
     const userData = data.data;
-    console.log("userData")
-    console.log(userData)
+    //console.log("userData")
+    //console.log(userData)
 
     nickname.value=userData.nickname;
-    console.log("nickname")
-    console.log(nickname.value)
+    //console.log("nickname")
+    //console.log(nickname.value)
     isAttention.value=userData.isAttention
     intro.value = userData.intro;
     imgUrl.value = userData.imgUrl ==null ? "/favicon.png": userData.imgUrl ;

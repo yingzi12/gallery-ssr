@@ -53,7 +53,7 @@ async function getList(page: number) {
   //server/api/userSettingVip/list.get.ts
   const response = await axios.get('/api/userSettingVip/list?' + tansParams(queryParams.value))
   const data = response.data;
-  console.log(data.code)
+  //console.log(data.code)
   if (data.code == 200) {
     total.value = data.total
     vipList.value = data.data
@@ -63,7 +63,7 @@ async function getList(page: number) {
 getList(1)
 const paypalDialog = ref(false);
 function openPayPalDialog (vip:any){
-  console.log("------------openPayPalDialog---------------------------")
+  //console.log("------------openPayPalDialog---------------------------")
   paypalDialog.value = true;
   productId.value=vip.id;
   productName.value=vip.title;
@@ -80,10 +80,10 @@ async function getDetail() {
   });
   const data = response.data;
   if (data.code == 200) {
-    console.log("systemUser/info")
-    console.log(data.data)
+    //console.log("systemUser/info")
+    //console.log(data.data)
     const userData=data.data;
-    console.log(userData.nickname)
+    //console.log(userData.nickname)
     nickname.value = userData.nickname;
     intro.value = userData.intro;
     imgUrl.value = userData.imgUrl ==null ? "/favicon.png": userData.imgUrl ;

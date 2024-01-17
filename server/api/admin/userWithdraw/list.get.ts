@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }else{
         list=[];
     }
-    // console.log(dataJson.data)
+    // //console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

@@ -46,20 +46,20 @@ const uploadImage = async () => {
       });
 
       const data = response.json();
-      // console.log(data)
-      // console.log(data.data)
-      // console.log(data.code)
+      // //console.log(data)
+      // //console.log(data.data)
+      // //console.log(data.code)
 
       if (data.code == 200) {
         useQuasar().dialog({
           title: '信息',
           message: '替换头像成功.'
         }).onOk(() => {
-          // console.log('OK')
+          // //console.log('OK')
         }).onCancel(() => {
-          // console.log('Cancel')
+          // //console.log('Cancel')
         }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
+          // //console.log('I am triggered on both OK and Cancel')
         })
         router.push('/users'); // Redirect to login page
 
@@ -68,14 +68,14 @@ const uploadImage = async () => {
           title: '信息',
           message: '替换头像失败.'
         }).onOk(() => {
-          // console.log('OK')
+          // //console.log('OK')
         }).onCancel(() => {
-          // console.log('Cancel')
+          // //console.log('Cancel')
         }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
+          // //console.log('I am triggered on both OK and Cancel')
         })
       }
-      console.log(data); // 处理响应
+      //console.log(data); // 处理响应
     } catch (error) {
       console.error('上传失败:', error);
     }

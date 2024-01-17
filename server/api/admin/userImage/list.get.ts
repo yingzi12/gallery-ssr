@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const list= dataJson.data;
     if(list!=null) {
         for (let image of list) {
-            console.log(image);
+            //console.log(image);
             try {
                 image.url = await getBase64FromImageUrl(sourceWeb + image.imgUrl);
             } catch (error) {
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
             }
         }
     }
-    console.log(dataJson.data)
+    //console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

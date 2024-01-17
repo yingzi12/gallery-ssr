@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const response = await fetch(config.public.baseUrl+`/userAlbum/list?${tansParams(query)}`);
     const dataJson = await response.json();
-    // console.log(dataJson.data)
+    // //console.log(dataJson.data)
     return {
         code:dataJson.code,
         message: "Album list retrieved!",

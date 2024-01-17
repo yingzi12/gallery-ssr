@@ -39,7 +39,7 @@ async function getList(page: number) {
   } catch (error) {
     console.error('获取数据失败：', error);
   }
-  console.log("token:" + token);
+  //console.log("token:" + token);
   queryParams.value.pageNum = page;
 }
 
@@ -101,7 +101,7 @@ function updateStatus(album: any, statusChoise: number) {
     } else {
       album.status = 1
     }
-    // console.log('Cancel')
+    // //console.log('Cancel')
   });
 }
 

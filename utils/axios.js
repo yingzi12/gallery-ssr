@@ -25,9 +25,8 @@ axiosInstance.interceptors.request.use(config => {
             // 清空 token 或其他认证数据
             // 
             // userStore.clearUser();  // 假设 clearToken 是清空 token 的方法
-
             // 重定向到登录页面
-            // window.location.href = '/login';
+            window.location.href = '/login';
             // console.log(`-----------login--------请求---${config.url}-----${token}----`)
         }
     }

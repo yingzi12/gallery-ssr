@@ -176,13 +176,13 @@ export default defineI18nConfig(() => ({
                     lifetime: '永久'
                 },
                 features: {
-                    monthFeature1: '1个月使用期限',
+                    monthFeature1: '1个月期限',
                     download: '下载',
                     exclusiveLogo: '专属标志',
                     // ...其他月套餐特征...
-                    halfYearFeature1: '6个月使用期限',
+                    halfYearFeature1: '6个月期限',
                     // ...半年套餐的其他特征...
-                    yearFeature1: '12个月使用期限',
+                    yearFeature1: '12个月期限',
                     // ...年套餐的其他特征...
                     lifetimeFeature1: '永久更新',
                     videos: '视频',

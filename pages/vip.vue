@@ -41,20 +41,20 @@ const vips = ref([
     id: 4,
     name: 'yearly',
     intro:"yearly",
-    sourcePrice: "32.9$",
+    sourcePrice: "35.9$",
     price: '28.90',
     date: 'year',
     features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount95', 'videos']
   },
-  {
-    id: 5,
-    name: 'lifetime',
-    intro:"lifetime",
-    sourcePrice: "99.9$",
-    price: '49.90',
-    date: 'lifetime',
-    features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount90', 'exclusiveServices', 'videos']
-  }
+  // {
+  //   id: 5,
+  //   name: 'lifetime',
+  //   intro:"lifetime",
+  //   sourcePrice: "99.9$",
+  //   price: '49.90',
+  //   date: 'lifetime',
+  //   features: ['download', 'exclusiveLogo', 'fullAlbum', 'discount90', 'exclusiveServices', 'videos']
+  // }
 ]);
 const url="/vip"
 const paypalDialog = ref(false);

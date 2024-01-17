@@ -33,10 +33,10 @@ const timeTypeList = [
     label: '年',
     value: 4
   },
-  {
-    label: '永久',
-    value: 5
-  }
+  // {
+  //   label: '永久',
+  //   value: 5
+  // }
 ]
 // if (accept.value !== true) {
 //   $q.notify({

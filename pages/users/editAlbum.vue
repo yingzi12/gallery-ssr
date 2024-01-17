@@ -32,8 +32,7 @@ function notify(message: string, color: string) {
 
 function onReset() {
   title.value = null;
-  girl
-      .value = null;
+  girl.value = null;
   intro.value = null;
   tags.value = null;
   imgUrl.value = "";
@@ -42,16 +41,12 @@ function onReset() {
 }
 
 async function onSubmit() {
-  // if (!accept.value) {
-  //   notify('You need to accept the license and terms first', 'red-5');
-  // } else {server≈.get.ts
   const response = await axios.post("/api/admin/userAlbum/edit",
       JSON.stringify({
         id: aid.value,
         title: title.value,
         intro: intro.value,
-        girl: girl
-            .value,
+        girl: girl.value,
         imgUrl: imgUrl.value,
         tags: tags.value,
         charge: charge.value,
@@ -81,8 +76,6 @@ async function onSubmit() {
       message: 'Update Error'
     });
   }
-  // 这里添加您的提交逻辑
-  // }
 }
 
 async function getDetail() {
@@ -97,9 +90,7 @@ async function getDetail() {
   if (data.code == 200) {
     title.value = data.data.title;
     intro.value = data.data.intro;
-    girl
-        .value = data.data.girl
-    ;
+    girl.value = data.data.girl;
     imgUrl.value = data.data.imgUrl;
     tags.value = data.data.tags;
     charge.value = data.data.charge;
@@ -205,8 +196,7 @@ getDetail()
           lazy-rules
       />
       <q-input
-          v-model="girl
-"
+          v-model="girl"
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           filled
           hint="Name and surname"

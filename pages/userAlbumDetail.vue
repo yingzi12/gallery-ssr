@@ -56,7 +56,6 @@ const onLoad = async (index: number, done: () => void) => {
     done();
   }
 }
-
 // 使用防抖包装 onLoad 保持不变
 const debouncedOnLoad = debounce(onLoad, 300);
 //下拉设置

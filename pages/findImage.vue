@@ -4,7 +4,7 @@ import { useQuasar } from 'quasar'
 const data = reactive({
     form: {
         title:"",
-        gril:"",
+        girl:"",
         createTime:""
     },
 });
@@ -91,7 +91,7 @@ getRandom();
                              filled
                              :rules="[ val => val.length <= 200 || '最多200个字符']"
                     />
-                    <q-input label="模特" v-model="form.gril"
+                    <q-input label="模特" v-model="form.girl"
                              ref="inputRef"
                              filled
                              :rules="[ val => val.length <= 50 || '最多50个字符']"
@@ -122,7 +122,7 @@ getRandom();
                     <tbody>
                     <tr v-for="findImage in findImageList" :key="findImage.id">
                         <td class="text-left">{{ findImage.title }}</td>
-                        <td class="text-right">{{ findImage.gril }}</td>
+                        <td class="text-right">{{ findImage.girl }}</td>
                         <td class="text-right">{{ findImage.createTime }}</td>
                         <td class="text-right">{{ findImage.subTime }}</td>
                         <td class="text-right">{{ findImage.countFind }}</td>

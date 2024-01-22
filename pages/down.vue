@@ -14,7 +14,7 @@
                 <a class="qq-qr-icon jsLoadQr"><i class="icon-qr"></i></a>
               </div>
             </div>
-            <div class="yw-app-mb-pic"><img style="width: 400px" src="/Gallery Album.svg" class="yw-app-mb"></div>
+            <div class="yw-app-mb-pic"><img style="width: 400px" src="/gallery_album.svg" class="yw-app-mb"></div>
           </div>
         </div>
       </div>

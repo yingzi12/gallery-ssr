@@ -10,8 +10,7 @@ useSeoMeta({
   <h3>上传图片，上传视频</h3>
   <h3>自定义付费内容，自定义会员</h3>
   <p class="text-center">
-    <span cla ss="font-semibold">功能完善中</span>
-
+    <span cla ss="font-semibold">APP已经支持上述功能，网页版完善中</span>
   </p>
 
   <p class="text-center">

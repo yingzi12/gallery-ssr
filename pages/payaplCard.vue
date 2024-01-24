@@ -75,7 +75,7 @@ const props = defineProps({
 
 
 // const clientId = 'AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm'; // 替换为您的 PayPal Client ID
-const clientId = 'AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm'; // 替换为您的 PayPal Client ID
+const clientId = 'AcdD25YW71MTOxAO6qWz2nmu2yiw-4HR9ETC7J-ena06gRtqRu1RrRUoXTp65OCtQ-YYZeRbkgIwRxsq'; // 替换为您的 PayPal Client ID
 
 onMounted(async () => {
   await loadPayPalSDK();  // 等待 SDK 加载
@@ -288,6 +288,7 @@ function resultMessage(message) {
 }
 const discountAmount=ref(props.amount);
 async function getAmount() {
+
   // 滚动到顶部
   const response = await axios.post("/api/admin/paypal/getAmount",JSON.stringify({
     productId: props.productId,

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
 
     // Use the GET parameters to make a GET request to `/album/list`
-    const response = await fetch(config.public.baseUrl+`/findImage/list`);
+    const response = await fetch(config.public.baseUrl+`/findImage/list?${tansParams(query)}`);
     const dataJson = await response.json();
     // console.log(dataJson.data)
     return {

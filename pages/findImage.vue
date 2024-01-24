@@ -16,6 +16,19 @@ useHead({
 
     ],
 })
+const total = ref(0);
+const maxPage = ref(0);
+
+const current=ref(1)
+
+const queryData = reactive({
+  queryParams: {
+    pageNum: 1,
+    pageSize:20,
+    title: '',
+  }
+});
+const {queryParams} = toRefs(queryData);
 const { form, } = toRefs(data);
 async  function  onSubmit(){
     if(form.value.title == undefined || form.value.title == null || form.value.title.trim() == '' || form.value.title.trim().length ==0 ){
@@ -40,15 +53,16 @@ async  function  onSubmit(){
       title: '信息',
       message: '提交成功,等待管理员处理中.'
     })
-    getList()
+    getList(1)
   }
 }
 const findImageList = ref([]);
-const total = ref(0);
-async function getList() {
-    const { data } = await useFetch('/api/findImage/list')
+async function getList(page: number) {
+     queryParams.value.pageNum = page;
+    const { data } = await useFetch('/api/findImage/list?' + tansParams(queryParams.value))
     if(data.value.code ==200) {
       total.value = data.value.total
+      maxPage.value=  total.value/ queryParams.value.pageSize+1;
       findImageList.value = data.value.data
     }
 }
@@ -59,12 +73,12 @@ async function handleAdd(id:number){
             title: '信息',
             message: '提交成功,等待管理员处理中.'
         })
-        getList()
+        getList(1)
     }
 }
 
 
-getList()
+getList(1)
 
 function imageUrl(album) {
   if (album.sourceUrl!=null &&  album.sourceUrl.startsWith('/image')) {
@@ -133,6 +147,15 @@ getRandom();
                 <div v-if="findImageList.length <=0" class="caption">
                     <p class="text-h6">暂无数据</p>
                 </div>
+              <div class="q-pa-lg flex flex-center">
+                <q-pagination
+                    v-model="current"
+                    size="20"
+                    :max="maxPage"
+                    direction-links
+                    @update:modelValue="getList(current)"
+                />
+              </div>
             </div>
         </div>
       <div>

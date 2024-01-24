@@ -19,7 +19,6 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@libsql/client": "^0.3.6",
     "@paypal/paypal-js": "^7.1.1",
     "@quasar/extras": "^1.16.7",
     "@types/lru-cache": "^7.10.10",

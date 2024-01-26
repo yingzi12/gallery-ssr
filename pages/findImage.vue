@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref, toRefs} from "vue";
 import { useQuasar } from 'quasar'
 const data = reactive({
     form: {

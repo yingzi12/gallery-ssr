@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref,} from 'vue'
 import {useRoute} from "vue-router";
 
 // 接收url里的参数
@@ -58,6 +57,8 @@ const description = ref('图集网 美女 写真 摄影 秀人网 Photo Gallery,
 const  ortTile=ref("图集网")
 const  orgDec=ref("图集网")
 const  orgImgae=ref("图集网")
+const orgGirl = ref("图集网")
+const orgTags = ref("图集网")
 
 useHead({
     title:title,
@@ -66,7 +67,9 @@ useHead({
         { name: 'title', content: title },
         { name: 'og:title', content:  ortTile},
         { name: 'og:description', content:  orgDec},
-        { name: 'og:image', content:  orgImgae}
+        { name: 'og:image', content:  orgImgae},
+      {name: 'og:girl', content: orgGirl},
+      {name: 'og:tags', content: orgTags},
     ],
 })
 
@@ -79,6 +82,10 @@ async function getInfo() {
         ortTile.value=album.value.title
         ortTile.orgDec=album.value.value.description
         ortTile.orgImgae=album.value.sourceWeb+album.value.imgUrl
+
+      orgTags.value = album.value.tags
+      orgGirl.value = album.value.girl
+
 
     }
 }

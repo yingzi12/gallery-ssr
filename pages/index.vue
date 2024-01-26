@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref, toRefs} from 'vue'
 import {tansParams} from "~/server/utils/urlUtils";
 const current = ref(1)
 const slide = ref(0)
@@ -10,6 +9,7 @@ const queryData = reactive({
     form: {},
     queryParams: {
         pageNum: 1,
+        isFree:2,
         title:'',
     },
     rules: {
@@ -56,7 +56,7 @@ getRandom();
 </script>
 <template>
     <q-tabs shrink stretch>
-        <q-input name="title" label="搜索" v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
+        <q-input name="title" :label="$t('search') " v-model="title" style="width: 600px"  @keyup.enter="getList(1)"/>          <q-icon name="search" @click="getList(1)"/>
     </q-tabs>
   <div class="q-pa-md">
     <q-carousel v-if="imagesLoaded"

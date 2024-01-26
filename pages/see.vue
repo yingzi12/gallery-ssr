@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref, toRefs} from 'vue'
 import {tansParams} from "~/server/utils/urlUtils";
 useHead({
     title:"图集网",
@@ -18,7 +17,8 @@ const queryData = reactive({
     form: {},
     queryParams: {
         pageNum: 1,
-        title:'',
+      isFree:2,
+      title:'',
     },
     rules: {
     }

@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     static: 'static', // 新的静态文件夹名称
   },
   modules: [
+    '@nuxtjs/i18n',
     'nuxt-quasar-ui',
     'nuxt-simple-sitemap'
   ],
@@ -16,7 +17,9 @@ export default defineNuxtConfig({
     },
     // Public keys that are exposed to the client
     public: {
-      baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk'
+      // baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk'
+      // baseUrl:"https://admin.aiavr.uk"
+      baseUrl:"http://192.168.68.100:8098"
     }
   },
   quasar: { /* */ },

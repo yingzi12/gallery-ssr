@@ -18,8 +18,8 @@ export default defineNuxtConfig({
     // Public keys that are exposed to the client
     public: {
       // baseUrl:  process.env.BASE_URL || 'https://admin.aiavr.uk'
-      // baseUrl:"https://admin.aiavr.uk"
-      baseUrl:"http://192.168.68.100:8098"
+      baseUrl:"https://admin.aiavr.uk"
+      // baseUrl:"http://192.168.68.100:8098"
     }
   },
   quasar: { /* */ },

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {reactive, ref, toRefs} from 'vue'
 import {tansParams} from "~/server/utils/urlUtils";
 const current = ref(1)
 const slide = ref(0)
@@ -16,12 +15,21 @@ const queryData = reactive({
   rules: {
   }
 });
-useHead({
-  title:"图集网",
-  meta: [
-    { name: 'description', content: "图集网 美女 写真 摄影 秀人网 Photo Gallery, Beauty, Photo, Photography, Showman.com." },
-    { name: 'title', content: "图集网" }
+const  webTitle=ref("图集网")
 
+const description = ref('图集网 美女 写真 摄影 秀人网 Photo Gallery, Beauty, Photo, Photography, Showman.com.')
+const  ortTile=ref("用户图集")
+const  orgDec=ref("用户图集")
+const  orgImgae=ref("图集网")
+
+useHead({
+  title:title,
+  meta: [
+    { name: 'description', content: description },
+    { name: 'title', content: webTitle },
+    { name: 'og:title', content:  ortTile},
+    { name: 'og:description', content:  orgDec},
+    { name: 'og:image', content:  orgImgae}
   ],
 })
 const image=ref("")

@@ -27,7 +27,6 @@ const isRefreshing = ref(false)
 const onLoad = async (index: number, done: () => void) => {
     try {
         isRefreshing.value = true
-
         const {data} = await useFetch('/api/image/list?aid=' + aid.value + '&pageNum=' +(index+1))
         // if (data.value.code === 200) {
          if(data && data.value && data.value.code === 200) {
@@ -85,8 +84,6 @@ async function getInfo() {
 
       orgTags.value = album.value.tags
       orgGirl.value = album.value.girl
-
-
     }
 }
 async function handleImageError(){
@@ -118,6 +115,9 @@ function imageUrl(album) {
   }
   return album.sourceWeb + album.imgUrl;
 }
+function toLogin(){
+  window.location.href = "https://user.aiavr.uk/login";
+}
 </script>
 <template>
   <q-page>
@@ -136,7 +136,11 @@ function imageUrl(album) {
         <div>浏览次数:{{album.countSee}}</div>
         <div>类型: {{album.tags}}</div>
         <div>创建时间：{{album.createTime}}</div>
+        <div class="q-pa-md q-gutter-sm">
+          <q-btn  icon="favorite_border" @click="toLogin()">收藏</q-btn>
+        </div>
       </div>
+
       <div style="width: 10%">
         <button  class="text-h6" @click="handleImageError()"> 报告异常</button>
       </div>

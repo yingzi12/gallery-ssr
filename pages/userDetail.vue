@@ -123,6 +123,9 @@ function getImageUrl(url) {
   }
   return "/favicon.png";
 }
+function toLogin(){
+  window.location.href = "https://user.aiavr.uk/login";
+}
 </script>
 
 <template>
@@ -149,9 +152,8 @@ function getImageUrl(url) {
       <q-separator dark/>
 
       <q-card-actions>
-        <q-btn v-if="isAttention == 2" icon="favorite_border" @click="onAttention()">关注</q-btn>
-        <q-btn v-if="isAttention == 1"  icon="favorite"  @click="closeAttention()">取消关注</q-btn>
-        <q-btn color="secondary" flat> <a :href="'/userVip?userId=' + userId">VIP</a> </q-btn>
+        <q-btn  icon="favorite_border" @click="toLogin()">关注</q-btn>
+        <q-btn color="secondary" flat> <a  @click="toLogin()">VIP</a> </q-btn>
 
       </q-card-actions>
     </q-card>

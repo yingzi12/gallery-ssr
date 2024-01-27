@@ -64,11 +64,13 @@ onMounted(() => {
           <q-tab name="mails" :label=" $t('usersIndex')"  @click="toUrl('https://user.aiavr.uk/usersIndex')" ></q-tab>
           <q-tab name="mails" :label=" $t('users')"  @click="toUrl('https://user.aiavr.uk/users')" ></q-tab>
           <q-tab name="mails" :label=" $t('webVip')"  @click="toUrl('https://user.aiavr.uk/vip')" ></q-tab>
-<!--          <q-route-tab to="/usersAlbum" :label="$t('usersAlbum') "  />-->
+          <q-tab name="mails" :label=" $t('down')"  @click="toUrl('https://user.aiavr.uk/down')" ></q-tab>
+
+          <!--          <q-route-tab to="/usersAlbum" :label="$t('usersAlbum') "  />-->
 <!--          <q-route-tab to="/usersIndex" :label="$t('usersIndex') "  />-->
 <!--          <q-route-tab to="/users" :label="$t('users') "  />-->
 <!--          <q-route-tab to="/vip" :label="$t('webVip') "  />-->
-          <q-route-tab to="/down" :label="$t('down') "  />
+<!--          <q-route-tab to="/down" :label="$t('down') "  />-->
         </q-tabs>
       </q-header>
       <div>

@@ -152,7 +152,7 @@ function toLogin(){
       <q-separator dark/>
 
       <q-card-actions>
-        <q-btn  icon="favorite_border" @click="toLogin()">关注</q-btn>
+        <q-btn  icon="favorite_border" @click="toLogin()">{{$t('focusOn')}}</q-btn>
         <q-btn color="secondary" flat> <a  @click="toLogin()">VIP</a> </q-btn>
 
       </q-card-actions>

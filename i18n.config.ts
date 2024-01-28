@@ -3,6 +3,15 @@ export default defineI18nConfig(() => ({
     locale: 'en',
     messages: {
         en: {
+            failed: 'Failed',
+            success: 'Success',
+            collect:'Collect',
+            focusOn:'FocusOn',
+            unsubscribe:'Unsubscribe',
+            cancelFavorites:'Cancel Favorites',
+            purchase: "Purchase",
+            price: "Price",
+            free: "Free",
             useTerms: 'Terms Of Use',
             privateTerms: 'Privacy Policy',
             introTerms: 'I accept the license and terms',
@@ -122,6 +131,15 @@ export default defineI18nConfig(() => ({
             }
         },
         'zh-CN': {
+            failed: '失败',
+            success: '成功',
+            collect:'收藏',
+            focusOn:'关注',
+            unsubscribe:'取消关注',
+            cancelFavorites:'取消收藏',
+            purchase: "购买",
+            price: "价格",
+            free: "免费",
             useTerms: '使用条款',
             privateTerms: '隐私条款',
             introTerms: '我接受许可和条款',

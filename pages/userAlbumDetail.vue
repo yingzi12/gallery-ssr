@@ -263,8 +263,8 @@ function toLogin(){
               <div>标签: {{ album.tags }}</div>
               <div>创建时间：{{ album.createTime }}</div>
               <div class="q-pa-md q-gutter-sm">
-                <q-btn v-if="album.charge != 1 && amount >= 0" @click="toLogin()">购买 </q-btn>
-                <q-btn  icon="favorite_border" @click="toLogin()">收藏</q-btn>
+                <q-btn v-if="album.charge != 1 && amount >= 0" @click="toLogin()">{{$t('purchase')}} </q-btn>
+                <q-btn  icon="favorite_border" @click="toLogin()">{{$t('collect')}}</q-btn>
               </div>
             </div>
           </q-card-actions>

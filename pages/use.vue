@@ -33,7 +33,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_acceptance_of_terms"><span
+                    href="/use2#anchor_acceptance_of_terms"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>接受条款</span></span></a></span><span lang=EN-US style='font-size:
@@ -44,7 +44,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_intellectual_property"><span
+                    href="/use2#anchor_intellectual_property"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>知识产权；使用者有限许可</span></span></a></span><span lang=EN-US
@@ -55,7 +55,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_aiavr_trademarks"><span
+                    href="/use2#anchor_aiavr_trademarks"><span
                     style='color:#0070F0;text-decoration:none;text-underline:none'>aiavr
      </span><span lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;
      mso-hansi-font-family:Roboto;color:#0070F0;text-decoration:none;
@@ -67,7 +67,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_information_you_provide"><span
+                    href="/use2#anchor_information_you_provide"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>您提供的信息</span></span></a></span><span lang=EN-US
@@ -78,7 +78,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_your_content"><span
+                    href="/use2#anchor_your_content"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>您的内容</span></span></a></span><span lang=EN-US style='font-size:
@@ -89,7 +89,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_infringement"><span
+                    href="/use2#anchor_infringement"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>违反侵害权利索赔</span></span><span style='color:#0070F0;text-decoration:
@@ -103,7 +103,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_limitations"><span
+                    href="/use2#anchor_limitations"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>限制</span></span></a></span><span lang=EN-US style='font-size:
@@ -114,7 +114,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_restriction"><span
+                    href="/use2#anchor_restriction"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>限制和终止使用</span></span></a></span><span lang=EN-US
@@ -125,7 +125,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_links"><span lang=EN-US
+                    href="/use2#anchor_links"><span lang=EN-US
                                                                       style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>第三方网站链接</span></span></a></span><span lang=EN-US
@@ -136,7 +136,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_warranties"><span lang=EN-US
+                    href="/use2#anchor_warranties"><span lang=EN-US
                                                                            style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>保证和免责声明</span></span></a></span><span lang=EN-US
@@ -147,7 +147,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_indemnification"><span
+                    href="/use2#anchor_indemnification"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>赔偿</span></span></a></span><span lang=EN-US style='font-size:
@@ -158,7 +158,7 @@ mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件�
      white'><span lang=EN-US style='font-size:12.0pt;font-family:Roboto;
      mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-color-alt:
      windowtext;mso-font-kerning:0pt;mso-ligatures:none'><a
-                    href="/use#anchor_miscellanous"><span
+                    href="/use2#anchor_miscellanous"><span
                     lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
      Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
                     lang=EN-US>其他</span></span></a></span><span lang=EN-US style='font-size:

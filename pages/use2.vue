@@ -1,5 +1,5 @@
 <template>
-  <use></use>
+  <Use></Use>
 </template>
 <script setup>
 import Use from "~/pages/use.vue";

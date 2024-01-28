@@ -9,21 +9,21 @@ Roboto;mso-bidi-font-family:宋体;color:black;mso-color-alt:windowtext;mso-font
 24.0pt;font-family:Roboto;mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;
 mso-font-kerning:18.0pt;mso-ligatures:none'></span></b></p>
 
-        <p class=MsoNormal align=left style='margin-bottom:36.0pt;text-align:left;
-mso-pagination:widow-orphan;background:white'><span lang=EN-US
-                                                    style='font-size:12.0pt;font-family:Roboto;mso-fareast-font-family:宋体;
-mso-bidi-font-family:宋体;color:black;mso-color-alt:windowtext;mso-font-kerning:
-0pt;mso-ligatures:none'><a href="/privacyPolicy"><span
-                lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:
-Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span
-                lang=EN-US>查看我们的隐私政策</span></span></a></span><span lang=EN-US style='font-size:
-12.0pt;font-family:Roboto;mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;
-mso-font-kerning:0pt;mso-ligatures:none'></span></p>
+<!--        <p class=MsoNormal align=left style='margin-bottom:36.0pt;text-align:left;-->
+<!--mso-pagination:widow-orphan;background:white'><span lang=EN-US-->
+<!--                                                    style='font-size:12.0pt;font-family:Roboto;mso-fareast-font-family:宋体;-->
+<!--mso-bidi-font-family:宋体;color:black;mso-color-alt:windowtext;mso-font-kerning:-->
+<!--0pt;mso-ligatures:none'><a href="/privacyPolicy"><span-->
+<!--                lang=EN-US style='font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:-->
+<!--Roboto;color:#0070F0;text-decoration:none;text-underline:none'><span-->
+<!--                lang=EN-US>查看我们的隐私政策</span></span></a></span><span lang=EN-US style='font-size:-->
+<!--12.0pt;font-family:Roboto;mso-fareast-font-family:宋体;mso-bidi-font-family:宋体;-->
+<!--mso-font-kerning:0pt;mso-ligatures:none'></span></p>-->
 
         <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan;
 background:white'><span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
 Roboto;mso-hansi-font-family:Roboto;mso-bidi-font-family:宋体;color:black;
-mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件仅供参考，并非具有法律约束力的文件。请参阅英文原版条款。</span><span
+mso-color-alt:windowtext;mso-font-kerning:0pt;mso-ligatures:none'>本翻译件仅供参考，并非具有法律约束力的文件。</span><span
                 lang=EN-US style='font-size:12.0pt;font-family:Roboto;mso-fareast-font-family:
 宋体;mso-bidi-font-family:宋体;mso-font-kerning:0pt;mso-ligatures:none'></span></p>
 
@@ -1296,8 +1296,8 @@ mso-font-kerning:0pt;mso-ligatures:none'></span></b></p>
                 <router-link to="">帮助中心</router-link>|
                 <router-link to="">提交建议</router-link>|
                 <router-link to="">举报中心</router-link>|
-                <router-link to="/privacyPolicy">隐私政策</router-link>|
-                <router-link to="/use">使用条款</router-link>|
+<!--                <router-link to="/privacyPolicy">隐私政策</router-link>|-->
+<!--                <router-link to="/use">使用条款</router-link>|-->
 
                 <router-link to="">漏洞提交</router-link>|
             </div>

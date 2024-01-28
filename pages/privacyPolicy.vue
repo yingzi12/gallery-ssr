@@ -2,7 +2,7 @@
     <div class="WordSection1">
 
         <p align="left" class="MsoNormal"><b><span style="font-size:24.0pt;font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:Roboto;mso-bidi-font-family:宋体;color:black;mso-color-alt:windowtext;mso-font-kerning:18.0pt;mso-ligatures:none;" data-v-inspector="pages/use.vue:5:70">使用条款</span></b><b><span lang="EN-US"></span></b></p>
-        <p align="left" class="MsoNormal"><span lang="EN-US"><a href="/use"><span lang="EN-US"><span lang="EN-US">查看我们的使用条款</span></span></a></span><span lang="EN-US"></span></p>
+<!--        <p align="left" class="MsoNormal"><span lang="EN-US"><a href="/use"><span lang="EN-US"><span lang="EN-US">查看我们的使用条款</span></span></a></span><span lang="EN-US"></span></p>-->
         <ol start="1" type="1">
             <li class="MsoNormal"><span lang="EN-US"><a href="/privacyPolicy#anchor_collecting_personal_information"><span lang="EN-US"><span lang="EN-US">个人信息的收集</span></span></a></span><span lang="EN-US"></span></li>
             <li class="MsoNormal"><span lang="EN-US"><a href="/privacyPolicy#anchor_updating_personal_information"><span lang="EN-US"><span lang="EN-US">更新您的个人信息和隐私首选项</span></span></a></span><span lang="EN-US"></span></li>
@@ -53,7 +53,7 @@ March 15, 2021</span><span>。</span><span lang="EN-US"></span></p>
         <p align="left" class="MsoNormal"><b><span>更新您的个人信息和隐私首选项</span></b><b><span lang="EN-US"></span></b></p>
         <p align="left" class="MsoNormal"><span>根据要求，</span><span lang="EN-US">心世界未来
 </span><span>将为您提供我们获得您个人信息的有关途径。如需此类信息，请通过</span><span lang="EN-US"> <a href="mailto:privacy@aiavr.uk"><span>privacy@aiavr.uk</span></a> </span><span>联系我们。</span><span lang="EN-US"></span></p>
-        <p align="left" class="MsoNormal"><span>您有权随时访问和更正或删除您的个人信息和隐私首选项。单击</span><span lang="EN-US"><a href="https://www.aiavr.uk/account/profile"><span>“</span><span lang="EN-US"><span lang="EN-US">我的帐户</span></span><span>”</span></a></span><span>链接即可完成此操作，在</span><span lang="EN-US">“</span><span>我的帐户</span><span lang="EN-US">”</span><span>中，您可以立即查看并更改您的大部分个人信息。如果您希望删除自己的帐户，或要求我们不再使用您的信息为您提供服务，请访问网站上的</span><span lang="EN-US"><a href="/privacyPolicy/privacy"><span>“</span><span lang="EN-US"><span lang="EN-US">我的帐户首选项</span></span><span>”</span></a></span><span>链接，然后按照</span><span lang="EN-US">“</span><span>删除我的帐户</span><span lang="EN-US">”</span><span>部分中的说明操作。如果您是投稿者，您可以在</span><span lang="EN-US"><a href="https://submit.心世界未来.com/account/settings"><span lang="EN-US"><span lang="EN-US">此处</span></span></a></span><span>更改您的用户资料。出于安全目的，某些个人信息只能通过</span><span lang="EN-US"><a href="/privacyPolicy/help"><span lang="EN-US"><span lang="EN-US">联系支持部门</span></span></a></span><span>才能进行更改。我们会在合理时间段内立刻回复您的请求。</span><span lang="EN-US"></span></p>
+        <p align="left" class="MsoNormal"><span>您有权随时访问和更正或删除您的个人信息和隐私首选项。单击</span><span lang="EN-US"><a href="https://user.aiavr.uk/users/detail"><span>“</span><span lang="EN-US"><span lang="EN-US">我的帐户</span></span><span>”</span></a></span><span>链接即可完成此操作，在</span><span lang="EN-US">“</span><span>我的帐户</span><span lang="EN-US">”</span><span>中，您可以立即查看并更改您的大部分个人信息。如果您希望删除自己的帐户，或要求我们不再使用您的信息为您提供服务，请访问网站上的</span><span lang="EN-US"><a href="/privacyPolicy/privacy"><span>“</span><span lang="EN-US"><span lang="EN-US">我的帐户首选项</span></span><span>”</span></a></span><span>链接，然后按照</span><span lang="EN-US">“</span><span>删除我的帐户</span><span lang="EN-US">”</span><span>部分中的说明操作。如果您是投稿者，您可以在</span><span lang="EN-US"><a href="https://submit.心世界未来.com/account/settings"><span lang="EN-US"><span lang="EN-US">此处</span></span></a></span><span>更改您的用户资料。出于安全目的，某些个人信息只能通过</span><span lang="EN-US"><a href="/privacyPolicy/help"><span lang="EN-US"><span lang="EN-US">联系支持部门</span></span></a></span><span>才能进行更改。我们会在合理时间段内立刻回复您的请求。</span><span lang="EN-US"></span></p>
         <p align="left" class="MsoNormal"><b><span style="font-size:18.0pt;font-family:宋体;mso-ascii-font-family:Roboto;mso-hansi-font-family:Roboto;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt;mso-ligatures:none;">如何使用您的个人信息</span></b><b><span lang="EN-US"></span></b></p>
         <p align="left" class="MsoNormal"><span>为了向您提供服务、履行我们的法律义务并提升我们的产品和服务，</span><span lang="EN-US">心世界未来 </span><span>会收集您的信息。我们不以任何并非本隐私政策所披露的任何其他方式向第三方出售、租赁或分享您的个人身份信息。</span><span lang="EN-US">心世界未来 </span><span>可能会对该信息做如下处理：</span><span lang="EN-US"></span></p>
         <ul type="disc">
@@ -201,8 +201,8 @@ Facebook Connect </span><span>或开放</span><span lang="EN-US"> ID </span><spa
         <router-link to="">帮助中心</router-link>|
         <router-link to="">提交建议</router-link>|
         <router-link to="">举报中心</router-link>|
-        <router-link to="/privacyPolicy">隐私政策</router-link>|
-        <router-link to="/use">使用条款</router-link>|
+<!--        <router-link to="/privacyPolicy">隐私政策</router-link>|-->
+<!--        <router-link to="/use">使用条款</router-link>|-->
         <router-link to="">漏洞提交</router-link>|
     </div>
     <div class="footerText text-weight-thin"> <p>Copyright © 2002-2022 www.aiavr.uk Rights Reserved 版权所有 心世界未来科技有限公司</p></div>

@@ -21,35 +21,22 @@ const videoTotal = ref(0);
 const isSee = ref(false);
 const imageList = ref([]);
 const videoList = ref([]);
-
+const offsetPage = ref(1);
+const pageNum = ref(0);
 const isCollection = ref(2)
 const isRefreshing = ref(false);
 const onLoad = async (index: number, done: () => void) => {
+  console.log(`-----------onLoad-------------`)
+  console.log(index)
   if (!isSee.value || disableInfiniteScroll.value) {
     done();
     return;
   }
-
   try {
     isRefreshing.value = true
-    const response = await axios.get(`/api/userImage/list?aid=${aid.value}&pageNum=` + (index + 1), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    const data = response.data;
-    if (data.code === 200) {
-      const imgList = data.data;
-      imageList.value.push(...imgList);
+    pageNum.value=index;
+    await getList(index + offsetPage.value);
 
-      // 判断是否还有更多数据需要加载
-      if (imgList.length === 0 || imageList.value.length >= imgTotal.value) {
-        disableInfiniteScroll.value = true;
-      }
-    } else {
-      disableInfiniteScroll.value = true;
-    }
   } catch (error) {
     console.error(error);
     disableInfiniteScroll.value = true;
@@ -121,7 +108,6 @@ async function getInfo() {
     orgGirl.value = album.value.girl
     orgDec.value = album.value.intro
     orgImgae.value = album.value.imgUrl
-
     imgTotal.value = album.value.numberPhotos
     videoTotal.value = album.value.numberVideo
     const imgList = album.value.imageList
@@ -136,23 +122,29 @@ async function getInfo() {
 }
 
 async function getList(page: number) {
-  // queryParams.value.aid = aid.value;
-  // queryParams.value.pageNum = page;
+  console.log(`-----------getList----${page}---------`)
   try {
     const response = await axios.get('/api/userImage/list?aid='+aid.value+"&pageNum="+page+"&pageSize="+10 , {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     });
-    if (response.data.code == 200) {
-      imageList.value.push(...response.data.data);
+    const data = response.data;
+    if (data.code === 200) {
+      const imgList = data.data;
+      imageList.value.push(...imgList);
+      // 判断是否还有更多数据需要加载
+      if (imgList.length === 0 || imageList.value.length >= imgTotal.value) {
+        disableInfiniteScroll.value = true;
+      }
+    } else {
+      disableInfiniteScroll.value = true;
     }
   } catch (error) {
     console.error('Error fetching images:', error);
   }
 }
-
-
 
 const randomList = ref([]);
 
@@ -309,7 +301,6 @@ function toLogin(){
               <div v-for="(image, index) in imageList" :key="index" class="caption">
                 <img v-if="image.status != -1" :src="getImageUrl(image.imgUrl)" class="responsive-image">
                 <img  v-if="image.status == -1" :src="getImageUrl('/lock_image.jpg') " class="responsive-image">
-<!--                <img :src="getImageUrl(image.imgUrl)" class="responsive-image"/>-->
               </div>
 
               <template v-slot:loading>

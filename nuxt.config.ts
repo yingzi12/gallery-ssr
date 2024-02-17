@@ -22,7 +22,16 @@ export default defineNuxtConfig({
       // baseUrl:"http://192.168.68.100:8098"
     }
   },
-  quasar: { /* */ },
+  quasar: {
+    plugins: [
+      'AppFullscreen',
+      'BottomSheet',
+      'Dialog',
+      'Loading',
+      'LoadingBar',
+      'Notify',
+    ],
+    },
   meta: {
     title: '图集网-图片,美女,写真,图集',
     meta: [

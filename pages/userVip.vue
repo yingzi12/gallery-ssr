@@ -106,7 +106,7 @@ async function getDetail() {
 getDetail();
 
 function getImageUrl(url) {
-  console.log(url)
+  // console.log(url)
   if (url != null) {
     return `${config.public.sourceWeb}${url}`;
   }

@@ -12,7 +12,7 @@ onMounted(async () => {
   try {
     // 获取浏览器语言设置
     const userLang = navigator.language || navigator.userLanguage;
-    console.log(userLang)
+    // console.log(userLang)
     // 替换为您的 PayPal 客户端 ID
     const clientId = "AWwAGKZhvPE3xSgDh-gRH9sXwNMKDQSzr65ZwaUHp-U7CTbUk-FTnRRjlF0zTpz5LaeDz5rHgcaaekVm";
     paypalRef.value = await loadScript({

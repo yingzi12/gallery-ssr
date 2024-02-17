@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
     // baseURL:"https://gallery-nuxt.vercel.app",
-    baseURL:"https://www.aiavr.uk",
+    // baseURL:"https://www.aiavr.uk",
     // baseURL:"https://idyllic-kheer-a1b6ce.netlify.app/",
     withCredentials: true
 });

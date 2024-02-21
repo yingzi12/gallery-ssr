@@ -15,7 +15,22 @@ export default defineSitemapEventHandler(async (e) => {
         if (dataJson.code == 200) {
             // 假设API返回的是URL数组
             posts.push(...dataJson.data.map(item => ({
-                _path: `/detail?aid=${item.id}`,
+                _path: `/userAlbumDetail?aid=${item.id}`,
+                modifiedAt: new Date(),
+            })));
+        } else {
+            console.error('API Error:', dataJson.message);
+        }
+    }
+    for(let i=1;i<2;i++) {
+        // console.log(config.public.baseUrl+`/album/listSee?page=`+i.toString())
+        const response = await fetch(config.public.baseUrl+`/systemUser/list?pageNum=`+i.toString());
+        const dataJson = await response.json();
+        // console.log(dataJson.data)
+        if (dataJson.code == 200) {
+            // 假设API返回的是URL数组
+            posts.push(...dataJson.data.map(item => ({
+                _path: `/userDetail?userId=${item.id}`,
                 modifiedAt: new Date(),
             })));
         } else {

@@ -10,6 +10,10 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-quasar-ui'
   ],
+  i18n: {
+    defaultLocale: 'en',
+    // 其他i18n配置...
+  },
   site: {
     url: 'https://www.aiavr.uk',
   },

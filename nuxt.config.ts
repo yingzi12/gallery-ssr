@@ -11,6 +11,13 @@ export default defineNuxtConfig({
     'nuxt-quasar-ui'
   ],
   i18n: {
+    // 启用i18n
+    locales: [
+      // 定义地区对象，包括 code, file 和 name
+      { code: 'en', name: 'English' },
+      { code: 'zh-CN',  name: 'China' },
+      // 可以添加更多地区
+    ],
     defaultLocale: 'en',
     // 其他i18n配置...
   },

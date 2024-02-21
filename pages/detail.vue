@@ -79,7 +79,7 @@ async function getInfo() {
         album.value = data.value.data;
         title.value="图集网-"+album.value.title
         ortTile.value=album.value.title
-        ortTile.orgDec=album.value.value.description
+        ortTile.orgDec=album.value.intro
         ortTile.orgImgae=album.value.sourceWeb+album.value.imgUrl
 
       orgTags.value = album.value.tags

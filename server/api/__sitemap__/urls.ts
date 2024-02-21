@@ -1,5 +1,6 @@
 
 export default defineSitemapEventHandler(async () => {
+    console.log("----------------defineSitemapEventHandler------------------------------");
     const config = useRuntimeConfig();
     try {
         let urls=[];
@@ -50,6 +51,7 @@ export default defineSitemapEventHandler(async () => {
                 console.error('API Error:', dataJson.message);
             }
         }
+        console.log("----------------defineSitemapEventHandler------ stop------------------------");
         //console.log(JSON.stringify(urls))
         return urls;
     } catch (error) {

@@ -1,11 +1,12 @@
 export default defineSitemapEventHandler(async (e) => {
+    const posts = await Promise.all([
+        {
+            _path: '/see',
+            modifiedAt: new Date(),
+        }
+    ]);
     try {
-        const posts = await Promise.all([
-            {
-                _path: '/see',
-                modifiedAt: new Date(),
-            }
-        ]);
+
         const config = useRuntimeConfig();
         console.log("--------start----defineSitemapEventHandler--------------------")
         for (let i = 1; i < 2; i++) {
@@ -96,8 +97,13 @@ export default defineSitemapEventHandler(async (e) => {
             };
         });
     }catch (error) {
-        return {
-            message:  `${error}`,
-        };
+        return posts.map((p) => {
+            return {
+                loc: p._path,
+                lastmod: p.modifiedAt,
+                message:  `${error}`,
+            };
+        });
+
     }
 });

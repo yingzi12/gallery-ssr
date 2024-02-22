@@ -97,7 +97,7 @@ export default defineSitemapEventHandler(async (e) => {
         });
     }catch (error) {
         return {
-            message:       `Sorry, your transaction could not be processed...<br><br>${error}`,
+            message:  `${error}`,
         };
     }
 });

@@ -38,7 +38,7 @@ export default defineSitemapEventHandler(async (e) => {
                 console.error('API Error:', dataJson.message);
             }
         }
-        for (let i = 1; i < 10; i++) {
+        for (let i = 1; i < 20; i++) {
             try {
                 const response = await fetch(config.public.baseUrl+`/album/list?pageNum=${i}`);
                 const dataJson = await response.json();
